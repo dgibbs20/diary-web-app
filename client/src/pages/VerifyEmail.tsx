@@ -8,7 +8,7 @@ import { authApi } from '@/lib/api';
 import { Loader2, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 
-const LOGO_URL = '/manus-storage/logo_c40e17b6.png';
+const LOGO_URL = '/assets/images/logo.png';
 
 export default function VerifyEmail() {
   const [, navigate] = useLocation();

@@ -160,7 +160,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F5F0E8' }}>
         <div className="text-center">
-          <img src="/manus-storage/logo_c40e17b6.png" alt="diAry" className="h-12 w-auto mx-auto mb-4 animate-pulse" />
+          <img src="/assets/images/logo.png" alt="diAry" className="h-12 w-auto mx-auto mb-4 animate-pulse" />
           <p className="text-sm" style={{ color: '#8B6347' }}>Loading your space...</p>
         </div>
       </div>

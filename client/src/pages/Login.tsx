@@ -10,7 +10,7 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const AUTH_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/310419663029844115/cw39joRvygwi83an4yvvJL/auth-bg-EbDrbgB9XmpwVMmEp2nJa3.webp';
-const LOGO_URL = '/manus-storage/logo_c40e17b6.png';
+const LOGO_URL = '/assets/images/logo.png';
 
 export default function Login() {
   const [, navigate] = useLocation();

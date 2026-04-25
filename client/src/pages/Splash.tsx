@@ -7,10 +7,10 @@ import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 
-const LOGO_URL = '/manus-storage/logo_c40e17b6.png';
-const LOGO_ELITE_URL = '/manus-storage/logo_elite_45e7c91a.png';
-const SHADOW_URL = '/manus-storage/shadow_1e32d072.png';
-const NOTIFY_URL = '/manus-storage/notify_91bbce90.wav';
+const LOGO_URL = '/assets/images/logo.png';
+const LOGO_ELITE_URL = '/assets/images/logo_elite.png';
+const SHADOW_URL = '/assets/images/shadow.png';
+const NOTIFY_URL = '/assets/sound/notify.wav';
 
 export default function Splash() {
   const [, navigate] = useLocation();

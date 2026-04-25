@@ -11,8 +11,8 @@ import {
 } from 'lucide-react';
 import type { ViewMode } from '@/pages/Dashboard';
 
-const LOGO_URL = '/manus-storage/logo_c40e17b6.png';
-const LOGO_ELITE_URL = '/manus-storage/logo_elite_45e7c91a.png';
+const LOGO_URL = '/assets/images/logo.png';
+const LOGO_ELITE_URL = '/assets/images/logo_elite.png';
 
 interface SidebarProps {
   viewMode: ViewMode;
