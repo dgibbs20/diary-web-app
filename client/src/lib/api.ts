@@ -3,7 +3,7 @@
  * Handles all communication with the Flask backend
  */
 
-const API_BASE = 'https://diary.gmxquantum.com';
+const API_BASE = 'https://api.diary.gmxquantum.com';
 
 // Token management
 let accessToken: string | null = null;
