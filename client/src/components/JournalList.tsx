@@ -20,6 +20,7 @@ interface JournalListProps {
   user: User | null;
   todayMood: string | null;
   onMoodClick: () => void;
+  ghostModeEnabled?: boolean;
 }
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
@@ -48,7 +49,7 @@ function getGreeting() {
 export default function JournalList({
   entries, isLoading, searchQuery, onSearchChange,
   filterType, onFilterChange, onEntrySelect, onNewEntry,
-  user, todayMood, onMoodClick,
+  user, todayMood, onMoodClick, ghostModeEnabled,
 }: JournalListProps) {
   const stats = user?.stats;
 
@@ -243,19 +244,29 @@ export default function JournalList({
                         {entry.burn_mode && <Flame size={14} style={{ color: '#E85D4A' }} />}
                         {entry.ghost_mode && <Ghost size={14} style={{ color: 'var(--muted-foreground)' }} />}
                       </div>
-                      <p
-                        className="text-sm truncate mb-1.5"
-                        style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
-                      >
-                        {entry.preview || 'No content'}
-                      </p>
+                      {ghostModeEnabled ? (
+                        <p
+                          className="text-sm truncate mb-1.5 flex items-center gap-1.5"
+                          style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontStyle: 'italic' }}
+                        >
+                          <Ghost size={12} style={{ opacity: 0.5 }} />
+                          Content hidden — Ghost Mode active
+                        </p>
+                      ) : (
+                        <p
+                          className="text-sm truncate mb-1.5"
+                          style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                        >
+                          {entry.preview || 'No content'}
+                        </p>
+                      )}
                       <div
                         className="flex items-center gap-3 text-xs tracking-wide"
                         style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
                       >
                         <span>{formatDate(entry.created_at)}</span>
                         <span style={{ opacity: 0.4 }}>·</span>
-                        <span>{entry.word_count} words</span>
+                        {!ghostModeEnabled && <span>{entry.word_count} words</span>}
                         {entry.ai_response && (
                           <>
                             <span style={{ opacity: 0.4 }}>·</span>

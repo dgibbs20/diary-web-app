@@ -5,11 +5,14 @@
  * Brand: Cormorant Garamond headings, gold accents (#C9A84C), cream/brown palette.
  * Flow: Free vs Elite side-by-side → Choose monthly/annual → RevenueCat payment link with user ID.
  * Post-payment: User returns to /dashboard, app calls /subscription/verify to sync tier.
+ * 
+ * LOGOS: Uses uploaded logo.png (Free card) and logo_elite.png (Elite card) instead of text.
+ * TOGGLE: billingCycle state drives price display on Elite card.
  */
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'wouter';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Crown, Check, X, Sparkles, BookOpen, Brain, Shield, BarChart3,
   FileText, Mic, PenTool, Lock, Zap, ArrowRight
@@ -17,6 +20,9 @@ import {
 
 const REVENUECAT_MONTHLY = 'https://pay.rev.cat/fcxkvesvqsmqyjgj';
 const REVENUECAT_ANNUAL = 'https://pay.rev.cat/dgnllmadailgfknc';
+
+const LOGO_FREE = '/manus-storage/logo_4ed9e2a9.png';
+const LOGO_ELITE = '/manus-storage/logo_elite_0247fd9a.png';
 
 interface PlanFeature {
   label: string;
@@ -63,6 +69,12 @@ export default function Subscription() {
   const annualPrice = 79.99;
   const annualMonthly = (annualPrice / 12).toFixed(2);
   const savings = Math.round(((monthlyPrice * 12 - annualPrice) / (monthlyPrice * 12)) * 100);
+
+  // Derived display values based on billingCycle
+  const displayPrice = billingCycle === 'annual' ? annualMonthly : monthlyPrice.toFixed(2);
+  const billingNote = billingCycle === 'annual'
+    ? `Billed $${annualPrice} annually`
+    : 'Billed monthly, cancel anytime';
 
   return (
     <div className="min-h-screen pt-[70px]" style={{ backgroundColor: '#FAF6F0' }}>
@@ -151,12 +163,12 @@ export default function Subscription() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="mb-8">
-              <h2
-                className="text-2xl md:text-3xl font-bold mb-2"
-                style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#2C1A0E' }}
-              >
-                diAry
-              </h2>
+              {/* Logo image instead of text */}
+              <img
+                src={LOGO_FREE}
+                alt="diAry"
+                className="h-14 md:h-16 object-contain mb-2"
+              />
               <p
                 className="text-sm mb-6"
                 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#8B7B6E' }}
@@ -257,40 +269,42 @@ export default function Subscription() {
             </div>
 
             <div className="mb-8 relative z-10">
-              <div className="flex items-center gap-2 mb-2">
-                <Crown size={22} style={{ color: '#C9A84C' }} />
-                <h2
-                  className="text-2xl md:text-3xl font-bold"
-                  style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#C9A84C' }}
-                >
-                  diAry Elite
-                </h2>
-              </div>
+              {/* Logo image instead of text */}
+              <img
+                src={LOGO_ELITE}
+                alt="diAry Elite"
+                className="h-16 md:h-20 object-contain mb-2"
+              />
               <p
                 className="text-sm mb-6"
                 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: 'rgba(201, 168, 76, 0.7)' }}
               >
                 Unlock every feature, no limits
               </p>
-              <div className="flex items-baseline gap-1">
-                <span
-                  className="text-4xl md:text-5xl font-bold"
-                  style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#FFFFFF' }}
+
+              {/* Price — animated on toggle change */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={billingCycle}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
                 >
-                  ${billingCycle === 'annual' ? annualMonthly : monthlyPrice.toFixed(2)}
-                </span>
-                <span className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>/month</span>
-              </div>
-              {billingCycle === 'annual' && (
-                <p className="text-sm mt-2" style={{ color: 'rgba(201, 168, 76, 0.7)' }}>
-                  Billed ${annualPrice} annually
-                </p>
-              )}
-              {billingCycle === 'monthly' && (
-                <p className="text-sm mt-2" style={{ color: 'rgba(201, 168, 76, 0.7)' }}>
-                  Billed monthly, cancel anytime
-                </p>
-              )}
+                  <div className="flex items-baseline gap-1">
+                    <span
+                      className="text-4xl md:text-5xl font-bold"
+                      style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#FFFFFF' }}
+                    >
+                      ${displayPrice}
+                    </span>
+                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>/month</span>
+                  </div>
+                  <p className="text-sm mt-2" style={{ color: 'rgba(201, 168, 76, 0.7)' }}>
+                    {billingNote}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             <div className="space-y-3 relative z-10">

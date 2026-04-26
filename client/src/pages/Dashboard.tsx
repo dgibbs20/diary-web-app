@@ -221,6 +221,7 @@ export default function Dashboard() {
                     user={user}
                     todayMood={todayMood}
                     onMoodClick={() => setShowMoodPicker(true)}
+                    ghostModeEnabled={user?.preferences?.privacy_mode ?? false}
                   />
                 </motion.div>
               )}
