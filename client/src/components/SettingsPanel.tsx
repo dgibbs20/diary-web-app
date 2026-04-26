@@ -8,11 +8,12 @@
  */
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield } from 'lucide-react';
+import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { userApi, exportApi } from '@/lib/api';
 import { toast } from 'sonner';
+import { useLocation } from 'wouter';
 import PaywallModal from './PaywallModal';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
@@ -79,7 +80,7 @@ export default function SettingsPanel() {
 }
 
 function ProfileSection() {
-  const { user, refreshUser } = useAuth();
+  const { user, isElite, refreshUser } = useAuth();
   const [firstName, setFirstName] = useState(user?.first_name || '');
   const [lastName, setLastName] = useState(user?.last_name || '');
   const [username, setUsername] = useState(user?.username || '');
@@ -192,6 +193,36 @@ function ProfileSection() {
         {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
         {isSaving ? 'Saving...' : 'Save Changes'}
       </button>
+
+      {/* Manage Subscription */}
+      <div
+        className="p-4 rounded-xl cursor-pointer transition-all duration-200 group"
+        style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}
+        onClick={() => {
+          // Navigate to subscription page
+          window.location.href = '/subscription';
+        }}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center"
+              style={{ background: 'rgba(201,168,76,0.15)' }}
+            >
+              <Crown size={18} style={{ color: GOLD }} />
+            </div>
+            <div>
+              <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                {isElite ? 'Manage Subscription' : 'Upgrade to Elite'}
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+                {isElite ? 'View your plan details and billing' : 'Unlock unlimited AI, export, ghost mode & more'}
+              </p>
+            </div>
+          </div>
+          <ArrowRight size={16} style={{ color: GOLD }} className="group-hover:translate-x-1 transition-transform" />
+        </div>
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 pt-4" style={{ borderTop: '1px solid var(--border)' }}>
