@@ -341,4 +341,19 @@ export const subscriptionApi = {
     const res = await authFetch('/api/subscription/status');
     return res.json();
   },
+
+  async verify() {
+    const res = await authFetch('/api/subscription/verify', { method: 'POST' });
+    return res.json();
+  },
+
+  async upgrade() {
+    const res = await authFetch('/api/subscription/upgrade', { method: 'POST' });
+    return res.json();
+  },
+
+  async getTiers() {
+    const res = await fetch(`${API_BASE}/api/subscription/tiers`);
+    return res.json();
+  },
 };

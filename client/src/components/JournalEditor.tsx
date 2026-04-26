@@ -5,7 +5,7 @@
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Bot, Trash2, Flame, Save, Clock, Check } from 'lucide-react';
+import { ArrowLeft, Bot, Trash2, Flame, Save, Clock, Check, FileDown, Crown } from 'lucide-react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Underline } from '@tiptap/extension-underline';
@@ -17,7 +17,9 @@ import { FontFamily } from '@tiptap/extension-font-family';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Typography } from '@tiptap/extension-typography';
 import EditorToolbar from './EditorToolbar';
-import { journalApi } from '@/lib/api';
+import { journalApi, exportApi } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
+import PaywallModal from './PaywallModal';
 import { MOOD_CONFIG } from '@/lib/constants';
 import { toast } from 'sonner';
 import type { JournalEntry } from '@/pages/Dashboard';
@@ -36,6 +38,9 @@ interface JournalEditorProps {
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export default function JournalEditor({ entry, pendingMood, onSave, onDelete, onBack, onToggleAi }: JournalEditorProps) {
+  const { isElite } = useAuth();
+  const [showExportPaywall, setShowExportPaywall] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [title, setTitle] = useState(entry?.title || '');
   const [mood, setMood] = useState(entry?.mood || pendingMood || '');
   const [burnMode, setBurnMode] = useState(entry?.burn_mode || false);
@@ -268,6 +273,39 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             <Save size={16} />
           </button>
 
+          {/* Export button — paywalled for free users */}
+          {entryId && (
+            <button
+              onClick={async () => {
+                if (!isElite) {
+                  setShowExportPaywall(true);
+                  return;
+                }
+                setIsExporting(true);
+                try {
+                  const res = await exportApi.exportPdf();
+                  if (res.success) {
+                    toast.success('PDF exported successfully');
+                  } else {
+                    toast.error('Failed to export PDF');
+                  }
+                } catch {
+                  toast.error('Export failed');
+                }
+                setIsExporting(false);
+              }}
+              disabled={isExporting}
+              className="p-2 rounded-lg transition-colors relative"
+              style={{ color: 'var(--muted-foreground)' }}
+              title={isElite ? 'Export as PDF' : 'Export (Elite)'}
+            >
+              <FileDown size={16} />
+              {!isElite && (
+                <Crown size={8} className="absolute -top-0.5 -right-0.5" style={{ color: '#C9A84C' }} />
+              )}
+            </button>
+          )}
+
           <button
             onClick={onToggleAi}
             className="p-2 rounded-lg transition-colors"
@@ -386,6 +424,13 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           </motion.div>
         </div>
       )}
+
+      {/* PaywallModal for Export */}
+      <PaywallModal
+        isOpen={showExportPaywall}
+        onClose={() => setShowExportPaywall(false)}
+        feature="export"
+      />
     </div>
   );
 }

@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
+import Subscription from "./pages/Subscription";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/verify" component={VerifyEmail} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/subscription" component={Subscription} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

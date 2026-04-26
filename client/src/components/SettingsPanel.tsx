@@ -1,6 +1,10 @@
 /**
  * Settings Panel — Premium branded: Profile, preferences, password, export, dark mode
  * Consistent Cormorant Garamond typography, gold accents throughout
+ * 
+ * PAYWALL GATING:
+ * - Ghost Mode: Elite-only, free users see PaywallModal
+ * - Export PDF: Elite-only, free users see PaywallModal
  */
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -9,6 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { userApi, exportApi } from '@/lib/api';
 import { toast } from 'sonner';
+import PaywallModal from './PaywallModal';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -236,7 +241,7 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
           <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>Mobile-Only Features</p>
         </div>
         <div className="space-y-2">
-          {['Voice Recording', 'Handwriting OCR', 'Biometric Auth', 'ICE Cam Security'].map(f => (
+          {['Voice Transcription', 'Handwriting Input', 'Biometric Lock', 'Page Flip Sound'].map(f => (
             <div key={f} className="flex items-center justify-between py-1.5">
               <span className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{f}</span>
               <span
@@ -257,6 +262,7 @@ function SecuritySection() {
   const { user, isElite, refreshUser } = useAuth();
   const [ghostMode, setGhostMode] = useState(user?.preferences?.privacy_mode ?? false);
   const [isTogglingGhost, setIsTogglingGhost] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
   const [currentPw, setCurrentPw] = useState('');
   const [newPw, setNewPw] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
@@ -266,7 +272,7 @@ function SecuritySection() {
 
   const handleGhostToggle = async () => {
     if (!isElite) {
-      toast.error('Ghost Mode requires diAry Elite subscription');
+      setShowPaywall(true);
       return;
     }
     setIsTogglingGhost(true);
@@ -321,120 +327,135 @@ function SecuritySection() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      {/* Ghost Mode */}
-      <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center"
-              style={{ background: ghostMode ? 'rgba(201,168,76,0.15)' : 'var(--muted)' }}
+    <>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+        {/* Ghost Mode */}
+        <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ background: ghostMode ? 'rgba(201,168,76,0.15)' : 'var(--muted)' }}
+              >
+                <Ghost size={18} style={{ color: ghostMode ? GOLD : 'var(--muted-foreground)' }} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                  Ghost Mode
+                  {!isElite && (
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
+                      style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
+                    >
+                      <Crown size={10} className="inline mr-1" />Elite
+                    </span>
+                  )}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+                  Hide your activity from analytics and streak tracking
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleGhostToggle}
+              disabled={isTogglingGhost}
+              className="w-12 h-7 rounded-full relative transition-colors duration-300"
+              style={{ backgroundColor: ghostMode ? GOLD : 'var(--border)', opacity: isTogglingGhost ? 0.6 : 1 }}
             >
-              <Ghost size={18} style={{ color: ghostMode ? GOLD : 'var(--muted-foreground)' }} />
-            </div>
-            <div>
-              <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
-                Ghost Mode
-                {!isElite && (
-                  <span
-                    className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
-                    style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
-                  >
-                    <Crown size={10} className="inline mr-1" />Elite
-                  </span>
-                )}
-              </p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
-                Hide your activity from analytics and streak tracking
-              </p>
-            </div>
+              <div
+                className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
+                style={{ transform: ghostMode ? 'translateX(22px)' : 'translateX(2px)' }}
+              />
+            </button>
           </div>
-          <button
-            onClick={handleGhostToggle}
-            disabled={isTogglingGhost}
-            className="w-12 h-7 rounded-full relative transition-colors duration-300"
-            style={{ backgroundColor: ghostMode ? GOLD : 'var(--border)', opacity: isTogglingGhost ? 0.6 : 1 }}
-          >
-            <div
-              className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
-              style={{ transform: ghostMode ? 'translateX(22px)' : 'translateX(2px)' }}
+          {ghostMode && (
+            <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(201,168,76,0.06)' }}>
+              <Shield size={14} style={{ color: GOLD_DARK }} />
+              <p className="text-xs" style={{ color: GOLD_DARK, fontFamily: FONT, fontWeight: 600 }}>
+                Ghost Mode is active — your entries are hidden from analytics
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Change Password */}
+        <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
+        <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>Change Password</h3>
+
+        <div>
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>Current Password</label>
+          <div className="relative">
+            <input
+              type={showCurrent ? 'text' : 'password'} value={currentPw} onChange={(e) => setCurrentPw(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
+              style={inputStyle}
+              onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+              onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
             />
-          </button>
-        </div>
-        {ghostMode && (
-          <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(201,168,76,0.06)' }}>
-            <Shield size={14} style={{ color: GOLD_DARK }} />
-            <p className="text-xs" style={{ color: GOLD_DARK, fontFamily: FONT, fontWeight: 600 }}>
-              Ghost Mode is active — your entries are hidden from analytics
-            </p>
+            <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
+              {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* Change Password */}
-      <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
-      <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>Change Password</h3>
+        <div>
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>New Password</label>
+          <div className="relative">
+            <input
+              type={showNew ? 'text' : 'password'} value={newPw} onChange={(e) => setNewPw(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
+              style={inputStyle}
+              onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+              onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+            />
+            <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
+              {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+        </div>
 
-      <div>
-        <label className="block text-xs uppercase mb-2" style={labelStyle}>Current Password</label>
-        <div className="relative">
+        <div>
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>Confirm New Password</label>
           <input
-            type={showCurrent ? 'text' : 'password'} value={currentPw} onChange={(e) => setCurrentPw(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
+            type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
             style={inputStyle}
             onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
             onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
           />
-          <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
-            {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
-          </button>
         </div>
-      </div>
 
-      <div>
-        <label className="block text-xs uppercase mb-2" style={labelStyle}>New Password</label>
-        <div className="relative">
-          <input
-            type={showNew ? 'text' : 'password'} value={newPw} onChange={(e) => setNewPw(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
-            style={inputStyle}
-            onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
-            onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
-          />
-          <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
-            {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
-          </button>
+        <button
+          onClick={handleChangePw} disabled={isSaving}
+          className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
+          style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+        >
+          {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
+          {isSaving ? 'Changing...' : 'Change Password'}
+        </button>
         </div>
-      </div>
+      </motion.div>
 
-      <div>
-        <label className="block text-xs uppercase mb-2" style={labelStyle}>Confirm New Password</label>
-        <input
-          type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
-          style={inputStyle}
-          onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
-          onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
-        />
-      </div>
-
-      <button
-        onClick={handleChangePw} disabled={isSaving}
-        className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
-        style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
-      >
-        {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-        {isSaving ? 'Changing...' : 'Change Password'}
-      </button>
-      </div>
-    </motion.div>
+      {/* PaywallModal for Ghost Mode */}
+      <PaywallModal
+        isOpen={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        feature="ghost_mode"
+      />
+    </>
   );
 }
 
 function ExportSection() {
+  const { isElite } = useAuth();
   const [isExporting, setIsExporting] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const handleExport = async () => {
+    if (!isElite) {
+      setShowPaywall(true);
+      return;
+    }
     setIsExporting(true);
     try {
       const res = await exportApi.exportPdf();
@@ -450,30 +471,50 @@ function ExportSection() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <div className="p-6 rounded-xl text-center" style={{ border: '1px solid var(--border)' }}>
-        <Download size={32} className="mx-auto mb-3" style={{ color: GOLD }} />
-        <h3
-          className="text-lg mb-2 font-semibold"
-          style={{ fontFamily: FONT, color: 'var(--foreground)' }}
-        >
-          Export Your Journal
-        </h3>
-        <p
-          className="text-sm mb-6"
-          style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
-        >
-          Download all your entries as a beautifully formatted PDF
-        </p>
-        <button
-          onClick={handleExport} disabled={isExporting}
-          className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 mx-auto disabled:opacity-60"
-          style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
-        >
-          {isExporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-          {isExporting ? 'Exporting...' : 'Export as PDF'}
-        </button>
-      </div>
-    </motion.div>
+    <>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+        <div className="p-6 rounded-xl text-center" style={{ border: '1px solid var(--border)' }}>
+          <Download size={32} className="mx-auto mb-3" style={{ color: GOLD }} />
+          <h3
+            className="text-lg mb-2 font-semibold"
+            style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+          >
+            Export Your Journal
+          </h3>
+          <p
+            className="text-sm mb-6"
+            style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+          >
+            Download all your entries as a beautifully formatted PDF
+          </p>
+
+          {!isElite && (
+            <div
+              className="flex items-center justify-center gap-2 mb-4 text-xs font-semibold tracking-wider"
+              style={{ color: GOLD, fontFamily: FONT }}
+            >
+              <Crown size={14} />
+              <span>Elite Feature</span>
+            </div>
+          )}
+
+          <button
+            onClick={handleExport} disabled={isExporting}
+            className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 mx-auto disabled:opacity-60"
+            style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+          >
+            {isExporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+            {isExporting ? 'Exporting...' : isElite ? 'Export as PDF' : 'Upgrade to Export'}
+          </button>
+        </div>
+      </motion.div>
+
+      {/* PaywallModal for Export */}
+      <PaywallModal
+        isOpen={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        feature="export"
+      />
+    </>
   );
 }
