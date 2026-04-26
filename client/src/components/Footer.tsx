@@ -1,11 +1,7 @@
 /**
- * Footer — Matches marketing site footer exactly
- * Reference: marketing site lines 824-838
- * bg: var(--brown) = #2C1A0E
- * Logo: logo.png, height 220px
- * Tagline: 2rem italic, rgba(245,240,232,0.5)
- * Links: 0.78rem, 0.15em letter-spacing, uppercase, rgba(245,240,232,0.5), hover: gold
- * Copyright: 0.78rem, rgba(245,240,232,0.3)
+ * Footer — Shows on auth/splash pages with full marketing-style branding
+ * Dashboard has its own integrated compact footer (DashboardFooter in Dashboard.tsx)
+ * Matches marketing site: diary.gmxquantum.com
  */
 import { useLocation, Link } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
@@ -27,53 +23,54 @@ export default function Footer() {
   const [location] = useLocation();
   const { isAuthenticated, logout } = useAuth();
 
-  // Show on splash + auth pages only (dashboard has its own layout)
-  const showPages = ['/', '/login', '/register', '/forgot-password', '/verify'];
-  const shouldShow = showPages.some(p => location === p || (p !== '/' && location.startsWith(p)));
-  if (!shouldShow) return null;
+  const isDashboard = location.startsWith('/dashboard');
+
+  /* Dashboard has its own footer — don't render here */
+  if (isDashboard) return null;
 
   return (
     <footer
       style={{
         background: '#2C1A0E',
         color: 'rgba(245,240,232,0.6)',
-        padding: '36px 5%',
+        padding: '48px 5% 32px',
         textAlign: 'center',
         fontFamily: "'Cormorant Garamond', Georgia, serif",
       }}
     >
-      {/* Logo — matching marketing site: height 220px */}
+      {/* Logo */}
       <img
         src="/assets/images/logo.png"
         alt="diAry"
         style={{
-          height: '220px',
+          height: '180px',
           display: 'block',
-          margin: '0 auto 16px',
+          margin: '0 auto 20px',
           filter: 'brightness(0.9)',
         }}
       />
 
-      {/* Tagline — matching marketing site: 2rem italic */}
+      {/* Tagline */}
       <p
         style={{
-          fontSize: '2rem',
+          fontSize: '1.8rem',
           fontStyle: 'italic',
-          color: 'rgba(245,240,232,0.5)',
-          marginBottom: '32px',
+          color: 'rgba(245,240,232,0.45)',
+          marginBottom: '36px',
+          fontWeight: 300,
         }}
       >
         "I'll never tell..."
       </p>
 
-      {/* Nav links — matching marketing site footer-links */}
+      {/* Nav links */}
       <div
         style={{
           display: 'flex',
-          gap: '32px',
+          gap: '28px',
           justifyContent: 'center',
           flexWrap: 'wrap',
-          marginBottom: '24px',
+          marginBottom: '28px',
         }}
       >
         {FOOTER_LINKS.map(link => (
@@ -83,15 +80,16 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              fontSize: '0.78rem',
+              fontSize: '0.72rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              color: 'rgba(245,240,232,0.5)',
+              color: 'rgba(245,240,232,0.45)',
               textDecoration: 'none',
               transition: 'color 0.2s',
+              fontWeight: 600,
             }}
             onMouseEnter={(e) => { e.currentTarget.style.color = '#C9A84C'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245,240,232,0.5)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245,240,232,0.45)'; }}
           >
             {link.label}
           </a>
@@ -99,21 +97,21 @@ export default function Footer() {
       </div>
 
       {/* Login/Logout button */}
-      <div style={{ marginBottom: '28px' }}>
+      <div style={{ marginBottom: '32px' }}>
         {isAuthenticated ? (
           <button
             onClick={() => logout()}
             style={{
               background: 'transparent',
-              border: '1px solid rgba(201,168,76,0.4)',
+              border: '1px solid rgba(201,168,76,0.35)',
               color: '#C9A84C',
-              padding: '10px 28px',
+              padding: '10px 32px',
               borderRadius: '40px',
-              fontSize: '0.78rem',
+              fontSize: '0.72rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
               fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontWeight: 500,
+              fontWeight: 600,
               transition: 'all 0.25s',
               cursor: 'pointer',
             }}
@@ -123,7 +121,7 @@ export default function Footer() {
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)';
+              e.currentTarget.style.borderColor = 'rgba(201,168,76,0.35)';
             }}
           >
             Sign Out
@@ -134,16 +132,16 @@ export default function Footer() {
             style={{
               background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
               color: '#F5F0E8',
-              padding: '10px 28px',
+              padding: '10px 32px',
               borderRadius: '40px',
-              fontSize: '0.78rem',
+              fontSize: '0.72rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
               textDecoration: 'none',
               fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontWeight: 500,
+              fontWeight: 600,
               transition: 'transform 0.2s, box-shadow 0.2s',
-              boxShadow: '0 4px 20px rgba(168,134,58,0.3)',
+              boxShadow: '0 4px 20px rgba(168,134,58,0.25)',
               display: 'inline-block',
             }}
           >
@@ -152,13 +150,11 @@ export default function Footer() {
         )}
       </div>
 
-      {/* Copyright — exact text as specified */}
-      <p
-        style={{
-          fontSize: '0.78rem',
-          color: 'rgba(245,240,232,0.3)',
-        }}
-      >
+      {/* Divider */}
+      <div style={{ width: '60px', height: '1px', background: 'rgba(201,168,76,0.2)', margin: '0 auto 20px' }} />
+
+      {/* Copyright */}
+      <p style={{ fontSize: '0.72rem', color: 'rgba(245,240,232,0.3)' }}>
         &copy; 2026 GMX Quantum LLC. All rights reserved. A GMCG Holdings Inc. company.
       </p>
     </footer>

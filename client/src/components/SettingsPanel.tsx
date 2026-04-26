@@ -1,13 +1,18 @@
 /**
- * Settings Panel — Profile, preferences, password, export, dark mode
+ * Settings Panel — Premium branded: Profile, preferences, password, export, dark mode
+ * Consistent Cormorant Garamond typography, gold accents throughout
  */
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone } from 'lucide-react';
+import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { userApi, exportApi } from '@/lib/api';
 import { toast } from 'sonner';
+
+const FONT = "'Cormorant Garamond', Georgia, serif";
+const GOLD = '#C9A84C';
+const GOLD_DARK = '#A8863A';
 
 type SettingsTab = 'profile' | 'preferences' | 'security' | 'export';
 
@@ -24,9 +29,14 @@ export default function SettingsPanel() {
   ];
 
   return (
-    <div className="h-full flex flex-col">
-      <header className="px-6 lg:px-8 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
-        <h1 className="font-serif text-2xl font-light" style={{ color: 'var(--foreground)' }}>Settings</h1>
+    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
+      <header className="px-6 lg:px-8 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
+        <h1
+          className="text-2xl font-semibold"
+          style={{ fontFamily: FONT, color: 'var(--foreground)', letterSpacing: '0.02em' }}
+        >
+          Settings
+        </h1>
       </header>
 
       <div className="flex-1 overflow-y-auto diary-scrollbar">
@@ -40,8 +50,11 @@ export default function SettingsPanel() {
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-sm transition-all"
                 style={{
                   backgroundColor: activeTab === tab.id ? 'var(--card)' : 'transparent',
-                  color: activeTab === tab.id ? 'var(--foreground)' : 'var(--muted-foreground)',
+                  color: activeTab === tab.id ? GOLD_DARK : 'var(--muted-foreground)',
                   boxShadow: activeTab === tab.id ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+                  fontFamily: FONT,
+                  fontWeight: activeTab === tab.id ? 700 : 600,
+                  letterSpacing: '0.03em',
                 }}
               >
                 <tab.icon size={14} />
@@ -84,68 +97,109 @@ function ProfileSection() {
     setIsSaving(false);
   };
 
-  const inputClass = "w-full px-4 py-2.5 rounded-lg border text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all";
+  const inputStyle: React.CSSProperties = {
+    border: '1px solid var(--border)',
+    color: 'var(--foreground)',
+    fontFamily: FONT,
+    fontSize: '15px',
+  };
+
+  const labelStyle: React.CSSProperties = {
+    color: 'var(--muted-foreground)',
+    fontFamily: FONT,
+    fontWeight: 700,
+    letterSpacing: '0.12em',
+  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       {/* Subscription badge */}
       <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: 'var(--muted)' }}>
-        <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-serif"
-          style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8' }}>
+        <div
+          className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold"
+          style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+        >
           {user?.first_name?.[0] || 'U'}
         </div>
         <div className="flex-1">
-          <p className="font-medium" style={{ color: 'var(--foreground)' }}>{user?.fullname}</p>
-          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{user?.email}</p>
+          <p className="font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>{user?.fullname}</p>
+          <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{user?.email}</p>
         </div>
-        <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium"
-          style={{ background: 'rgba(201,168,76,0.12)', color: '#C9A84C' }}>
+        <span
+          className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold tracking-wider"
+          style={{ background: 'rgba(201,168,76,0.12)', color: GOLD, fontFamily: FONT }}
+        >
           <Crown size={12} /> {user?.subscription_tier === 'diary_elite' ? 'Elite' : 'Free'}
         </span>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>First Name</label>
-          <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={inputClass} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }} />
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>First Name</label>
+          <input
+            type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
+            style={inputStyle}
+            onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+            onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+          />
         </div>
         <div>
-          <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>Last Name</label>
-          <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} className={inputClass} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }} />
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>Last Name</label>
+          <input
+            type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
+            style={inputStyle}
+            onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+            onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+          />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>Username</label>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className={inputClass} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }} />
+        <label className="block text-xs uppercase mb-2" style={labelStyle}>Username</label>
+        <input
+          type="text" value={username} onChange={(e) => setUsername(e.target.value)}
+          className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
+          style={inputStyle}
+          onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+          onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+        />
       </div>
 
       <div>
-        <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>Bio</label>
-        <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className={`${inputClass} resize-none`} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }} placeholder="Tell us about yourself..." />
+        <label className="block text-xs uppercase mb-2" style={labelStyle}>Bio</label>
+        <textarea
+          value={bio} onChange={(e) => setBio(e.target.value)} rows={3}
+          className="w-full px-4 py-2.5 rounded-lg text-sm bg-background resize-none focus:outline-none transition-shadow"
+          style={inputStyle}
+          placeholder="Tell us about yourself..."
+          onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+          onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+        />
       </div>
 
-      <button onClick={handleSave} disabled={isSaving}
-        className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 disabled:opacity-60"
-        style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8' }}>
+      <button
+        onClick={handleSave} disabled={isSaving}
+        className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
+        style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+      >
         {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
         {isSaving ? 'Saving...' : 'Save Changes'}
       </button>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
-        <div className="text-center p-3 rounded-lg" style={{ background: 'var(--muted)' }}>
-          <p className="text-xl font-serif" style={{ color: '#C9A84C' }}>{user?.stats?.total_entries || 0}</p>
-          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>Entries</p>
-        </div>
-        <div className="text-center p-3 rounded-lg" style={{ background: 'var(--muted)' }}>
-          <p className="text-xl font-serif" style={{ color: '#C9A84C' }}>{user?.stats?.current_streak || 0}</p>
-          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>Day Streak</p>
-        </div>
-        <div className="text-center p-3 rounded-lg" style={{ background: 'var(--muted)' }}>
-          <p className="text-xl font-serif" style={{ color: '#C9A84C' }}>{user?.stats?.total_words || 0}</p>
-          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>Words</p>
-        </div>
+      <div className="grid grid-cols-3 gap-4 pt-4" style={{ borderTop: '1px solid var(--border)' }}>
+        {[
+          { value: user?.stats?.total_entries || 0, label: 'Entries' },
+          { value: user?.stats?.current_streak || 0, label: 'Day Streak' },
+          { value: user?.stats?.total_words || 0, label: 'Words' },
+        ].map(s => (
+          <div key={s.label} className="text-center p-3 rounded-lg" style={{ background: 'var(--muted)' }}>
+            <p className="text-xl font-semibold" style={{ color: GOLD, fontFamily: FONT }}>{s.value}</p>
+            <p className="text-xs tracking-wider uppercase" style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600 }}>{s.label}</p>
+          </div>
+        ))}
       </div>
     </motion.div>
   );
@@ -157,33 +211,40 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
       {/* Theme toggle */}
       <div className="flex items-center justify-between p-4 rounded-xl" style={{ background: 'var(--muted)' }}>
         <div className="flex items-center gap-3">
-          {theme === 'dark' ? <Moon size={18} style={{ color: '#C9A84C' }} /> : <Sun size={18} style={{ color: '#C9A84C' }} />}
+          {theme === 'dark' ? <Moon size={18} style={{ color: GOLD }} /> : <Sun size={18} style={{ color: GOLD }} />}
           <div>
-            <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>Dark Mode</p>
-            <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>Switch between light and dark themes</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>Dark Mode</p>
+            <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>Switch between light and dark themes</p>
           </div>
         </div>
         <button
           onClick={() => toggleTheme?.()}
           className="w-12 h-7 rounded-full relative transition-colors duration-300"
-          style={{ backgroundColor: theme === 'dark' ? '#C9A84C' : 'var(--border)' }}
+          style={{ backgroundColor: theme === 'dark' ? GOLD : 'var(--border)' }}
         >
-          <div className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
-            style={{ transform: theme === 'dark' ? 'translateX(22px)' : 'translateX(2px)' }} />
+          <div
+            className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
+            style={{ transform: theme === 'dark' ? 'translateX(22px)' : 'translateX(2px)' }}
+          />
         </button>
       </div>
 
       {/* Mobile-only features */}
-      <div className="p-4 rounded-xl border" style={{ borderColor: 'var(--border)' }}>
+      <div className="p-4 rounded-xl" style={{ border: '1px solid var(--border)' }}>
         <div className="flex items-center gap-2 mb-3">
           <Smartphone size={16} style={{ color: 'var(--muted-foreground)' }} />
-          <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>Mobile-Only Features</p>
+          <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>Mobile-Only Features</p>
         </div>
         <div className="space-y-2">
           {['Voice Recording', 'Handwriting OCR', 'Biometric Auth', 'ICE Cam Security'].map(f => (
             <div key={f} className="flex items-center justify-between py-1.5">
-              <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>{f}</span>
-              <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(201,168,76,0.1)', color: '#C9A84C' }}>Mobile</span>
+              <span className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{f}</span>
+              <span
+                className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
+                style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
+              >
+                Mobile
+              </span>
             </div>
           ))}
         </div>
@@ -193,12 +254,37 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
 }
 
 function SecuritySection() {
+  const { user, isElite, refreshUser } = useAuth();
+  const [ghostMode, setGhostMode] = useState(user?.preferences?.privacy_mode ?? false);
+  const [isTogglingGhost, setIsTogglingGhost] = useState(false);
   const [currentPw, setCurrentPw] = useState('');
   const [newPw, setNewPw] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  const handleGhostToggle = async () => {
+    if (!isElite) {
+      toast.error('Ghost Mode requires diAry Elite subscription');
+      return;
+    }
+    setIsTogglingGhost(true);
+    try {
+      const newVal = !ghostMode;
+      const res = await userApi.updatePreferences({ privacy_mode: newVal });
+      if (res.success) {
+        setGhostMode(newVal);
+        toast.success(newVal ? 'Ghost Mode enabled — your activity is now hidden' : 'Ghost Mode disabled');
+        refreshUser();
+      } else {
+        toast.error(res.error?.message || 'Failed to update Ghost Mode');
+      }
+    } catch {
+      toast.error('Failed to update Ghost Mode');
+    }
+    setIsTogglingGhost(false);
+  };
 
   const handleChangePw = async () => {
     if (!currentPw || !newPw) { toast.error('Please fill in all fields'); return; }
@@ -220,17 +306,85 @@ function SecuritySection() {
     setIsSaving(false);
   };
 
-  const inputClass = "w-full px-4 py-2.5 rounded-lg border text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all";
+  const inputStyle: React.CSSProperties = {
+    border: '1px solid var(--border)',
+    color: 'var(--foreground)',
+    fontFamily: FONT,
+    fontSize: '15px',
+  };
+
+  const labelStyle: React.CSSProperties = {
+    color: 'var(--muted-foreground)',
+    fontFamily: FONT,
+    fontWeight: 700,
+    letterSpacing: '0.12em',
+  };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
-      <h3 className="font-serif text-lg" style={{ color: 'var(--foreground)' }}>Change Password</h3>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+      {/* Ghost Mode */}
+      <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center"
+              style={{ background: ghostMode ? 'rgba(201,168,76,0.15)' : 'var(--muted)' }}
+            >
+              <Ghost size={18} style={{ color: ghostMode ? GOLD : 'var(--muted-foreground)' }} />
+            </div>
+            <div>
+              <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                Ghost Mode
+                {!isElite && (
+                  <span
+                    className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
+                    style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
+                  >
+                    <Crown size={10} className="inline mr-1" />Elite
+                  </span>
+                )}
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+                Hide your activity from analytics and streak tracking
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleGhostToggle}
+            disabled={isTogglingGhost}
+            className="w-12 h-7 rounded-full relative transition-colors duration-300"
+            style={{ backgroundColor: ghostMode ? GOLD : 'var(--border)', opacity: isTogglingGhost ? 0.6 : 1 }}
+          >
+            <div
+              className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
+              style={{ transform: ghostMode ? 'translateX(22px)' : 'translateX(2px)' }}
+            />
+          </button>
+        </div>
+        {ghostMode && (
+          <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(201,168,76,0.06)' }}>
+            <Shield size={14} style={{ color: GOLD_DARK }} />
+            <p className="text-xs" style={{ color: GOLD_DARK, fontFamily: FONT, fontWeight: 600 }}>
+              Ghost Mode is active — your entries are hidden from analytics
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Change Password */}
+      <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
+      <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>Change Password</h3>
 
       <div>
-        <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>Current Password</label>
+        <label className="block text-xs uppercase mb-2" style={labelStyle}>Current Password</label>
         <div className="relative">
-          <input type={showCurrent ? 'text' : 'password'} value={currentPw} onChange={(e) => setCurrentPw(e.target.value)}
-            className={`${inputClass} pr-10`} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }} />
+          <input
+            type={showCurrent ? 'text' : 'password'} value={currentPw} onChange={(e) => setCurrentPw(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
+            style={inputStyle}
+            onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+            onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+          />
           <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
             {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
@@ -238,10 +392,15 @@ function SecuritySection() {
       </div>
 
       <div>
-        <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>New Password</label>
+        <label className="block text-xs uppercase mb-2" style={labelStyle}>New Password</label>
         <div className="relative">
-          <input type={showNew ? 'text' : 'password'} value={newPw} onChange={(e) => setNewPw(e.target.value)}
-            className={`${inputClass} pr-10`} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }} />
+          <input
+            type={showNew ? 'text' : 'password'} value={newPw} onChange={(e) => setNewPw(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
+            style={inputStyle}
+            onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+            onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+          />
           <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
             {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
@@ -249,17 +408,25 @@ function SecuritySection() {
       </div>
 
       <div>
-        <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>Confirm New Password</label>
-        <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)}
-          className={inputClass} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }} />
+        <label className="block text-xs uppercase mb-2" style={labelStyle}>Confirm New Password</label>
+        <input
+          type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)}
+          className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
+          style={inputStyle}
+          onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+          onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+        />
       </div>
 
-      <button onClick={handleChangePw} disabled={isSaving}
-        className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 disabled:opacity-60"
-        style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8' }}>
+      <button
+        onClick={handleChangePw} disabled={isSaving}
+        className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
+        style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+      >
         {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
         {isSaving ? 'Changing...' : 'Change Password'}
       </button>
+      </div>
     </motion.div>
   );
 }
@@ -284,15 +451,25 @@ function ExportSection() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <div className="p-6 rounded-xl border text-center" style={{ borderColor: 'var(--border)' }}>
-        <Download size={32} className="mx-auto mb-3" style={{ color: '#C9A84C' }} />
-        <h3 className="font-serif text-lg mb-2" style={{ color: 'var(--foreground)' }}>Export Your Journal</h3>
-        <p className="text-sm mb-6" style={{ color: 'var(--muted-foreground)' }}>
+      <div className="p-6 rounded-xl text-center" style={{ border: '1px solid var(--border)' }}>
+        <Download size={32} className="mx-auto mb-3" style={{ color: GOLD }} />
+        <h3
+          className="text-lg mb-2 font-semibold"
+          style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+        >
+          Export Your Journal
+        </h3>
+        <p
+          className="text-sm mb-6"
+          style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+        >
           Download all your entries as a beautifully formatted PDF
         </p>
-        <button onClick={handleExport} disabled={isExporting}
-          className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 mx-auto disabled:opacity-60"
-          style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8' }}>
+        <button
+          onClick={handleExport} disabled={isExporting}
+          className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 mx-auto disabled:opacity-60"
+          style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+        >
           {isExporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
           {isExporting ? 'Exporting...' : 'Export as PDF'}
         </button>

@@ -1,7 +1,6 @@
 /**
- * Rich Text Editor Toolbar — Word-processor style formatting bar
- * Supports: font family, font size, bold, italic, underline, strikethrough,
- * text color, highlight, headings, alignment, lists, blockquote, code, undo/redo
+ * Rich Text Editor Toolbar — Premium branded formatting bar
+ * Consistent gold active states, Cormorant Garamond labels
  */
 import { type Editor } from '@tiptap/react';
 import {
@@ -12,6 +11,8 @@ import {
   ChevronDown, Palette, Highlighter, Type,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+
+const FONT = "'Cormorant Garamond', Georgia, serif";
 
 interface EditorToolbarProps {
   editor: Editor | null;
@@ -49,7 +50,6 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
   const colorRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdowns on outside click
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (fontMenuRef.current && !fontMenuRef.current.contains(e.target as Node)) setShowFontMenu(false);
@@ -63,15 +63,24 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
 
   if (!editor) return null;
 
-  // Helper to run any chain command via the editor
   const run = (fn: (chain: ReturnType<Editor['chain']>) => ReturnType<Editor['chain']>) => {
     fn(editor.chain().focus()).run();
   };
 
+  /* Gold active state instead of generic primary */
   const btnClass = (active: boolean) =>
-    `p-1.5 rounded transition-colors duration-150 ${active ? 'bg-primary/15 text-primary' : 'hover:bg-accent text-foreground/70 hover:text-foreground'}`;
+    `p-1.5 rounded transition-colors duration-150 ${
+      active
+        ? 'text-[#C9A84C]'
+        : 'hover:bg-accent text-foreground/60 hover:text-foreground'
+    }`;
 
-  const divider = <div className="w-px h-5 mx-1 flex-shrink-0" style={{ backgroundColor: 'var(--border)' }} />;
+  const activeBtnBg = (active: boolean): React.CSSProperties =>
+    active ? { backgroundColor: 'rgba(201,168,76,0.1)' } : {};
+
+  const divider = (
+    <div className="w-px h-5 mx-1 flex-shrink-0" style={{ backgroundColor: 'var(--border)' }} />
+  );
 
   const currentFont = editor.getAttributes('textStyle').fontFamily || 'Cormorant Garamond';
   const currentFontLabel = FONT_FAMILIES.find(f => f.value === currentFont)?.label || 'Cormorant Garamond';
@@ -79,8 +88,11 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
 
   return (
     <div
-      className="flex items-center gap-0.5 px-3 py-1.5 border-b overflow-x-auto diary-scrollbar"
-      style={{ borderColor: 'var(--border)', backgroundColor: 'var(--card)' }}
+      className="flex items-center gap-0.5 px-3 py-1.5 overflow-x-auto diary-scrollbar"
+      style={{
+        borderBottom: '1px solid var(--border)',
+        backgroundColor: 'var(--card)',
+      }}
     >
       {/* Undo / Redo */}
       <button onClick={() => run(c => c.undo())} disabled={!editor.can().undo()} className={`${btnClass(false)} disabled:opacity-30`} title="Undo (Ctrl+Z)">
@@ -97,14 +109,17 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         <button
           onClick={() => { setShowFontMenu(!showFontMenu); setShowSizeMenu(false); setShowColorPicker(false); setShowHighlightPicker(false); }}
           className="flex items-center gap-1 px-2 py-1 rounded text-xs hover:bg-accent transition-colors min-w-[110px]"
-          style={{ color: 'var(--foreground)' }}
+          style={{ color: 'var(--foreground)', fontFamily: FONT }}
         >
           <Type size={13} />
           <span className="truncate">{currentFontLabel}</span>
           <ChevronDown size={12} />
         </button>
         {showFontMenu && (
-          <div className="absolute top-full left-0 mt-1 bg-popover border rounded-lg shadow-lg z-50 py-1 min-w-[180px]" style={{ borderColor: 'var(--border)' }}>
+          <div
+            className="absolute top-full left-0 mt-1 rounded-lg shadow-lg z-50 py-1 min-w-[180px]"
+            style={{ backgroundColor: 'var(--popover)', border: '1px solid var(--border)' }}
+          >
             {FONT_FAMILIES.map(font => (
               <button
                 key={font.value}
@@ -124,13 +139,16 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         <button
           onClick={() => { setShowSizeMenu(!showSizeMenu); setShowFontMenu(false); setShowColorPicker(false); setShowHighlightPicker(false); }}
           className="flex items-center gap-1 px-2 py-1 rounded text-xs hover:bg-accent transition-colors min-w-[50px]"
-          style={{ color: 'var(--foreground)' }}
+          style={{ color: 'var(--foreground)', fontFamily: FONT }}
         >
           <span>{currentSize}</span>
           <ChevronDown size={12} />
         </button>
         {showSizeMenu && (
-          <div className="absolute top-full left-0 mt-1 bg-popover border rounded-lg shadow-lg z-50 py-1 min-w-[60px] max-h-[200px] overflow-y-auto" style={{ borderColor: 'var(--border)' }}>
+          <div
+            className="absolute top-full left-0 mt-1 rounded-lg shadow-lg z-50 py-1 min-w-[60px] max-h-[200px] overflow-y-auto"
+            style={{ backgroundColor: 'var(--popover)', border: '1px solid var(--border)' }}
+          >
             {FONT_SIZES.map(size => (
               <button
                 key={size}
@@ -139,7 +157,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
                   setShowSizeMenu(false);
                 }}
                 className="w-full text-left px-3 py-1.5 text-sm hover:bg-accent transition-colors"
-                style={{ color: currentSize === size ? '#C9A84C' : 'var(--foreground)' }}
+                style={{ color: currentSize === size ? '#C9A84C' : 'var(--foreground)', fontFamily: FONT }}
               >
                 {size}
               </button>
@@ -151,16 +169,16 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       {divider}
 
       {/* Bold, Italic, Underline, Strikethrough */}
-      <button onClick={() => run(c => c.toggleBold())} className={btnClass(editor.isActive('bold'))} title="Bold (Ctrl+B)">
+      <button onClick={() => run(c => c.toggleBold())} className={btnClass(editor.isActive('bold'))} style={activeBtnBg(editor.isActive('bold'))} title="Bold (Ctrl+B)">
         <Bold size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleItalic())} className={btnClass(editor.isActive('italic'))} title="Italic (Ctrl+I)">
+      <button onClick={() => run(c => c.toggleItalic())} className={btnClass(editor.isActive('italic'))} style={activeBtnBg(editor.isActive('italic'))} title="Italic (Ctrl+I)">
         <Italic size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleUnderline())} className={btnClass(editor.isActive('underline'))} title="Underline (Ctrl+U)">
+      <button onClick={() => run(c => c.toggleUnderline())} className={btnClass(editor.isActive('underline'))} style={activeBtnBg(editor.isActive('underline'))} title="Underline (Ctrl+U)">
         <Underline size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleStrike())} className={btnClass(editor.isActive('strike'))} title="Strikethrough">
+      <button onClick={() => run(c => c.toggleStrike())} className={btnClass(editor.isActive('strike'))} style={activeBtnBg(editor.isActive('strike'))} title="Strikethrough">
         <Strikethrough size={15} />
       </button>
 
@@ -176,14 +194,17 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           <Palette size={15} />
         </button>
         {showColorPicker && (
-          <div className="absolute top-full left-0 mt-1 bg-popover border rounded-lg shadow-lg z-50 p-2" style={{ borderColor: 'var(--border)' }}>
+          <div
+            className="absolute top-full left-0 mt-1 rounded-lg shadow-lg z-50 p-2"
+            style={{ backgroundColor: 'var(--popover)', border: '1px solid var(--border)' }}
+          >
             <div className="grid grid-cols-5 gap-1">
               {TEXT_COLORS.map(color => (
                 <button
                   key={color}
                   onClick={() => { run(c => c.setColor(color)); setShowColorPicker(false); }}
-                  className="w-6 h-6 rounded border hover:scale-110 transition-transform"
-                  style={{ backgroundColor: color, borderColor: 'var(--border)' }}
+                  className="w-6 h-6 rounded hover:scale-110 transition-transform"
+                  style={{ backgroundColor: color, border: '1px solid var(--border)' }}
                 />
               ))}
             </div>
@@ -196,12 +217,16 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         <button
           onClick={() => { setShowHighlightPicker(!showHighlightPicker); setShowFontMenu(false); setShowSizeMenu(false); setShowColorPicker(false); }}
           className={btnClass(editor.isActive('highlight'))}
+          style={activeBtnBg(editor.isActive('highlight'))}
           title="Highlight"
         >
           <Highlighter size={15} />
         </button>
         {showHighlightPicker && (
-          <div className="absolute top-full left-0 mt-1 bg-popover border rounded-lg shadow-lg z-50 p-2" style={{ borderColor: 'var(--border)' }}>
+          <div
+            className="absolute top-full left-0 mt-1 rounded-lg shadow-lg z-50 p-2"
+            style={{ backgroundColor: 'var(--popover)', border: '1px solid var(--border)' }}
+          >
             <div className="grid grid-cols-5 gap-1">
               {HIGHLIGHT_COLORS.map(color => (
                 <button
@@ -214,8 +239,8 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
                     }
                     setShowHighlightPicker(false);
                   }}
-                  className="w-6 h-6 rounded border hover:scale-110 transition-transform"
-                  style={{ backgroundColor: color === 'transparent' ? 'var(--background)' : color, borderColor: 'var(--border)' }}
+                  className="w-6 h-6 rounded hover:scale-110 transition-transform"
+                  style={{ backgroundColor: color === 'transparent' ? 'var(--background)' : color, border: '1px solid var(--border)' }}
                 >
                   {color === 'transparent' && <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>✕</span>}
                 </button>
@@ -228,49 +253,49 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       {divider}
 
       {/* Headings */}
-      <button onClick={() => run(c => c.toggleHeading({ level: 1 }))} className={btnClass(editor.isActive('heading', { level: 1 }))} title="Heading 1">
+      <button onClick={() => run(c => c.toggleHeading({ level: 1 }))} className={btnClass(editor.isActive('heading', { level: 1 }))} style={activeBtnBg(editor.isActive('heading', { level: 1 }))} title="Heading 1">
         <Heading1 size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleHeading({ level: 2 }))} className={btnClass(editor.isActive('heading', { level: 2 }))} title="Heading 2">
+      <button onClick={() => run(c => c.toggleHeading({ level: 2 }))} className={btnClass(editor.isActive('heading', { level: 2 }))} style={activeBtnBg(editor.isActive('heading', { level: 2 }))} title="Heading 2">
         <Heading2 size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleHeading({ level: 3 }))} className={btnClass(editor.isActive('heading', { level: 3 }))} title="Heading 3">
+      <button onClick={() => run(c => c.toggleHeading({ level: 3 }))} className={btnClass(editor.isActive('heading', { level: 3 }))} style={activeBtnBg(editor.isActive('heading', { level: 3 }))} title="Heading 3">
         <Heading3 size={15} />
       </button>
 
       {divider}
 
       {/* Alignment */}
-      <button onClick={() => run(c => c.setTextAlign('left'))} className={btnClass(editor.isActive({ textAlign: 'left' }))} title="Align Left">
+      <button onClick={() => run(c => c.setTextAlign('left'))} className={btnClass(editor.isActive({ textAlign: 'left' }))} style={activeBtnBg(editor.isActive({ textAlign: 'left' }))} title="Align Left">
         <AlignLeft size={15} />
       </button>
-      <button onClick={() => run(c => c.setTextAlign('center'))} className={btnClass(editor.isActive({ textAlign: 'center' }))} title="Align Center">
+      <button onClick={() => run(c => c.setTextAlign('center'))} className={btnClass(editor.isActive({ textAlign: 'center' }))} style={activeBtnBg(editor.isActive({ textAlign: 'center' }))} title="Align Center">
         <AlignCenter size={15} />
       </button>
-      <button onClick={() => run(c => c.setTextAlign('right'))} className={btnClass(editor.isActive({ textAlign: 'right' }))} title="Align Right">
+      <button onClick={() => run(c => c.setTextAlign('right'))} className={btnClass(editor.isActive({ textAlign: 'right' }))} style={activeBtnBg(editor.isActive({ textAlign: 'right' }))} title="Align Right">
         <AlignRight size={15} />
       </button>
-      <button onClick={() => run(c => c.setTextAlign('justify'))} className={btnClass(editor.isActive({ textAlign: 'justify' }))} title="Justify">
+      <button onClick={() => run(c => c.setTextAlign('justify'))} className={btnClass(editor.isActive({ textAlign: 'justify' }))} style={activeBtnBg(editor.isActive({ textAlign: 'justify' }))} title="Justify">
         <AlignJustify size={15} />
       </button>
 
       {divider}
 
       {/* Lists */}
-      <button onClick={() => (editor.chain().focus() as any).toggleBulletList().run()} className={btnClass(editor.isActive('bulletList'))} title="Bullet List">
+      <button onClick={() => (editor.chain().focus() as any).toggleBulletList().run()} className={btnClass(editor.isActive('bulletList'))} style={activeBtnBg(editor.isActive('bulletList'))} title="Bullet List">
         <List size={15} />
       </button>
-      <button onClick={() => (editor.chain().focus() as any).toggleOrderedList().run()} className={btnClass(editor.isActive('orderedList'))} title="Numbered List">
+      <button onClick={() => (editor.chain().focus() as any).toggleOrderedList().run()} className={btnClass(editor.isActive('orderedList'))} style={activeBtnBg(editor.isActive('orderedList'))} title="Numbered List">
         <ListOrdered size={15} />
       </button>
 
       {divider}
 
       {/* Blockquote, Code, Horizontal Rule */}
-      <button onClick={() => (editor.chain().focus() as any).toggleBlockquote().run()} className={btnClass(editor.isActive('blockquote'))} title="Blockquote">
+      <button onClick={() => (editor.chain().focus() as any).toggleBlockquote().run()} className={btnClass(editor.isActive('blockquote'))} style={activeBtnBg(editor.isActive('blockquote'))} title="Blockquote">
         <Quote size={15} />
       </button>
-      <button onClick={() => (editor.chain().focus() as any).toggleCodeBlock().run()} className={btnClass(editor.isActive('codeBlock'))} title="Code Block">
+      <button onClick={() => (editor.chain().focus() as any).toggleCodeBlock().run()} className={btnClass(editor.isActive('codeBlock'))} style={activeBtnBg(editor.isActive('codeBlock'))} title="Code Block">
         <Code size={15} />
       </button>
       <button onClick={() => (editor.chain().focus() as any).setHorizontalRule().run()} className={btnClass(false)} title="Horizontal Rule">

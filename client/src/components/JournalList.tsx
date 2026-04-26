@@ -1,8 +1,9 @@
 /**
- * Journal List — Entry list with search, filter, and mood-first flow
+ * Journal List — Premium branded entry list
+ * Consistent Cormorant Garamond typography, gold accents, refined card design
  */
 import { motion } from 'framer-motion';
-import { Search, Filter, Plus, Flame, Ghost, BookOpen } from 'lucide-react';
+import { Search, Plus, Flame, Ghost, BookOpen, Sparkles } from 'lucide-react';
 import type { JournalEntry } from '@/pages/Dashboard';
 import type { User } from '@/contexts/AuthContext';
 import { MOOD_CONFIG } from '@/lib/constants';
@@ -21,7 +22,7 @@ interface JournalListProps {
   onMoodClick: () => void;
 }
 
-// Empty state uses the brand logo instead of an external image
+const FONT = "'Cormorant Garamond', Georgia, serif";
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -37,6 +38,13 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: d.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
 }
 
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 17) return 'Good afternoon';
+  return 'Good evening';
+}
+
 export default function JournalList({
   entries, isLoading, searchQuery, onSearchChange,
   filterType, onFilterChange, onEntrySelect, onNewEntry,
@@ -45,17 +53,32 @@ export default function JournalList({
   const stats = user?.stats;
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <header className="px-6 lg:px-8 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
+    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
+      {/* Header area */}
+      <header
+        className="px-6 lg:px-8 py-5"
+        style={{ borderBottom: '1px solid var(--border)' }}
+      >
         <div className="max-w-3xl mx-auto">
+          {/* Greeting + Mood */}
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="font-serif text-2xl font-light" style={{ color: 'var(--foreground)' }}>
-                {getGreeting()}, {user?.first_name || 'there'}
+              <h1
+                className="text-2xl font-light"
+                style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+              >
+                {getGreeting()},{' '}
+                <span style={{ color: '#C9A84C', fontWeight: 500 }}>
+                  {user?.first_name || 'there'}
+                </span>
               </h1>
-              <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>
-                {stats?.current_streak ? `${stats.current_streak} day streak` : 'Start your journey today'}
+              <p
+                className="text-sm mt-1 tracking-wide"
+                style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+              >
+                {stats?.current_streak
+                  ? `${stats.current_streak} day streak`
+                  : 'Start your journey today'}
                 {stats?.total_entries ? ` · ${stats.total_entries} entries` : ''}
               </p>
             </div>
@@ -69,12 +92,23 @@ export default function JournalList({
               {todayMood ? (
                 <>
                   <img src={MOOD_CONFIG[todayMood]?.icon} alt={todayMood} className="w-7 h-7" />
-                  <span className="text-xs font-medium capitalize hidden sm:inline" style={{ color: 'var(--muted-foreground)' }}>
+                  <span
+                    className="text-xs font-semibold capitalize hidden sm:inline tracking-wide"
+                    style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                  >
                     {todayMood}
                   </span>
                 </>
               ) : (
-                <span className="text-xs px-3 py-1 rounded-full" style={{ background: 'rgba(201,168,76,0.1)', color: '#C9A84C' }}>
+                <span
+                  className="text-xs font-semibold px-4 py-1.5 rounded-full tracking-wider uppercase"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(168,134,58,0.12), rgba(201,168,76,0.08))',
+                    color: '#C9A84C',
+                    fontFamily: FONT,
+                    border: '1px solid rgba(201,168,76,0.15)',
+                  }}
+                >
                   How are you?
                 </span>
               )}
@@ -84,21 +118,33 @@ export default function JournalList({
           {/* Search + Filter */}
           <div className="flex items-center gap-3">
             <div className="flex-1 relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }} />
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }} />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder="Search entries..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm focus:outline-none transition-all"
+                style={{
+                  borderColor: 'var(--border)',
+                  color: 'var(--foreground)',
+                  backgroundColor: 'var(--card)',
+                  fontFamily: FONT,
+                  fontSize: '0.9rem',
+                }}
               />
             </div>
             <select
               value={filterType}
               onChange={(e) => onFilterChange(e.target.value)}
-              className="px-3 py-2.5 rounded-lg border text-sm bg-card focus:outline-none focus:ring-2 focus:ring-primary/20"
-              style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}
+              className="px-3 py-2.5 rounded-lg border text-sm focus:outline-none"
+              style={{
+                borderColor: 'var(--border)',
+                color: 'var(--foreground)',
+                backgroundColor: 'var(--card)',
+                fontFamily: FONT,
+                fontSize: '0.9rem',
+              }}
             >
               <option value="all">All Entries</option>
               <option value="text">Text</option>
@@ -119,22 +165,39 @@ export default function JournalList({
             </div>
           ) : entries.length === 0 ? (
             <motion.div
-              className="text-center py-16"
+              className="text-center py-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <img src="/assets/images/logo.png" alt="" className="w-40 mx-auto mb-6 opacity-60" style={{ filter: 'grayscale(30%)' }} />
-              <h3 className="font-serif text-xl mb-2" style={{ color: 'var(--foreground)' }}>
+              <img
+                src="/assets/images/logo.png"
+                alt=""
+                className="w-32 mx-auto mb-6"
+                style={{ opacity: 0.5, filter: 'grayscale(20%)' }}
+              />
+              <h3
+                className="text-xl mb-2 font-light"
+                style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+              >
                 {searchQuery ? 'No entries found' : 'Your story begins here'}
               </h3>
-              <p className="text-sm mb-6" style={{ color: 'var(--muted-foreground)' }}>
-                {searchQuery ? 'Try a different search term' : 'Start writing your first entry'}
+              <p
+                className="text-sm mb-8"
+                style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+              >
+                {searchQuery ? 'Try a different search term' : 'Every great story starts with a single word'}
               </p>
               {!searchQuery && (
                 <button
                   onClick={onNewEntry}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium transition-all"
-                  style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8' }}
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold tracking-wider uppercase transition-all"
+                  style={{
+                    background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
+                    color: '#F5F0E8',
+                    fontFamily: FONT,
+                    letterSpacing: '0.12em',
+                    boxShadow: '0 4px 16px rgba(168,134,58,0.25)',
+                  }}
                 >
                   <Plus size={16} /> Write Your First Entry
                 </button>
@@ -146,7 +209,7 @@ export default function JournalList({
                 <motion.button
                   key={entry.id}
                   onClick={() => onEntrySelect(entry)}
-                  className="w-full text-left p-4 rounded-lg border transition-all duration-200 hover:shadow-sm group"
+                  className="w-full text-left p-4 rounded-lg border transition-all duration-200 group"
                   style={{
                     backgroundColor: 'var(--card)',
                     borderColor: 'var(--border)',
@@ -154,7 +217,10 @@ export default function JournalList({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.03 }}
-                  whileHover={{ y: -1 }}
+                  whileHover={{
+                    y: -2,
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+                  }}
                 >
                   <div className="flex items-start gap-3">
                     {/* Mood indicator */}
@@ -168,24 +234,33 @@ export default function JournalList({
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-serif text-base font-medium truncate" style={{ color: 'var(--foreground)' }}>
+                        <h3
+                          className="text-base font-medium truncate"
+                          style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+                        >
                           {entry.title || 'Untitled Entry'}
                         </h3>
                         {entry.burn_mode && <Flame size={14} style={{ color: '#E85D4A' }} />}
                         {entry.ghost_mode && <Ghost size={14} style={{ color: 'var(--muted-foreground)' }} />}
                       </div>
-                      <p className="text-sm truncate mb-1.5" style={{ color: 'var(--muted-foreground)' }}>
+                      <p
+                        className="text-sm truncate mb-1.5"
+                        style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                      >
                         {entry.preview || 'No content'}
                       </p>
-                      <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                      <div
+                        className="flex items-center gap-3 text-xs tracking-wide"
+                        style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                      >
                         <span>{formatDate(entry.created_at)}</span>
-                        <span>·</span>
+                        <span style={{ opacity: 0.4 }}>·</span>
                         <span>{entry.word_count} words</span>
                         {entry.ai_response && (
                           <>
-                            <span>·</span>
+                            <span style={{ opacity: 0.4 }}>·</span>
                             <span className="flex items-center gap-1" style={{ color: '#C9A84C' }}>
-                              AI insight
+                              <Sparkles size={11} /> AI insight
                             </span>
                           </>
                         )}
@@ -204,18 +279,15 @@ export default function JournalList({
         <button
           onClick={onNewEntry}
           className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
-          style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8' }}
+          style={{
+            background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
+            color: '#F5F0E8',
+            boxShadow: '0 4px 20px rgba(168,134,58,0.3)',
+          }}
         >
           <Plus size={24} />
         </button>
       </div>
     </div>
   );
-}
-
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 17) return 'Good afternoon';
-  return 'Good evening';
 }

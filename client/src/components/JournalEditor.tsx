@@ -1,8 +1,7 @@
 /**
- * Journal Editor — Centered writing canvas with TipTap rich text editor
- * Full toolbar: font, size, bold, italic, underline, strikethrough, color,
- * highlight, headings, alignment, lists, blockquote, code, undo/redo
- * Auto-save with 3s debounce
+ * Journal Editor — Premium branded writing canvas with TipTap rich text editor
+ * Consistent Cormorant Garamond typography, gold accents
+ * Full toolbar, auto-save with 3s debounce, Ctrl+S manual save
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
@@ -22,6 +21,8 @@ import { journalApi } from '@/lib/api';
 import { MOOD_CONFIG } from '@/lib/constants';
 import { toast } from 'sonner';
 import type { JournalEntry } from '@/pages/Dashboard';
+
+const FONT = "'Cormorant Garamond', Georgia, serif";
 
 interface JournalEditorProps {
   entry: JournalEntry | null;
@@ -53,7 +54,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({
-        placeholder: 'Begin writing...',
+        placeholder: 'Begin writing your thoughts...',
         emptyEditorClass: 'is-editor-empty',
       }),
       TextStyle,
@@ -66,32 +67,28 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     content: entry?.content || '',
     editorProps: {
       attributes: {
-        class: 'prose prose-lg max-w-none focus:outline-none min-h-[60vh] font-serif',
-        style: 'color: var(--foreground); line-height: 1.85; font-size: 18px;',
+        class: 'prose prose-lg max-w-none focus:outline-none min-h-[60vh]',
+        style: `color: var(--foreground); line-height: 1.85; font-size: 18px; font-family: ${FONT};`,
       },
     },
     onUpdate: ({ editor: ed }) => {
       hasChangesRef.current = true;
       setSaveStatus('idle');
-      // Update word count
       const text = ed.getText();
       const words = text.trim() ? text.trim().split(/\s+/).length : 0;
       setWordCount(words);
     },
   });
 
-  // Focus editor on mount for new entries
   useEffect(() => {
     if (!entry && editor) {
       setTimeout(() => editor.commands.focus(), 300);
     }
   }, [entry, editor]);
 
-  // Auto-save logic
   const performSave = useCallback(async () => {
     if (!editor) return;
     const content = editor.getHTML();
-    const plainText = editor.getText();
     if (!content.trim() && !title.trim()) return;
 
     setSaveStatus('saving');
@@ -132,7 +129,6 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     }
   }, [title, mood, burnMode, entryId, onSave, editor]);
 
-  // Ctrl+S keyboard shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -145,7 +141,6 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [performSave]);
 
-  // Debounced auto-save (3 seconds after last change)
   useEffect(() => {
     if (!hasChangesRef.current) return;
     if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
@@ -187,7 +182,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     switch (saveStatus) {
       case 'saving': return <Clock size={14} className="animate-pulse" />;
       case 'saved': return <Check size={14} />;
-      case 'error': return <span className="text-destructive text-xs">Error</span>;
+      case 'error': return <span className="text-destructive text-xs" style={{ fontFamily: FONT }}>Error</span>;
       default: return null;
     }
   };
@@ -202,29 +197,51 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Top bar with back, mood, save status, and actions */}
-      <header className="flex items-center justify-between px-4 lg:px-6 py-2 border-b" style={{ borderColor: 'var(--border)' }}>
+    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
+      {/* Top bar */}
+      <header
+        className="flex items-center justify-between px-4 lg:px-6 py-2.5"
+        style={{ borderBottom: '1px solid var(--border)' }}
+      >
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-lg hover:bg-accent transition-colors" style={{ color: 'var(--muted-foreground)' }}>
+          <button
+            onClick={onBack}
+            className="p-2 rounded-lg hover:bg-accent transition-colors"
+            style={{ color: 'var(--muted-foreground)' }}
+          >
             <ArrowLeft size={18} />
           </button>
 
           {mood && MOOD_CONFIG[mood] && (
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: 'var(--muted)' }}>
+            <div
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full"
+              style={{ background: 'var(--muted)', fontFamily: FONT }}
+            >
               <img src={MOOD_CONFIG[mood].icon} alt={mood} className="w-5 h-5" />
-              <span className="text-xs capitalize" style={{ color: 'var(--muted-foreground)' }}>{mood}</span>
+              <span className="text-xs font-semibold capitalize tracking-wide" style={{ color: 'var(--muted-foreground)' }}>
+                {mood}
+              </span>
             </div>
           )}
 
-          <div className="flex items-center gap-1.5 text-xs" style={{ color: saveStatus === 'saved' ? '#C9A84C' : 'var(--muted-foreground)' }}>
+          <div
+            className="flex items-center gap-1.5 text-xs tracking-wide"
+            style={{
+              color: saveStatus === 'saved' ? '#C9A84C' : 'var(--muted-foreground)',
+              fontFamily: FONT,
+              fontWeight: 600,
+            }}
+          >
             {saveStatusIcon()}
             <span>{saveStatusText()}</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs tabular-nums" style={{ color: 'var(--muted-foreground)' }}>
+        <div className="flex items-center gap-1.5">
+          <span
+            className="text-xs tabular-nums px-2"
+            style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600, letterSpacing: '0.05em' }}
+          >
             {wordCount} words
           </span>
 
@@ -232,18 +249,31 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             <button
               onClick={() => setBurnMode(!burnMode)}
               className="p-2 rounded-lg transition-colors"
-              style={{ color: burnMode ? '#E85D4A' : 'var(--muted-foreground)', backgroundColor: burnMode ? 'rgba(232,93,74,0.1)' : 'transparent' }}
+              style={{
+                color: burnMode ? '#E85D4A' : 'var(--muted-foreground)',
+                backgroundColor: burnMode ? 'rgba(232,93,74,0.1)' : 'transparent',
+              }}
               title="Burn Mode — auto-delete after 24h"
             >
               <Flame size={16} />
             </button>
           )}
 
-          <button onClick={handleManualSave} className="p-2 rounded-lg hover:bg-accent transition-colors" style={{ color: 'var(--muted-foreground)' }} title="Save now (Ctrl+S)">
+          <button
+            onClick={handleManualSave}
+            className="p-2 rounded-lg hover:bg-accent transition-colors"
+            style={{ color: 'var(--muted-foreground)' }}
+            title="Save now (Ctrl+S)"
+          >
             <Save size={16} />
           </button>
 
-          <button onClick={onToggleAi} className="p-2 rounded-lg hover:bg-accent transition-colors" style={{ color: '#C9A84C' }} title="AI Companion">
+          <button
+            onClick={onToggleAi}
+            className="p-2 rounded-lg transition-colors"
+            style={{ color: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.06)' }}
+            title="AI Companion"
+          >
             <Bot size={16} />
           </button>
 
@@ -277,13 +307,17 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             value={title}
             onChange={(e) => handleTitleChange(e.target.value)}
             placeholder="Title your entry..."
-            className="w-full font-serif text-2xl lg:text-3xl font-light bg-transparent border-none outline-none placeholder:opacity-30 mb-4"
-            style={{ color: 'var(--foreground)' }}
+            className="w-full text-2xl lg:text-3xl font-light bg-transparent border-none outline-none placeholder:opacity-30 mb-4"
+            style={{ color: 'var(--foreground)', fontFamily: FONT }}
           />
 
           {/* Date */}
-          <p className="text-xs tracking-wider uppercase mb-6" style={{ color: 'var(--muted-foreground)' }}>
-            {entry ? new Date(entry.created_at).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+          <p
+            className="text-xs tracking-widest uppercase mb-8"
+            style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600, letterSpacing: '0.18em' }}
+          >
+            {entry
+              ? new Date(entry.created_at).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
               : new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
 
@@ -294,27 +328,58 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
 
       {/* Burn mode indicator */}
       {burnMode && (
-        <div className="px-4 py-2 text-center text-xs flex items-center justify-center gap-2" style={{ background: 'rgba(232,93,74,0.08)', color: '#E85D4A' }}>
+        <div
+          className="px-4 py-2 text-center text-xs flex items-center justify-center gap-2 tracking-wider uppercase"
+          style={{
+            background: 'rgba(232,93,74,0.06)',
+            color: '#E85D4A',
+            fontFamily: FONT,
+            fontWeight: 600,
+            letterSpacing: '0.1em',
+          }}
+        >
           <Flame size={12} /> Burn Mode — This entry will auto-delete after 24 hours
         </div>
       )}
 
       {/* Delete confirmation */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm" onClick={() => setShowDeleteConfirm(false)}>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+          onClick={() => setShowDeleteConfirm(false)}
+        >
           <motion.div
-            className="bg-card rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl"
+            className="rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl"
+            style={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)' }}
             onClick={(e) => e.stopPropagation()}
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
           >
-            <h3 className="font-serif text-lg mb-2" style={{ color: 'var(--foreground)' }}>Delete this entry?</h3>
-            <p className="text-sm mb-6" style={{ color: 'var(--muted-foreground)' }}>This action cannot be undone.</p>
+            <h3
+              className="text-lg mb-2 font-medium"
+              style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+            >
+              Delete this entry?
+            </h3>
+            <p
+              className="text-sm mb-6"
+              style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+            >
+              This action cannot be undone. Your words will be lost forever.
+            </p>
             <div className="flex gap-3">
-              <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-2.5 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 py-2.5 rounded-lg border text-sm font-semibold tracking-wide"
+                style={{ borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
+              >
                 Cancel
               </button>
-              <button onClick={handleDelete} className="flex-1 py-2.5 rounded-lg text-sm font-medium bg-destructive text-destructive-foreground">
+              <button
+                onClick={handleDelete}
+                className="flex-1 py-2.5 rounded-lg text-sm font-semibold tracking-wide bg-destructive text-destructive-foreground"
+                style={{ fontFamily: FONT }}
+              >
                 Delete
               </button>
             </div>

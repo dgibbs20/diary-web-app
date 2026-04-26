@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -29,6 +29,19 @@ function Router() {
   );
 }
 
+function AppLayout() {
+  const [location] = useLocation();
+  const isSplash = location === '/';
+
+  return (
+    <>
+      {!isSplash && <Header />}
+      <Router />
+      {!isSplash && <Footer />}
+    </>
+  );
+}
+
 function App() {
   return (
     <ErrorBoundary>
@@ -44,9 +57,7 @@ function App() {
                 },
               }}
             />
-            <Header />
-            <Router />
-            <Footer />
+            <AppLayout />
           </TooltipProvider>
         </AuthProvider>
       </ThemeProvider>

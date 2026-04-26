@@ -1,6 +1,7 @@
 /**
- * Dashboard — Main app shell with Rail + Canvas + Drawer layout
- * "Quiet Luxury" design: warm surfaces, contextual gold, breathing whitespace
+ * Dashboard — Main app shell
+ * Layout: Header (56px, global) + Sidebar Rail + Canvas + AI Drawer + Compact Footer (36px)
+ * Premium branding throughout
  */
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'wouter';
@@ -40,6 +41,9 @@ export interface JournalEntry {
 }
 
 export type ViewMode = 'list' | 'editor' | 'settings' | 'analytics';
+
+const FONT = "'Cormorant Garamond', Georgia, serif";
+const MARKETING = 'https://diary.gmxquantum.com';
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
@@ -158,121 +162,141 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F5F0E8' }}>
+      <div
+        className="flex items-center justify-center"
+        style={{ backgroundColor: 'var(--background)', minHeight: 'calc(100vh - 56px)', paddingTop: '56px' }}
+      >
         <div className="text-center">
-          <img src="/assets/images/logo.png" alt="diAry" className="h-12 w-auto mx-auto mb-4 animate-pulse" />
-          <p className="text-sm" style={{ color: '#8B6347' }}>Loading your space...</p>
+          <img src="/assets/images/logo.png" alt="diAry" className="h-16 w-auto mx-auto mb-4 animate-pulse" />
+          <p
+            className="text-sm tracking-widest uppercase"
+            style={{ color: 'var(--muted-foreground)', fontFamily: FONT, letterSpacing: '0.15em' }}
+          >
+            Loading your space...
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex overflow-hidden bg-background">
-      {/* Sidebar Rail */}
-      <Sidebar
-        viewMode={viewMode}
-        onViewChange={setViewMode}
-        onNewEntry={handleNewEntry}
-        onToggleAi={() => setShowAiPanel(!showAiPanel)}
-        showAiPanel={showAiPanel}
-      />
+    <>
+      {/* Dashboard grid: header(56px) + content + footer(36px) */}
+      <div
+        className="flex flex-col"
+        style={{ marginTop: '56px', height: 'calc(100vh - 56px)' }}
+      >
+        {/* Main content row */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Sidebar Rail */}
+          <Sidebar
+            viewMode={viewMode}
+            onViewChange={setViewMode}
+            onNewEntry={handleNewEntry}
+            onToggleAi={() => setShowAiPanel(!showAiPanel)}
+            showAiPanel={showAiPanel}
+          />
 
-      {/* Main Canvas */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <AnimatePresence mode="wait">
-          {viewMode === 'list' && (
-            <motion.div
-              key="list"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden"
-            >
-              <JournalList
-                entries={filteredEntries}
-                isLoading={isLoadingEntries}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                filterType={filterType}
-                onFilterChange={setFilterType}
-                onEntrySelect={handleEntrySelect}
-                onNewEntry={handleNewEntry}
-                user={user}
-                todayMood={todayMood}
-                onMoodClick={() => setShowMoodPicker(true)}
-              />
-            </motion.div>
-          )}
+          {/* Main Canvas */}
+          <main className="flex-1 flex flex-col overflow-hidden">
+            <AnimatePresence mode="wait">
+              {viewMode === 'list' && (
+                <motion.div
+                  key="list"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 overflow-hidden"
+                >
+                  <JournalList
+                    entries={filteredEntries}
+                    isLoading={isLoadingEntries}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    filterType={filterType}
+                    onFilterChange={setFilterType}
+                    onEntrySelect={handleEntrySelect}
+                    onNewEntry={handleNewEntry}
+                    user={user}
+                    todayMood={todayMood}
+                    onMoodClick={() => setShowMoodPicker(true)}
+                  />
+                </motion.div>
+              )}
 
-          {viewMode === 'editor' && (
-            <motion.div
-              key="editor"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden"
-            >
-              <JournalEditor
-                entry={selectedEntry}
-                pendingMood={pendingMoodForEntry}
-                onSave={handleEntrySaved}
-                onDelete={handleEntryDeleted}
-                onBack={handleBackToList}
-                onToggleAi={() => setShowAiPanel(!showAiPanel)}
-              />
-            </motion.div>
-          )}
+              {viewMode === 'editor' && (
+                <motion.div
+                  key="editor"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 overflow-hidden"
+                >
+                  <JournalEditor
+                    entry={selectedEntry}
+                    pendingMood={pendingMoodForEntry}
+                    onSave={handleEntrySaved}
+                    onDelete={handleEntryDeleted}
+                    onBack={handleBackToList}
+                    onToggleAi={() => setShowAiPanel(!showAiPanel)}
+                  />
+                </motion.div>
+              )}
 
-          {viewMode === 'settings' && (
-            <motion.div
-              key="settings"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden"
-            >
-              <SettingsPanel />
-            </motion.div>
-          )}
+              {viewMode === 'settings' && (
+                <motion.div
+                  key="settings"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 overflow-hidden"
+                >
+                  <SettingsPanel />
+                </motion.div>
+              )}
 
-          {viewMode === 'analytics' && (
-            <motion.div
-              key="analytics"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden"
-            >
-              <AnalyticsPanel />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </main>
+              {viewMode === 'analytics' && (
+                <motion.div
+                  key="analytics"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 overflow-hidden"
+                >
+                  <AnalyticsPanel />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </main>
 
-      {/* AI Companion Drawer */}
-      <AnimatePresence>
-        {showAiPanel && (
-          <motion.div
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 380, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: 'easeOut' }}
-            className="h-full border-l overflow-hidden"
-            style={{ borderColor: 'var(--border)' }}
-          >
-            <AiCompanion
-              entryContext={selectedEntry?.content}
-              userName={user?.fullname || user?.username}
-              onClose={() => setShowAiPanel(false)}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {/* AI Companion Drawer */}
+          <AnimatePresence>
+            {showAiPanel && (
+              <motion.div
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 380, opacity: 1 }}
+                exit={{ width: 0, opacity: 0 }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
+                className="h-full overflow-hidden"
+                style={{ borderLeft: '1px solid var(--border)' }}
+              >
+                <AiCompanion
+                  entryContext={selectedEntry?.content}
+                  userName={user?.fullname || user?.username}
+                  onClose={() => setShowAiPanel(false)}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Compact Dashboard Footer — always visible */}
+        <DashboardFooter />
+      </div>
 
       {/* Mood Picker Modal */}
       <AnimatePresence>
@@ -283,6 +307,78 @@ export default function Dashboard() {
           />
         )}
       </AnimatePresence>
-    </div>
+    </>
+  );
+}
+
+/* ─── Compact Dashboard Footer ─── */
+function DashboardFooter() {
+  const FOOTER_LINKS = [
+    { label: 'Features', href: `${MARKETING}/#features` },
+    { label: 'How It Works', href: `${MARKETING}/#how-it-works` },
+    { label: 'Screenshots', href: `${MARKETING}/#screenshots` },
+    { label: 'Videos', href: `${MARKETING}/#videos` },
+    { label: 'Pricing', href: `${MARKETING}/#pricing` },
+    { label: 'FAQ', href: `${MARKETING}/faq.html` },
+    { label: 'Privacy', href: `${MARKETING}/#privacy` },
+    { label: 'Contact', href: `${MARKETING}/#contact` },
+  ];
+
+  return (
+    <footer
+      className="flex-shrink-0"
+      style={{
+        background: '#2C1A0E',
+        padding: '8px 3%',
+        fontFamily: FONT,
+        borderTop: '1px solid rgba(201,168,76,0.15)',
+      }}
+    >
+      <div className="flex items-center justify-between gap-4">
+        {/* Logo + tagline */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <img src="/assets/images/logo.png" alt="diAry" style={{ height: '20px', filter: 'brightness(0.85)' }} />
+          <span
+            className="hidden md:inline"
+            style={{ fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(245,240,232,0.35)', whiteSpace: 'nowrap' }}
+          >
+            "I'll never tell..."
+          </span>
+        </div>
+
+        {/* Links */}
+        <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
+          {FOOTER_LINKS.map(link => (
+            <a
+              key={link.label}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: '0.58rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'rgba(245,240,232,0.35)',
+                textDecoration: 'none',
+                transition: 'color 0.2s',
+                fontWeight: 600,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#C9A84C'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245,240,232,0.35)'; }}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+
+        {/* Copyright */}
+        <p
+          className="flex-shrink-0"
+          style={{ fontSize: '0.58rem', color: 'rgba(245,240,232,0.25)', whiteSpace: 'nowrap' }}
+        >
+          &copy; 2026 GMX Quantum LLC. A GMCG Holdings Inc. company.
+        </p>
+      </div>
+    </footer>
   );
 }
