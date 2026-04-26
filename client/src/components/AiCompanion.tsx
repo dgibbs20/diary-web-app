@@ -1,6 +1,7 @@
 /**
  * AI Companion — Right drawer panel with chat interface
  * Supports all modes: auto, vault, friend, mirror, insight
+ * Sends chat history to backend for context continuity
  */
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -12,6 +13,7 @@ import { toast } from 'sonner';
 
 interface AiCompanionProps {
   entryContext?: string;
+  userName?: string;
   onClose: () => void;
 }
 
@@ -22,7 +24,7 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-export default function AiCompanion({ entryContext, onClose }: AiCompanionProps) {
+export default function AiCompanion({ entryContext, userName, onClose }: AiCompanionProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState('auto');
@@ -49,18 +51,33 @@ export default function AiCompanion({ entryContext, onClose }: AiCompanionProps)
     setInput('');
     setIsLoading(true);
 
+    // Build history from existing messages for backend context
+    const history = messages.map(m => ({
+      role: m.role,
+      content: m.content,
+    }));
+
     try {
-      const res = await aiApi.sendMessage(msg, mode, entryContext);
-      if (res.success) {
+      const res = await aiApi.sendMessage(msg, mode, entryContext, history, userName);
+      if (res.success && res.response) {
         const aiMsg: ChatMessage = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: res.response || res.message || 'I\'m here to help.',
+          content: res.response,
           timestamp: new Date(),
         };
         setMessages(prev => [...prev, aiMsg]);
       } else {
-        toast.error(res.error?.message || 'AI companion is unavailable');
+        const errorMsg = res.error?.message || 'AI companion is unavailable right now.';
+        toast.error(errorMsg);
+        // Still show a message in chat so user knows what happened
+        const aiMsg: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: `*${errorMsg}*`,
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, aiMsg]);
       }
     } catch {
       toast.error('Failed to reach AI companion');
@@ -83,15 +100,15 @@ export default function AiCompanion({ entryContext, onClose }: AiCompanionProps)
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'var(--border)' }}>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(201,168,76,0.12)' }}>
-            <Bot size={16} style={{ color: '#C9A84C' }} />
+          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(168, 134, 58, 0.1)' }}>
+            <Bot size={16} style={{ color: '#A8863A' }} />
           </div>
           <div>
             <h3 className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>AI Companion</h3>
             <button
               onClick={() => setShowModes(!showModes)}
               className="text-xs flex items-center gap-1 hover:underline"
-              style={{ color: '#C9A84C' }}
+              style={{ color: '#A8863A' }}
             >
               {currentMode.icon} {currentMode.label} Mode
             </button>
@@ -118,7 +135,7 @@ export default function AiCompanion({ entryContext, onClose }: AiCompanionProps)
               className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors"
               style={{
                 backgroundColor: mode === m.id ? 'var(--accent)' : 'transparent',
-                color: mode === m.id ? '#C9A84C' : 'var(--foreground)',
+                color: mode === m.id ? '#A8863A' : 'var(--foreground)',
               }}
             >
               <span className="text-lg">{m.icon}</span>
@@ -135,8 +152,8 @@ export default function AiCompanion({ entryContext, onClose }: AiCompanionProps)
       <div className="flex-1 overflow-y-auto diary-scrollbar px-4 py-4 space-y-4">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center px-4">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'rgba(201,168,76,0.08)' }}>
-              <Sparkles size={24} style={{ color: '#C9A84C' }} />
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'rgba(168, 134, 58, 0.08)' }}>
+              <Sparkles size={24} style={{ color: '#A8863A' }} />
             </div>
             <h4 className="font-serif text-lg mb-2" style={{ color: 'var(--foreground)' }}>Your AI Companion</h4>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
@@ -176,7 +193,7 @@ export default function AiCompanion({ entryContext, onClose }: AiCompanionProps)
           <div className="flex justify-start">
             <div className="px-4 py-3 rounded-2xl" style={{ background: 'var(--muted)' }}>
               <div className="flex items-center gap-2">
-                <Loader2 size={14} className="animate-spin" style={{ color: '#C9A84C' }} />
+                <Loader2 size={14} className="animate-spin" style={{ color: '#A8863A' }} />
                 <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>Thinking...</span>
               </div>
             </div>

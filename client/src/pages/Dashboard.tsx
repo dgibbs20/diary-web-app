@@ -267,6 +267,7 @@ export default function Dashboard() {
           >
             <AiCompanion
               entryContext={selectedEntry?.content}
+              userName={user?.fullname || user?.username}
               onClose={() => setShowAiPanel(false)}
             />
           </motion.div>

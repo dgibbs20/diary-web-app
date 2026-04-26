@@ -209,12 +209,31 @@ export const journalApi = {
 // ============ AI API ============
 
 export const aiApi = {
-  async sendMessage(message: string, mode: string, entryContext?: string) {
+  async sendMessage(
+    message: string,
+    mode: string,
+    entryContext?: string,
+    history: Array<{ role: string; content: string }> = [],
+    userName?: string,
+    userStyle?: string
+  ) {
     const res = await authFetch('/api/ai/companion', {
       method: 'POST',
-      body: JSON.stringify({ message, mode, entry_context: entryContext }),
+      body: JSON.stringify({
+        message,
+        mode,
+        entry_context: entryContext || '',
+        history,
+        user_name: userName || '',
+        user_style: userStyle || '',
+      }),
     });
-    return res.json();
+    const json = await res.json();
+    // Backend returns { success, data: { response, model, mode }, usage }
+    if (json.success && json.data) {
+      return { success: true, response: json.data.response, model: json.data.model, usage: json.usage };
+    }
+    return json;
   },
 
   async getModes() {

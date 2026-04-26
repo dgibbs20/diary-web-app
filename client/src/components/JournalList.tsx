@@ -21,7 +21,7 @@ interface JournalListProps {
   onMoodClick: () => void;
 }
 
-const EMPTY_STATE_IMG = 'https://d2xsxph8kpxj0f.cloudfront.net/310419663029844115/cw39joRvygwi83an4yvvJL/empty-state-5JDCahsvEwRmySkNZSA27u.webp';
+// Empty state uses the brand logo instead of an external image
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -123,7 +123,7 @@ export default function JournalList({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <img src={EMPTY_STATE_IMG} alt="" className="w-48 h-48 mx-auto rounded-xl object-cover mb-6 opacity-80" />
+              <img src="/assets/images/logo.png" alt="" className="w-40 mx-auto mb-6 opacity-60" style={{ filter: 'grayscale(30%)' }} />
               <h3 className="font-serif text-xl mb-2" style={{ color: 'var(--foreground)' }}>
                 {searchQuery ? 'No entries found' : 'Your story begins here'}
               </h3>

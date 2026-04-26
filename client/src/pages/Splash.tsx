@@ -1,16 +1,12 @@
 /**
- * Splash Screen — "Quiet Luxury" aesthetic
- * Plays notify.wav, shows tier-based logo, fades to auth or dashboard
+ * Splash Screen — Matches the marketing site splash exactly
+ * Large logo (280px), shadow, tagline, "TAP ANYWHERE TO ENTER", warm cream bg
+ * Reference: marketing site line 299-305
  */
 import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
-
-const LOGO_URL = '/assets/images/logo.png';
-const LOGO_ELITE_URL = '/assets/images/logo_elite.png';
-const SHADOW_URL = '/assets/images/shadow.png';
-const NOTIFY_URL = '/assets/sound/notify.wav';
 
 export default function Splash() {
   const [, navigate] = useLocation();
@@ -20,106 +16,116 @@ export default function Splash() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    audioRef.current = new Audio(NOTIFY_URL);
-    audioRef.current.volume = 0.5;
+    audioRef.current = new Audio('/assets/sound/notify.wav');
+    audioRef.current.volume = 0.15; // Match marketing site: volume 0.15
   }, []);
 
   const handleInteraction = () => {
     if (hasInteracted) return;
     setHasInteracted(true);
-
-    // Play sound
     audioRef.current?.play().catch(() => {});
 
-    // Fade out after delay
+    // Match marketing site timing: 800ms delay then 1200ms fade
     setTimeout(() => {
       setShowSplash(false);
       setTimeout(() => {
         if (!isLoading) {
           navigate(isAuthenticated ? '/dashboard' : '/login');
         }
-      }, 600);
-    }, 1800);
+      }, 800);
+    }, 800);
   };
 
-  // If auth is still loading, wait
   useEffect(() => {
     if (!isLoading && !showSplash) {
       navigate(isAuthenticated ? '/dashboard' : '/login');
     }
   }, [isLoading, showSplash, isAuthenticated, navigate]);
 
-  const logoUrl = isElite ? LOGO_ELITE_URL : LOGO_URL;
+  const logoUrl = isElite ? '/assets/images/logo_elite.png' : '/assets/images/logo.png';
 
   return (
     <AnimatePresence>
       {showSplash && (
         <motion.div
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-cream cursor-pointer select-none"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center cursor-pointer select-none"
           style={{ backgroundColor: '#F5F0E8' }}
           onClick={handleInteraction}
           onKeyDown={(e) => e.key === 'Enter' && handleInteraction()}
           tabIndex={0}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: 'easeInOut' }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
         >
-          {/* Subtle radial glow */}
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
+          {/* Logo — large, matching marketing site height: 280px */}
+          <motion.img
+            src={logoUrl}
+            alt="diAry"
             style={{
-              background: 'radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 65%)',
+              height: '280px',
+              filter: 'drop-shadow(0 8px 32px rgba(201,168,76,0.4))',
+            }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{
+              opacity: 1,
+              scale: [1, 1.02, 1],
+            }}
+            transition={{
+              opacity: { duration: 0.6, ease: 'easeOut' },
+              scale: { duration: 1, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' },
             }}
           />
 
-          {/* Logo */}
-          <motion.div
-            className="relative z-10 flex flex-col items-center"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-          >
-            <img
-              src={logoUrl}
-              alt="diAry"
-              className="h-28 w-auto object-contain"
-              style={{ filter: 'drop-shadow(0 2px 8px rgba(201,168,76,0.15))' }}
-            />
-            <img
-              src={SHADOW_URL}
-              alt=""
-              className="mt-2 w-48 opacity-40"
-            />
-          </motion.div>
-
-          {/* Tagline */}
+          {/* Tagline — matching marketing site: 1.4rem italic */}
           <motion.p
-            className="mt-8 font-serif italic text-lg tracking-wide"
-            style={{ color: '#5C3D2A' }}
-            initial={{ opacity: 0, y: 10 }}
+            className="font-serif italic"
+            style={{
+              fontSize: '1.4rem',
+              color: '#8B6347',
+              letterSpacing: '0.08em',
+              marginTop: '20px',
+            }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
           >
-            "I'll never tell..."
+            "I'll never tell."
           </motion.p>
 
-          {/* Tap instruction */}
+          {/* Enter prompt — matching marketing site: 0.75rem, uppercase, gold */}
           <motion.p
-            className="mt-12 text-xs tracking-[0.3em] uppercase"
-            style={{ color: '#8B6347' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: hasInteracted ? 0 : [0, 0.7, 0] }}
-            transition={hasInteracted ? { duration: 0.3 } : { duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontSize: '0.75rem',
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase' as const,
+              color: '#C9A84C',
+              marginTop: '32px',
+            }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: hasInteracted ? 0 : [0, 1, 0] }}
+            transition={
+              hasInteracted
+                ? { duration: 0.3 }
+                : { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }
+            }
           >
-            — Click Anywhere to Enter —
+            — Tap Anywhere to Enter —
           </motion.p>
 
+          {/* Subtitle — matching marketing site: 0.82rem italic */}
           <motion.p
-            className="mt-3 text-xs tracking-wide"
-            style={{ color: '#8B6347' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            transition={{ duration: 0.6, delay: 1 }}
+            className="font-serif italic"
+            style={{
+              fontSize: '0.82rem',
+              fontWeight: 300,
+              color: '#8B6347',
+              letterSpacing: '0.06em',
+              marginTop: '12px',
+            }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: 'easeOut', delay: 2 }}
           >
             Your private space awaits
           </motion.p>

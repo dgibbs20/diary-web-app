@@ -1,6 +1,7 @@
 /**
- * Login Page — Quiet Luxury aesthetic
- * Split layout: left image panel, right form panel
+ * Login Page — Premium split layout matching marketing site quality
+ * Left: Brand hero with logo_hero image and tagline
+ * Right: Clean login form with gold accents
  */
 import { useState } from 'react';
 import { useLocation, Link } from 'wouter';
@@ -8,9 +9,6 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-
-const AUTH_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/310419663029844115/cw39joRvygwi83an4yvvJL/auth-bg-EbDrbgB9XmpwVMmEp2nJa3.webp';
-const LOGO_URL = '/assets/images/logo.png';
 
 export default function Login() {
   const [, navigate] = useLocation();
@@ -44,43 +42,85 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left panel — image */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <img
-          src={AUTH_BG}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+    <div className="min-h-screen flex" style={{ backgroundColor: '#F5F0E8', paddingTop: '70px' }}>
+      {/* Left panel — Brand hero with logo on cream background, matching marketing site hero */}
+      <div
+        className="hidden lg:flex lg:w-1/2 relative overflow-hidden items-center justify-center"
+        style={{ backgroundColor: '#EDE7D9' }}
+      >
+        {/* Subtle radial glow — matching marketing site hero-glow */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{
+            width: '800px',
+            height: '800px',
+            background: 'radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 65%)',
+            pointerEvents: 'none',
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#F5F0E8]/30" />
-        <div className="relative z-10 flex flex-col justify-end p-12 pb-16">
-          <p className="font-serif italic text-2xl text-brown-mid" style={{ color: '#5C3D2A' }}>
-            "The pages that hold your truth<br />are the ones that set you free."
-          </p>
-        </div>
-      </div>
-
-      {/* Right panel — form */}
-      <div className="flex-1 flex items-center justify-center p-8 lg:p-16" style={{ backgroundColor: '#F5F0E8' }}>
         <motion.div
-          className="w-full max-w-md"
+          className="relative z-10 text-center px-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
         >
-          {/* Logo */}
-          <div className="flex justify-center mb-10">
-            <Link href="/">
-              <img src={LOGO_URL} alt="diAry" className="h-16 w-auto" />
-            </Link>
+          <img
+            src="/assets/images/logo.png"
+            alt="diAry"
+            style={{
+              height: '200px',
+              display: 'block',
+              margin: '0 auto 32px',
+              filter: 'drop-shadow(0 8px 32px rgba(201,168,76,0.35))',
+            }}
+          />
+          <p
+            className="font-serif italic"
+            style={{ fontSize: '1.65rem', color: '#5C3D2A', marginBottom: '20px', letterSpacing: '0.04em' }}
+          >
+            "I'll never tell..."
+          </p>
+          <p
+            style={{
+              fontSize: '1.05rem',
+              color: '#8B6347',
+              maxWidth: '420px',
+              margin: '0 auto',
+              fontWeight: 300,
+              lineHeight: 1.75,
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+            }}
+          >
+            Your thoughts deserve a space that truly understands them. Write it, speak it, draw it — diAry listens with warmth and keeps your secrets forever.
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Right panel — Login form */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-20">
+        <motion.div
+          className="w-full max-w-sm"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* Mobile logo */}
+          <div className="lg:hidden flex flex-col items-center mb-8">
+            <img src="/assets/images/logo.png" alt="diAry" className="h-16 w-auto mb-3" />
+            <p className="font-serif italic text-sm" style={{ color: '#8B7355' }}>
+              "I'll never tell..."
+            </p>
           </div>
 
-          {/* Heading */}
-          <div className="text-center mb-8">
-            <h1 className="font-serif text-3xl font-light" style={{ color: '#2C1A0E' }}>
+          {/* Form header */}
+          <div className="mb-8">
+            <p className="text-xs tracking-[0.2em] uppercase font-medium mb-2" style={{ color: '#A8863A' }}>
               Welcome Back
+            </p>
+            <h1 className="font-serif text-3xl font-light" style={{ color: '#3D2B1F' }}>
+              Sign In
             </h1>
-            <p className="mt-2 text-sm" style={{ color: '#8B6347' }}>
+            <p className="mt-2 text-sm" style={{ color: '#8B7355' }}>
               Your private space awaits
             </p>
           </div>
@@ -95,63 +135,65 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border bg-white/60 font-serif text-base focus:outline-none focus:ring-2 transition-all"
+                className="w-full px-4 py-3 rounded-lg border text-sm focus:outline-none transition-all"
                 style={{
-                  borderColor: '#EDE7D9',
-                  color: '#2C1A0E',
+                  backgroundColor: 'rgba(255,255,255,0.6)',
+                  borderColor: 'rgba(168, 134, 58, 0.15)',
+                  color: '#3D2B1F',
                 }}
-                onFocus={(e) => { e.currentTarget.style.borderColor = '#C9A84C'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(201,168,76,0.15)'; }}
-                onBlur={(e) => { e.currentTarget.style.borderColor = '#EDE7D9'; e.currentTarget.style.boxShadow = 'none'; }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = '#C9A84C'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(201,168,76,0.1)'; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(168, 134, 58, 0.15)'; e.currentTarget.style.boxShadow = 'none'; }}
                 placeholder="your@email.com"
                 autoComplete="email"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-medium tracking-wider uppercase" style={{ color: '#5C3D2A' }}>
+                  Password
+                </label>
+                <Link href="/forgot-password" className="text-xs font-medium hover:underline" style={{ color: '#A8863A' }}>
+                  Forgot?
+                </Link>
+              </div>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 pr-12 rounded-lg border bg-white/60 font-serif text-base focus:outline-none focus:ring-2 transition-all"
+                  className="w-full px-4 py-3 pr-11 rounded-lg border text-sm focus:outline-none transition-all"
                   style={{
-                    borderColor: '#EDE7D9',
-                    color: '#2C1A0E',
+                    backgroundColor: 'rgba(255,255,255,0.6)',
+                    borderColor: 'rgba(168, 134, 58, 0.15)',
+                    color: '#3D2B1F',
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = '#C9A84C'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(201,168,76,0.15)'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = '#EDE7D9'; e.currentTarget.style.boxShadow = 'none'; }}
-                  placeholder="••••••••"
+                  onFocus={(e) => { e.currentTarget.style.borderColor = '#C9A84C'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(201,168,76,0.1)'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(168, 134, 58, 0.15)'; e.currentTarget.style.boxShadow = 'none'; }}
+                  placeholder="Enter your password"
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-1"
-                  style={{ color: '#8B6347' }}
+                  style={{ color: '#8B7355' }}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
-            {/* Remember me + Forgot */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded border-gray-300 accent-[#C9A84C]"
-                />
-                <span className="text-sm" style={{ color: '#5C3D2A' }}>Remember me</span>
-              </label>
-              <Link href="/forgot-password" className="text-sm font-medium hover:underline" style={{ color: '#C9A84C' }}>
-                Forgot password?
-              </Link>
-            </div>
+            {/* Remember me */}
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="rounded border-gray-300 accent-[#C9A84C]"
+              />
+              <span className="text-sm" style={{ color: '#6B5744' }}>Remember me</span>
+            </label>
 
             {/* Submit */}
             <button
@@ -161,29 +203,30 @@ export default function Login() {
               style={{
                 background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
                 color: '#F5F0E8',
+                boxShadow: '0 2px 16px rgba(168, 134, 58, 0.25)',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(201,168,76,0.3)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(168, 134, 58, 0.35)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 16px rgba(168, 134, 58, 0.25)'; }}
             >
-              {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : null}
+              {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : null}
               {isSubmitting ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
 
-          {/* Sign up link */}
-          <p className="mt-8 text-center text-sm" style={{ color: '#8B6347' }}>
+          {/* Register link */}
+          <p className="mt-8 text-center text-sm" style={{ color: '#8B7355' }}>
             Don't have an account?{' '}
-            <Link href="/register" className="font-medium hover:underline" style={{ color: '#C9A84C' }}>
-              Create one
+            <Link href="/register" className="font-medium hover:underline" style={{ color: '#A8863A' }}>
+              Create Account
             </Link>
           </p>
 
-          {/* Mobile-only features badge */}
-          <div className="mt-8 pt-6 border-t" style={{ borderColor: '#EDE7D9' }}>
-            <p className="text-center text-xs" style={{ color: '#8B6347' }}>
-              Looking for voice journaling, handwriting, or biometric login?{' '}
+          {/* Mobile features badge */}
+          <div className="mt-8 pt-6 border-t" style={{ borderColor: 'rgba(168, 134, 58, 0.1)' }}>
+            <p className="text-center text-xs" style={{ color: '#8B7355' }}>
+              Voice journaling, handwriting OCR &amp; biometric login available on{' '}
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'rgba(201,168,76,0.12)', color: '#A8863A' }}>
-                Mobile Exclusive
+                Mobile App
               </span>
             </p>
           </div>

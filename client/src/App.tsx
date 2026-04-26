@@ -5,6 +5,8 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Splash from "./pages/Splash";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -42,7 +44,9 @@ function App() {
                 },
               }}
             />
+            <Header />
             <Router />
+            <Footer />
           </TooltipProvider>
         </AuthProvider>
       </ThemeProvider>
