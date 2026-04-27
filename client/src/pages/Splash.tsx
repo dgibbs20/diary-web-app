@@ -91,8 +91,25 @@ export default function Splash() {
           >
             "I'll never tell."
           </motion.p>
-
-          {/* Enter prompt — matching marketing site: 0.75rem, uppercase, gold */}
+          
+          {/* Subtitle — NOW GOES RIGHT AFTER THE TAGLINE */}
+          <motion.p
+            className="font-serif italic"
+            style={{
+              fontSize: '0.82rem',
+              fontWeight: 300,
+              color: '#8B6347',
+              letterSpacing: '0.06em',
+              marginTop: '12px',
+            }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: 'easeOut', delay: 0.8 }}
+          >
+            Your private safe space awaits
+          </motion.p>
+          
+          {/* Enter prompt — NOW GOES AFTER THE SUBTITLE */}
           <motion.p
             style={{
               fontFamily: "'Cormorant Garamond', Georgia, serif",
@@ -127,7 +144,7 @@ export default function Splash() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: 'easeOut', delay: 2 }}
           >
-            Your private space awaits
+            Your private safe space awaits
           </motion.p>
         </motion.div>
       )}
