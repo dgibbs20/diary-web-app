@@ -22,7 +22,7 @@ const REVENUECAT_MONTHLY = 'https://pay.rev.cat/fcxkvesvqsmqyjgj';
 const REVENUECAT_ANNUAL = 'https://pay.rev.cat/dgnllmadailgfknc';
 
 const LOGO_FREE = '/assets/images/logo.png';
-const LOGO_ELITE = '/assets/images/elite_logo.png';
+const LOGO_ELITE = '/assets/images/logo_elite.png';
 
 interface PlanFeature {
   label: string;
