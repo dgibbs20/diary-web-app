@@ -18,6 +18,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = React.useRef<HTMLDivElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +40,14 @@ export default function Login() {
     } else {
       toast.error(result.error || 'Login failed');
     }
+  };
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      const emailInput = formRef.current?.querySelector('input[type="email"]') as HTMLInputElement;
+      emailInput?.focus();
+    }, 300);
   };
 
   return (
@@ -85,7 +94,7 @@ export default function Login() {
               fontSize: '1.05rem',
               color: '#8B6347',
               maxWidth: '420px',
-              margin: '0 auto',
+              margin: '0 auto 32px',
               fontWeight: 300,
               lineHeight: 1.75,
               fontFamily: "'Cormorant Garamond', Georgia, serif",
@@ -93,12 +102,32 @@ export default function Login() {
           >
             Your thoughts deserve a space that truly understands them. Write it, speak it, draw it — diAry listens with warmth and keeps your secrets forever.
           </p>
+          <button
+            onClick={scrollToForm}
+            className="px-8 py-3 rounded-lg text-sm font-medium tracking-wider uppercase transition-all duration-200"
+            style={{
+              background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
+              color: '#F5F0E8',
+              boxShadow: '0 2px 16px rgba(168, 134, 58, 0.25)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 24px rgba(168, 134, 58, 0.35)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 16px rgba(168, 134, 58, 0.25)';
+            }}
+          >
+            Sign In
+          </button>
         </motion.div>
       </div>
 
       {/* Right panel — Login form */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-20">
         <motion.div
+          ref={formRef}
           className="w-full max-w-sm"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
