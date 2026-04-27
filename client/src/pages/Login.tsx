@@ -3,13 +3,12 @@
  * Left: Brand hero with logo_hero image and tagline
  * Right: Clean login form with gold accents
  */
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import React, { useState, useRef } from 'react';
 
 export default function Login() {
   const [, navigate] = useLocation();
@@ -21,6 +20,13 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    formRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }, []);
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
