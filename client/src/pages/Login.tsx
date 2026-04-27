@@ -19,12 +19,26 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
+  
+  const scrollToForm = () => {
     formRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
     });
+  };
+  
+  useEffect(() => {
+    scrollToForm();
+  }, []);
+  
+  useEffect(() => {
+    const handler = () => scrollToForm();
+  
+    window.addEventListener('scrollToLogin', handler);
+  
+    return () => {
+      window.removeEventListener('scrollToLogin', handler);
+    };
   }, []);
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,14 +61,6 @@ export default function Login() {
     } else {
       toast.error(result.error || 'Login failed');
     }
-  };
-
-  const scrollToForm = () => {
-    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => {
-      const emailInput = formRef.current?.querySelector('input[type="email"]') as HTMLInputElement;
-      emailInput?.focus();
-    }, 300);
   };
 
   return (
