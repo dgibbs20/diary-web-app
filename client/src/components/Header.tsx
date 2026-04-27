@@ -140,12 +140,34 @@ export default function Header() {
               </button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              style={{ ...ctaBtnStyle, textDecoration: 'none', display: 'inline-block' }}
+            <button
+              onClick={() => {
+                if (location === '/login') {
+                  window.dispatchEvent(new Event('scrollToLogin'));
+                } else {
+                  window.location.href = '/login';
+                }
+              }}
+              style={{
+                background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
+                color: '#F5F0E8',
+                padding: '10px 32px',
+                borderRadius: '40px',
+                fontSize: '0.72rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontWeight: 600,
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                boxShadow: '0 4px 20px rgba(168,134,58,0.25)',
+                display: 'inline-block',
+                border: 'none',
+                cursor: 'pointer',
+              }}
             >
               Sign In
-            </Link>
+            </button>
           )}
         </li>
       </ul>
