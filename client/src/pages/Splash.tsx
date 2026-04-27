@@ -130,22 +130,6 @@ export default function Splash() {
             — Tap Anywhere to Enter —
           </motion.p>
 
-          {/* Subtitle — matching marketing site: 0.82rem italic */}
-          <motion.p
-            className="font-serif italic"
-            style={{
-              fontSize: '0.82rem',
-              fontWeight: 300,
-              color: '#8B6347',
-              letterSpacing: '0.06em',
-              marginTop: '12px',
-            }}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: 'easeOut', delay: 2 }}
-          >
-            Your private safe space awaits
-          </motion.p>
         </motion.div>
       )}
     </AnimatePresence>
