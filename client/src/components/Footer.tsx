@@ -21,7 +21,7 @@ const FOOTER_LINKS = [
 
 export default function Footer() {
   const [location] = useLocation();
-  const { isAuthenticated, isElite, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
 
   const isDashboard = location.startsWith('/dashboard');
 
