@@ -1,8 +1,8 @@
 /**
  * Header — Shows on EVERY page with consistent branding
  */
+import React, { useState } from 'react';
 import { useLocation, Link } from 'wouter';
-import { useState } from 'react';
 import { Menu, X, Crown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
