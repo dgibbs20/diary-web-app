@@ -273,7 +273,7 @@ export default function Subscription() {
               <img
                 src={LOGO_ELITE}
                 alt="diAry Elite"
-                className="h-16 md:h-20 object-contain mb-2"
+                className="h-24 md:h-32 object-contain mb-2"
               />
               <p
                 className="text-sm mb-6"
