@@ -78,29 +78,30 @@ export default function Footer() {
         }}
       >
         {FOOTER_LINKS.map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontSize: '0.72rem',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: 'rgba(245,240,232,0.45)',
-              textDecoration: 'none',
-              transition: 'color 0.2s',
-              fontWeight: 600,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#C9A84C';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'rgba(245,240,232,0.45)';
-            }}
-          >
-            {link.label}
-          </a>
+          <li key={link.label}>
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: '0.72rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'rgba(245,240,232,0.45)',
+                textDecoration: 'none',
+                transition: 'color 0.2s',
+                fontWeight: 600,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#C9A84C';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'rgba(245,240,232,0.45)';
+              }}
+            >
+              {link.label}
+            </a>
+          </li>
         ))}
       </div>
 
