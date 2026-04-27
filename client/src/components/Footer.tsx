@@ -3,7 +3,7 @@
  * Dashboard has its own integrated compact footer (DashboardFooter in Dashboard.tsx)
  * Matches marketing site: diary.gmxquantum.com
  */
-import { useLocation, Link } from 'wouter';
+import { useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
 
 const MARKETING = 'https://diary.gmxquantum.com';
@@ -25,7 +25,7 @@ export default function Footer() {
 
   const isDashboard = location.startsWith('/dashboard');
 
-  /* Dashboard has its own footer — don't render here */
+  // Dashboard has its own footer
   if (isDashboard) return null;
 
   return (
@@ -40,7 +40,11 @@ export default function Footer() {
     >
       {/* Logo */}
       <img
-        src={user?.subscription_tier === 'diary_elite' ? '/assets/images/logo_elite.png' : '/assets/images/logo.png'}
+        src={
+          user?.subscription_tier === 'diary_elite'
+            ? '/assets/images/logo_elite.png'
+            : '/assets/images/logo.png'
+        }
         alt="diAry"
         style={{
           height: '180px',
@@ -63,7 +67,7 @@ export default function Footer() {
         "I'll never tell..."
       </p>
 
-      {/* Nav links */}
+      {/* Footer Links */}
       <div
         style={{
           display: 'flex',
@@ -73,8 +77,8 @@ export default function Footer() {
           marginBottom: '28px',
         }}
       >
-        {FOOTER_LINKS.map(link => (
-          
+        {FOOTER_LINKS.map((link) => (
+          <a
             key={link.label}
             href={link.href}
             target="_blank"
@@ -88,15 +92,19 @@ export default function Footer() {
               transition: 'color 0.2s',
               fontWeight: 600,
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#C9A84C'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245,240,232,0.45)'; }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#C9A84C';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'rgba(245,240,232,0.45)';
+            }}
           >
             {link.label}
           </a>
         ))}
       </div>
 
-      {/* Login/Logout button */}
+      {/* Auth Button */}
       <div style={{ marginBottom: '32px' }}>
         {isAuthenticated ? (
           <button
@@ -112,8 +120,8 @@ export default function Footer() {
               textTransform: 'uppercase',
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontWeight: 600,
-              transition: 'all 0.25s',
               cursor: 'pointer',
+              transition: 'all 0.25s',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(201,168,76,0.1)';
@@ -143,14 +151,11 @@ export default function Footer() {
               fontSize: '0.72rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              textDecoration: 'none',
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontWeight: 600,
-              transition: 'transform 0.2s, box-shadow 0.2s',
-              boxShadow: '0 4px 20px rgba(168,134,58,0.25)',
-              display: 'inline-block',
-              border: 'none',
               cursor: 'pointer',
+              border: 'none',
+              boxShadow: '0 4px 20px rgba(168,134,58,0.25)',
             }}
           >
             Sign In
@@ -159,7 +164,14 @@ export default function Footer() {
       </div>
 
       {/* Divider */}
-      <div style={{ width: '60px', height: '1px', background: 'rgba(201,168,76,0.2)', margin: '0 auto 20px' }} />
+      <div
+        style={{
+          width: '60px',
+          height: '1px',
+          background: 'rgba(201,168,76,0.2)',
+          margin: '0 auto 20px',
+        }}
+      />
 
       {/* Copyright */}
       <p style={{ fontSize: '0.72rem', color: 'rgba(245,240,232,0.3)' }}>
