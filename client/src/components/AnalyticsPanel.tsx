@@ -109,11 +109,7 @@ export default function AnalyticsPanel() {
     <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
       <header className="px-6 lg:px-8 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-3">
-          <img 
-            src="/assets/images/logo.png" 
-            alt="diAry" 
-            style={{ height: '32px', width: 'auto' }} 
-          />
+          <BarChart3 size={20} style={{ color: GOLD }} />
           <div>
             <h1
               className="text-2xl font-semibold"
