@@ -185,7 +185,6 @@ export const journalApi = {
       method: 'POST',
       body: JSON.stringify({
         ...data,
-        is_text: true,
         input_method: data.input_method || 'text',
       }),
     });
@@ -195,7 +194,7 @@ export const journalApi = {
   async updateEntry(id: number, data: { title?: string; content?: string; mood?: string }) {
     const res = await authFetch(`/api/journal/entries/${id}`, {
       method: 'PUT',
-      body: JSON.stringify({ ...data, is_update: true, is_text: true }),
+      body: JSON.stringify(data),
     });
     return res.json();
   },
