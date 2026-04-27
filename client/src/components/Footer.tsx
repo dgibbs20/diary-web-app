@@ -40,7 +40,7 @@ export default function Footer() {
     >
       {/* Logo */}
       <img
-        src={isElite ? '/assets/images/logo_elite.png' : '/assets/images/logo.png'}
+        src={user?.subscription_tier === 'diary_elite' ? '/assets/images/logo_elite.png' : '/assets/images/logo.png'}
         alt="diAry"
         style={{
           height: '180px',
