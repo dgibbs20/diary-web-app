@@ -21,7 +21,7 @@ const FOOTER_LINKS = [
 
 export default function Footer() {
   const [location] = useLocation();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, isElite, logout } = useAuth();
 
   const isDashboard = location.startsWith('/dashboard');
 
@@ -40,7 +40,7 @@ export default function Footer() {
     >
       {/* Logo */}
       <img
-        src="/assets/images/logo.png"
+        src={isElite ? '/assets/images/logo_elite.png' : '/assets/images/logo.png'}
         alt="diAry"
         style={{
           height: '180px',
@@ -74,7 +74,7 @@ export default function Footer() {
         }}
       >
         {FOOTER_LINKS.map(link => (
-          <a
+          
             key={link.label}
             href={link.href}
             target="_blank"
