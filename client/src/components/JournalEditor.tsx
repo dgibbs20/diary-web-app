@@ -101,7 +101,8 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     const finalContent = content || editorContentRef.current;
     
     // Validation: require either title or content
-    if (!finalContent.trim() && !title.trim()) {
+    const textContent = editor.getText().trim();
+    if (!textContent && !title.trim()) {
       setSaveStatus('idle');
       return;
     }
