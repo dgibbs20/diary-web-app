@@ -143,7 +143,11 @@ export default function AnalyticsPanel() {
               transition={{ duration: 0.5 }}
             >
               <div className="flex items-center justify-center mb-3">
-                <Sparkles size={18} style={{ color: GOLD }} />
+                <img 
+                  src="/assets/images/logo.png" 
+                  alt="diAry" 
+                  style={{ height: '24px', width: 'auto' }} 
+                />
               </div>
               <p
                 className="text-lg italic"
