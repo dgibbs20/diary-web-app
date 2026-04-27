@@ -2,6 +2,7 @@
  * Journal Editor — Premium branded writing canvas with TipTap rich text editor
  * Consistent Cormorant Garamond typography, gold accents
  * Full toolbar, auto-save with 3s debounce, Ctrl+S manual save
+ * FIXES: Ensure performSave triggers on all change types, validates content properly
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
@@ -50,6 +51,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasChangesRef = useRef(false);
+  const editorContentRef = useRef('');
 
   const editor = useEditor({
     extensions: [
@@ -82,6 +84,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
       const text = ed.getText();
       const words = text.trim() ? text.trim().split(/\s+/).length : 0;
       setWordCount(words);
+      editorContentRef.current = ed.getHTML();
     },
   });
 
@@ -93,28 +96,40 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
 
   const performSave = useCallback(async () => {
     if (!editor) return;
+    
     const content = editor.getHTML();
-    if (!content.trim() && !title.trim()) return;
+    const finalContent = content || editorContentRef.current;
+    
+    // Validation: require either title or content
+    if (!finalContent.trim() && !title.trim()) {
+      setSaveStatus('idle');
+      return;
+    }
 
     setSaveStatus('saving');
     try {
       if (entryId) {
+        // Update existing entry
         const res = await journalApi.updateEntry(entryId, {
           title: title || 'Untitled',
-          content,
+          content: finalContent,
           mood: mood || undefined,
         });
         if (res.success) {
           onSave(res.entry);
           setSaveStatus('saved');
           hasChangesRef.current = false;
+          // Auto-hide "saved" message after 2 seconds
+          setTimeout(() => setSaveStatus('idle'), 2000);
         } else {
           setSaveStatus('error');
+          toast.error(res.error?.message || 'Failed to update entry');
         }
       } else {
+        // Create new entry
         const res = await journalApi.createEntry({
           title: title || 'Untitled',
-          content,
+          content: finalContent,
           mood: mood || undefined,
           burn_mode: burnMode,
           input_method: 'text',
@@ -124,16 +139,20 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           onSave(res.entry);
           setSaveStatus('saved');
           hasChangesRef.current = false;
+          // Auto-hide "saved" message after 2 seconds
+          setTimeout(() => setSaveStatus('idle'), 2000);
         } else {
           setSaveStatus('error');
-          toast.error(res.error?.message || 'Failed to save');
+          toast.error(res.error?.message || 'Failed to create entry');
         }
       }
-    } catch {
+    } catch (err) {
       setSaveStatus('error');
+      toast.error('An error occurred while saving');
     }
   }, [title, mood, burnMode, entryId, onSave, editor]);
 
+  // Ctrl+S save
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -146,16 +165,22 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [performSave]);
 
+  // Auto-save debounced
   useEffect(() => {
     if (!hasChangesRef.current) return;
+    
     if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    
     autoSaveTimerRef.current = setTimeout(() => {
-      performSave();
+      if (hasChangesRef.current) {
+        performSave();
+      }
     }, 3000);
+    
     return () => {
       if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
     };
-  }, [title, wordCount, performSave]);
+  }, [title, wordCount, mood, burnMode, performSave]);
 
   const handleTitleChange = (value: string) => {
     setTitle(value);

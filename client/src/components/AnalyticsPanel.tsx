@@ -15,6 +15,30 @@ const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
 const GOLD_DARK = '#A8863A';
 
+// Random positive messages, affirmations & quotes
+const POSITIVE_MESSAGES = [
+  "You're doing amazing. Keep going.",
+  "Every entry is a step towards knowing yourself better.",
+  "Your thoughts matter. Your words matter.",
+  "Progress, not perfection.",
+  "You've got this.",
+  "Be proud of the effort you're making.",
+  "Your journey is unique and beautiful.",
+  "Keep shining like the star you are.",
+  "You are worthy of your own love and respect.",
+  "Today is a great day to reflect and grow.",
+  "Your words have power.",
+  "You are stronger than you think.",
+  "Celebrate the small victories.",
+  "Your voice deserves to be heard.",
+  "You are enough, just as you are.",
+  "Every day is a fresh start.",
+  "Trust the process. You're getting there.",
+  "Your dedication is inspiring.",
+  "You're creating something meaningful.",
+  "Remember why you started.",
+];
+
 interface BackendStats {
   writing_streak: { current_streak: number; days_since_last_entry: number };
   entries: { total_entries: number; entries_this_month: number; most_used_method: string };
@@ -33,6 +57,13 @@ export default function AnalyticsPanel() {
   const [data, setData] = useState<BackendStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dailyMessage, setDailyMessage] = useState('');
+
+  useEffect(() => {
+    // Get random positive message on mount
+    const randomMessage = POSITIVE_MESSAGES[Math.floor(Math.random() * POSITIVE_MESSAGES.length)];
+    setDailyMessage(randomMessage);
+  }, []);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -98,6 +129,36 @@ export default function AnalyticsPanel() {
 
       <div className="flex-1 overflow-y-auto diary-scrollbar px-6 lg:px-8 py-6">
         <div className="max-w-3xl mx-auto space-y-8">
+          {/* Daily Affirmation */}
+          {dailyMessage && (
+            <motion.div
+              className="p-6 rounded-xl text-center"
+              style={{
+                border: '1.5px solid var(--border)',
+                backgroundColor: 'var(--card)',
+                borderColor: `${GOLD}40`,
+              }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex items-center justify-center mb-3">
+                <Sparkles size={18} style={{ color: GOLD }} />
+              </div>
+              <p
+                className="text-lg italic"
+                style={{
+                  fontFamily: FONT,
+                  color: 'var(--foreground)',
+                  letterSpacing: '0.02em',
+                  fontWeight: 300,
+                }}
+              >
+                {dailyMessage}
+              </p>
+            </motion.div>
+          )}
+
           {isLoading ? (
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
               {[1, 2, 3, 4, 5, 6].map(i => (
