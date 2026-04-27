@@ -68,13 +68,15 @@ export default function Footer() {
       </p>
 
       {/* Footer Links */}
-      <div
+      <ul
         style={{
           display: 'flex',
           gap: '28px',
           justifyContent: 'center',
           flexWrap: 'wrap',
           marginBottom: '28px',
+          listStyle: 'none',
+          padding: 0,
         }}
       >
         {FOOTER_LINKS.map((link) => (
@@ -103,7 +105,7 @@ export default function Footer() {
             </a>
           </li>
         ))}
-      </div>
+      </ul>
 
       {/* Auth Button */}
       <div style={{ marginBottom: '32px' }}>
