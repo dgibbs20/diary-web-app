@@ -81,7 +81,7 @@ export default function Header() {
       {/* Logo */}
       <Link href={isAuthenticated ? '/dashboard' : '/'} className="flex items-center gap-2">
         <img
-          src="/assets/images/logo.png"
+          src={isElite ? '/assets/images/logo_elite.png' : '/assets/images/logo.png'}
           alt="diAry"
           style={{ height: '36px' }}
         />
@@ -99,7 +99,7 @@ export default function Header() {
       <ul className="hidden lg:flex items-center" style={{ gap: '24px', listStyle: 'none' }}>
         {NAV_LINKS.map(link => (
           <li key={link.label}>
-            <a
+            
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
@@ -140,34 +140,12 @@ export default function Header() {
               </button>
             </div>
           ) : (
-            <button
-              onClick={() => {
-                if (location === '/login') {
-                  window.dispatchEvent(new Event('scrollToLogin'));
-                } else {
-                  window.location.href = '/login';
-                }
-              }}
-              style={{
-                background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
-                color: '#F5F0E8',
-                padding: '10px 32px',
-                borderRadius: '40px',
-                fontSize: '0.72rem',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontWeight: 600,
-                transition: 'transform 0.2s, box-shadow 0.2s',
-                boxShadow: '0 4px 20px rgba(168,134,58,0.25)',
-                display: 'inline-block',
-                border: 'none',
-                cursor: 'pointer',
-              }}
+            <Link
+              href="/login"
+              style={{ ...ctaBtnStyle, textDecoration: 'none', display: 'inline-block' }}
             >
               Sign In
-            </button>
+            </Link>
           )}
         </li>
       </ul>
@@ -195,7 +173,7 @@ export default function Header() {
           }}
         >
           {NAV_LINKS.map(link => (
-            <a
+            
               key={link.label}
               href={link.href}
               target="_blank"
