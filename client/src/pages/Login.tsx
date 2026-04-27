@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import React, { useState, useRef } from 'react';
 
 export default function Login() {
   const [, navigate] = useLocation();
