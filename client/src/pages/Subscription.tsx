@@ -21,8 +21,8 @@ import {
 const REVENUECAT_MONTHLY = 'https://pay.rev.cat/fcxkvesvqsmqyjgj';
 const REVENUECAT_ANNUAL = 'https://pay.rev.cat/dgnllmadailgfknc';
 
-const LOGO_FREE = '/manus-storage/logo_4ed9e2a9.png';
-const LOGO_ELITE = '/manus-storage/logo_elite_0247fd9a.png';
+const LOGO_FREE = '/assets/images/logo.png';
+const LOGO_ELITE = '/assets/images/elite_logo.png';
 
 interface PlanFeature {
   label: string;
