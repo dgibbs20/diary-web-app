@@ -3,7 +3,7 @@
  * Left: Brand hero with logo_hero image and tagline
  * Right: Clean login form with gold accents
  */
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLocation, Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,7 +18,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const formRef = React.useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
