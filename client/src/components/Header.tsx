@@ -24,7 +24,7 @@ const NAV_LINKS = [
 
 export default function Header() {
   const [location] = useLocation();
-  const { user, isAuthenticated, isElite, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isDashboard = location.startsWith('/dashboard');
@@ -85,7 +85,7 @@ export default function Header() {
           alt="diAry"
           style={{ height: '36px' }}
         />
-        {isDashboard && isElite && (
+        {isDashboard && user?.subscription_tier === 'diary_elite' && (
           <span
             className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
             style={{ background: 'rgba(201,168,76,0.12)', color: '#C9A84C' }}
