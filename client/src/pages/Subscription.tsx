@@ -61,6 +61,9 @@ export default function Subscription() {
       navigate('/login');
       return;
     }
+    // Set flag so Dashboard knows to verify on return
+    sessionStorage.setItem('pending_upgrade', 'true');
+    
     const baseUrl = billingCycle === 'monthly' ? REVENUECAT_MONTHLY : REVENUECAT_ANNUAL;
     const paymentUrl = `${baseUrl}/${userId}`;
     window.open(paymentUrl, '_blank');
