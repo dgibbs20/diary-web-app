@@ -87,7 +87,7 @@ export default function Subscription() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center justify-center gap-3 mb-6">
-            <Crown size={32} style={{ color: '#C9A84C' }} />
+
             <h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold"
               style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#2C1A0E' }}
