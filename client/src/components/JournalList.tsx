@@ -7,6 +7,7 @@ import { Search, Plus, Flame, Ghost, BookOpen, Sparkles } from 'lucide-react';
 import type { JournalEntry } from '@/pages/Dashboard';
 import type { User } from '@/contexts/AuthContext';
 import { MOOD_CONFIG } from '@/lib/constants';
+import BurnCountdown from './BurnCountdown';
 
 interface JournalListProps {
   entries: JournalEntry[];
@@ -241,7 +242,36 @@ export default function JournalList({
                         >
                           {entry.title || 'Untitled Entry'}
                         </h3>
-                        {entry.burn_mode && <Flame size={14} style={{ color: '#E85D4A' }} />}
+                        {entry.burn_mode && (
+                          entry.burn_date ? (
+                            <span
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full shrink-0"
+                              style={{
+                                background: 'rgba(232,93,74,0.10)',
+                                border: '1px solid rgba(232,93,74,0.28)',
+                                color: '#E85D4A',
+                                fontSize: '0.7rem',
+                                fontWeight: 600,
+                                letterSpacing: '0.04em',
+                              }}
+                              title={`Burns on ${new Date(entry.burn_date).toLocaleString()}`}
+                            >
+                              <Flame size={11} aria-hidden />
+                              <BurnCountdown
+                                target={new Date(entry.burn_date)}
+                                compact
+                              />
+                            </span>
+                          ) : (
+                            // Legacy entries with burn_mode but no burn_date —
+                            // fall back to the bare flame icon.
+                            <Flame
+                              size={14}
+                              style={{ color: '#E85D4A' }}
+                              aria-label="Burn Mode"
+                            />
+                          )
+                        )}
                         {entry.ghost_mode && <Ghost size={14} style={{ color: 'var(--muted-foreground)' }} />}
                       </div>
                       {ghostModeEnabled ? (
