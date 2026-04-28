@@ -101,8 +101,8 @@ export default function BurnSwitch({
         <span
           className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm"
           style={{
-            transform: value ? 'translateX(22px)' : 'translateX(2px)',
-            transition: 'transform 250ms cubic-bezier(0.4, 0, 0.2, 1)',
+            left: value ? '22px' : '2px',
+            transition: 'left 250ms cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         />
       </button>
