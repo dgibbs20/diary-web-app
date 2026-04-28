@@ -20,6 +20,7 @@ import { Typography } from '@tiptap/extension-typography';
 import EditorToolbar from './EditorToolbar';
 import BurnSwitch from './BurnSwitch';
 import BurnTimePicker from './BurnTimePicker';
+import BurnCountdown from './BurnCountdown';
 import { journalApi, exportApi } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import PaywallModal from './PaywallModal';
@@ -555,50 +556,5 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
         feature="export"
       />
     </div>
-  );
-}
-
-/**
- * BurnCountdown
- * -------------
- * Tiny live-updating "Burns in Xh Ym" label. Ticks every 30 seconds, which is
- * sufficient resolution for a minute-precision countdown without thrashing
- * React. When the target time is in the past, renders "Burning now…".
- *
- * Local to JournalEditor because it has exactly one consumer; hoist to its own
- * file if a second caller appears.
- */
-function BurnCountdown({ target }: { target: Date }) {
-  const [now, setNow] = useState(() => Date.now());
-
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 30_000);
-    return () => clearInterval(id);
-  }, []);
-
-  const remainingMs = target.getTime() - now;
-
-  if (remainingMs <= 0) {
-    return <span style={{ fontFamily: FONT }}>Burning now…</span>;
-  }
-
-  const totalMinutes = Math.floor(remainingMs / 60_000);
-  const days = Math.floor(totalMinutes / (60 * 24));
-  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
-  const minutes = totalMinutes % 60;
-
-  let label: string;
-  if (days >= 1) {
-    label = `${days}d ${hours}h`;
-  } else if (hours >= 1) {
-    label = `${hours}h ${minutes}m`;
-  } else {
-    label = `${minutes}m`;
-  }
-
-  return (
-    <span style={{ fontFamily: FONT, letterSpacing: '0.1em' }}>
-      Burns in {label}
-    </span>
   );
 }
