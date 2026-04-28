@@ -178,7 +178,12 @@ export const journalApi = {
     mood?: string;
     burn_mode?: boolean;
     ghost_mode?: boolean;
-    burn_end_time?: string;
+    /**
+     * ISO 8601 UTC timestamp for when the entry should burn.
+     * Backend reads this from the `end_time` key (see routes/journal.py).
+     * Only respected when burn_mode === true.
+     */
+    end_time?: string;
     input_method?: string;
   }) {
     const res = await authFetch('/api/journal/entries', {
@@ -191,7 +196,19 @@ export const journalApi = {
     return res.json();
   },
 
-  async updateEntry(id: number, data: { title?: string; content?: string; mood?: string }) {
+  async updateEntry(id: number, data: {
+    title?: string;
+    content?: string;
+    mood?: string;
+    /** Toggle burn mode on/off for an existing entry. */
+    burn_mode?: boolean;
+    /**
+     * ISO 8601 UTC timestamp for when the entry should burn.
+     * Pass `null` to clear an existing burn date.
+     * Only respected when burn_mode === true.
+     */
+    end_time?: string | null;
+  }) {
     const res = await authFetch(`/api/journal/entries/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
