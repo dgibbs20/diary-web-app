@@ -240,7 +240,7 @@ export default function AnalyticsPanel() {
                       if (!config) return null;
                       return (
                         <div key={moodKey} className="flex items-center gap-3">
-                          <img src={config.icon} alt={config.label} className="w-6 h-6 flex-shrink-0" />
+                          <span style={{ fontSize: "1.2rem", lineHeight: 1, flexShrink: 0 }}>{config.emoji}</span>
                           <span
                             className="text-sm w-20 capitalize font-medium"
                             style={{ color: 'var(--foreground)', fontFamily: FONT }}
