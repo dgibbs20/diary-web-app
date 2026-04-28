@@ -14,7 +14,7 @@ import AiCompanion from '@/components/AiCompanion';
 import SettingsPanel from '@/components/SettingsPanel';
 import MoodPicker from '@/components/MoodPicker';
 import AnalyticsPanel from '@/components/AnalyticsPanel';
-import { journalApi, moodApi } from '@/lib/api';
+import { journalApi, moodApi, subscriptionApi } from '@/lib/api';
 import { toast } from 'sonner';
 
 export interface JournalEntry {
@@ -47,7 +47,7 @@ const MARKETING = 'https://diary.gmxquantum.com';
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, isElite, refreshUser } = useAuth();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
@@ -95,6 +95,40 @@ export default function Dashboard() {
       fetchTodayMood();
     }
   }, [isAuthenticated, fetchEntries, fetchTodayMood]);
+
+  // Sync subscription status when window gains focus (user returns from payment)
+  useEffect(() => {
+    const handleWindowFocus = async () => {
+      if (!isAuthenticated) return;
+
+      try {
+        const result = await subscriptionApi.verify();
+        
+        if (result.success && result.subscription) {
+          // If they just upgraded to Elite, refresh profile and celebrate
+          if (result.subscription.is_elite && !isElite) {
+            await refreshUser();
+            toast.success('🎉 Welcome to diAry Elite! All features unlocked.', {
+              duration: 5000,
+            });
+          }
+          // If tier changed at all, refresh to sync
+          else if (result.subscription.tier !== user?.subscription_tier) {
+            await refreshUser();
+          }
+        }
+      } catch (error) {
+        // Silent fail - don't annoy users with errors on focus
+        console.error('[Subscription] Sync failed on window focus:', error);
+      }
+    };
+
+    window.addEventListener('focus', handleWindowFocus);
+    
+    return () => {
+      window.removeEventListener('focus', handleWindowFocus);
+    };
+  }, [isAuthenticated, isElite, user?.subscription_tier, refreshUser]);
 
   // Create new entry (mood-first flow)
   const handleNewEntry = () => {
