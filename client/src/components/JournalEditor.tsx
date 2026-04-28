@@ -309,7 +309,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
               className="flex items-center gap-1.5 px-3 py-1 rounded-full"
               style={{ background: 'var(--muted)', fontFamily: FONT }}
             >
-              <img src={MOOD_CONFIG[mood].icon} alt={mood} className="w-5 h-5" />
+              <span style={{ fontSize: '1.1rem', lineHeight: 1 }}>{MOOD_CONFIG[mood].emoji}</span>
               <span className="text-xs font-semibold capitalize tracking-wide" style={{ color: 'var(--muted-foreground)' }}>
                 {mood}
               </span>
