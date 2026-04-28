@@ -130,7 +130,6 @@ export default function Dashboard() {
       window.removeEventListener('focus', handleWindowFocus);
     };
   }, [isAuthenticated, isElite, refreshUser]);
-  }, [isAuthenticated, isElite, user?.subscription_tier, refreshUser]);
 
   // Create new entry (mood-first flow)
   const handleNewEntry = () => {
