@@ -18,6 +18,8 @@ import { FontFamily } from '@tiptap/extension-font-family';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Typography } from '@tiptap/extension-typography';
 import EditorToolbar from './EditorToolbar';
+import BurnSwitch from './BurnSwitch';
+import BurnTimePicker from './BurnTimePicker';
 import { journalApi, exportApi } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import PaywallModal from './PaywallModal';
@@ -45,6 +47,13 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
   const [title, setTitle] = useState(entry?.title || '');
   const [mood, setMood] = useState(entry?.mood || pendingMood || '');
   const [burnMode, setBurnMode] = useState(entry?.burn_mode || false);
+  // Burn time — JS Date in local time. Rehydrated from entry.burn_date (ISO UTC
+  // string from backend) when editing an existing entry. Mirrors Flutter's
+  // `_burnEndTime` pattern in text_journal_screen.dart.
+  const [burnDate, setBurnDate] = useState<Date | null>(
+    entry?.burn_date ? new Date(entry.burn_date) : null,
+  );
+  const [showBurnPicker, setShowBurnPicker] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [entryId, setEntryId] = useState<number | null>(entry?.id || null);
   const [wordCount, setWordCount] = useState(0);
@@ -107,14 +116,27 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
       return;
     }
 
+    // Burn validation (Flutter parity): if burn mode is on, a time is required.
+    // See text_journal_screen.dart line ~248: blocks save when burnMode && burnEndTime == null.
+    if (burnMode && !burnDate) {
+      setSaveStatus('idle');
+      toast.error('Set a burn time before saving, or turn off Burn Mode.');
+      setShowBurnPicker(true);
+      return;
+    }
+
     setSaveStatus('saving');
     try {
       if (entryId) {
-        // Update existing entry
+        // Update existing entry — backend accepts burn_mode + end_time on PUT
         const res = await journalApi.updateEntry(entryId, {
           title: title || 'Untitled',
           content: finalContent,
           mood: mood || undefined,
+          burn_mode: burnMode,
+          // Send ISO UTC. Pass null when burn is off so any prior burn_date
+          // gets cleared server-side.
+          end_time: burnMode && burnDate ? burnDate.toISOString() : null,
         });
         if (res.success) {
           onSave(res.entry);
@@ -133,6 +155,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           content: finalContent,
           mood: mood || undefined,
           burn_mode: burnMode,
+          end_time: burnMode && burnDate ? burnDate.toISOString() : undefined,
           input_method: 'text',
         });
         if (res.success) {
@@ -151,7 +174,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
       setSaveStatus('error');
       toast.error('An error occurred while saving');
     }
-  }, [title, mood, burnMode, entryId, onSave, editor]);
+  }, [title, mood, burnMode, burnDate, entryId, onSave, editor]);
 
   // Ctrl+S save
   useEffect(() => {
@@ -181,7 +204,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     return () => {
       if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
     };
-  }, [title, wordCount, mood, burnMode, performSave]);
+  }, [title, wordCount, mood, burnMode, burnDate, performSave]);
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
@@ -192,6 +215,43 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
   const handleManualSave = () => {
     hasChangesRef.current = true;
     performSave();
+  };
+
+  /**
+   * Fired when the BurnSwitch pill is toggled.
+   * Enabling: open the time picker so the user must explicitly choose a time
+   *           (Flutter parity — burn without a time is invalid).
+   * Disabling: clear any previously-selected time so the next enable starts clean.
+   */
+  const handleBurnToggle = (next: boolean) => {
+    if (next) {
+      setBurnMode(true);
+      setShowBurnPicker(true);
+      hasChangesRef.current = true;
+      setSaveStatus('idle');
+    } else {
+      setBurnMode(false);
+      setBurnDate(null);
+      hasChangesRef.current = true;
+      setSaveStatus('idle');
+    }
+  };
+
+  /** Fired when the user confirms a date/time in BurnTimePicker. */
+  const handleBurnTimeConfirm = (date: Date) => {
+    setBurnDate(date);
+    setShowBurnPicker(false);
+    hasChangesRef.current = true;
+    setSaveStatus('idle');
+  };
+
+  /** Fired when the user cancels BurnTimePicker. If burn was just turned ON
+   *  but no date had been set previously, treat cancel as turning burn back OFF. */
+  const handleBurnPickerCancel = () => {
+    setShowBurnPicker(false);
+    if (burnMode && !burnDate) {
+      setBurnMode(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -276,19 +336,14 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             {wordCount} words
           </span>
 
-          {!entryId && (
-            <button
-              onClick={() => setBurnMode(!burnMode)}
-              className="p-2 rounded-lg transition-colors"
-              style={{
-                color: burnMode ? '#E85D4A' : 'var(--muted-foreground)',
-                backgroundColor: burnMode ? 'rgba(232,93,74,0.1)' : 'transparent',
-              }}
-              title="Burn Mode — auto-delete after 24h"
-            >
-              <Flame size={16} />
-            </button>
-          )}
+          {/* Burn Mode pill — visible on both new and existing entries.
+              Tapping ON opens BurnTimePicker for time selection. */}
+          <BurnSwitch
+            value={burnMode}
+            onChange={handleBurnToggle}
+            disabled={saveStatus === 'saving'}
+            id="burn-switch"
+          />
 
           <button
             onClick={handleManualSave}
@@ -390,10 +445,11 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
         </motion.div>
       </div>
 
-      {/* Burn mode indicator */}
+      {/* Burn mode indicator — shows the actual scheduled burn time + a live
+          countdown. Tapping the time opens BurnTimePicker to edit. */}
       {burnMode && (
         <div
-          className="px-4 py-2 text-center text-xs flex items-center justify-center gap-2 tracking-wider uppercase"
+          className="px-4 py-2 text-center text-xs flex items-center justify-center gap-3 tracking-wider uppercase"
           style={{
             background: 'rgba(232,93,74,0.06)',
             color: '#E85D4A',
@@ -402,9 +458,50 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             letterSpacing: '0.1em',
           }}
         >
-          <Flame size={12} /> Burn Mode — This entry will auto-delete after 24 hours
+          <Flame size={12} />
+          <span>Burn Mode</span>
+          {burnDate ? (
+            <>
+              <span style={{ opacity: 0.55 }}>·</span>
+              <BurnCountdown target={burnDate} />
+              <button
+                type="button"
+                onClick={() => setShowBurnPicker(true)}
+                className="underline-offset-2 hover:underline"
+                style={{
+                  color: '#E85D4A',
+                  fontFamily: FONT,
+                  letterSpacing: '0.1em',
+                }}
+                title="Change burn time"
+              >
+                Edit
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowBurnPicker(true)}
+              className="underline-offset-2 hover:underline"
+              style={{
+                color: '#E85D4A',
+                fontFamily: FONT,
+                letterSpacing: '0.1em',
+              }}
+            >
+              Set burn time
+            </button>
+          )}
         </div>
       )}
+
+      {/* Burn time picker dialog */}
+      <BurnTimePicker
+        open={showBurnPicker}
+        initialValue={burnDate ?? undefined}
+        onConfirm={handleBurnTimeConfirm}
+        onCancel={handleBurnPickerCancel}
+      />
 
       {/* Delete confirmation */}
       {showDeleteConfirm && (
@@ -458,5 +555,50 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
         feature="export"
       />
     </div>
+  );
+}
+
+/**
+ * BurnCountdown
+ * -------------
+ * Tiny live-updating "Burns in Xh Ym" label. Ticks every 30 seconds, which is
+ * sufficient resolution for a minute-precision countdown without thrashing
+ * React. When the target time is in the past, renders "Burning now…".
+ *
+ * Local to JournalEditor because it has exactly one consumer; hoist to its own
+ * file if a second caller appears.
+ */
+function BurnCountdown({ target }: { target: Date }) {
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const remainingMs = target.getTime() - now;
+
+  if (remainingMs <= 0) {
+    return <span style={{ fontFamily: FONT }}>Burning now…</span>;
+  }
+
+  const totalMinutes = Math.floor(remainingMs / 60_000);
+  const days = Math.floor(totalMinutes / (60 * 24));
+  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const minutes = totalMinutes % 60;
+
+  let label: string;
+  if (days >= 1) {
+    label = `${days}d ${hours}h`;
+  } else if (hours >= 1) {
+    label = `${hours}h ${minutes}m`;
+  } else {
+    label = `${minutes}m`;
+  }
+
+  return (
+    <span style={{ fontFamily: FONT, letterSpacing: '0.1em' }}>
+      Burns in {label}
+    </span>
   );
 }
