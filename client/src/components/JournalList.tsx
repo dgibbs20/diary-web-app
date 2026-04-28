@@ -93,7 +93,7 @@ export default function JournalList({
             >
               {todayMood ? (
                 <>
-                  <img src={MOOD_CONFIG[todayMood]?.icon} alt={todayMood} className="w-7 h-7" />
+                  <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>{MOOD_CONFIG[todayMood]?.emoji}</span>
                   <span
                     className="text-xs font-semibold capitalize hidden sm:inline tracking-wide"
                     style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
@@ -228,7 +228,7 @@ export default function JournalList({
                     {/* Mood indicator */}
                     <div className="flex-shrink-0 mt-0.5">
                       {entry.mood && MOOD_CONFIG[entry.mood] ? (
-                        <img src={MOOD_CONFIG[entry.mood].icon} alt={entry.mood} className="w-6 h-6" />
+                        <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>{MOOD_CONFIG[entry.mood].emoji}</span>
                       ) : (
                         <BookOpen size={18} style={{ color: 'var(--muted-foreground)' }} />
                       )}
