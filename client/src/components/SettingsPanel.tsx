@@ -15,6 +15,7 @@ import { userApi, exportApi } from '@/lib/api';
 import { toast } from 'sonner';
 import { useLocation } from 'wouter';
 import PaywallModal from './PaywallModal';
+import ExportDialog from './ExportDialog';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -478,27 +479,17 @@ function SecuritySection() {
 }
 
 function ExportSection() {
-  const { isElite } = useAuth();
+  const { isElite, user } = useAuth();
   const [isExporting, setIsExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
 
-  const handleExport = async () => {
+  const handleExport = () => {
     if (!isElite) {
       setShowPaywall(true);
       return;
     }
-    setIsExporting(true);
-    try {
-      const res = await exportApi.exportPdf();
-      if (res.success) {
-        toast.success('PDF exported successfully');
-      } else {
-        toast.error('Failed to export PDF');
-      }
-    } catch {
-      toast.error('Export failed');
-    }
-    setIsExporting(false);
+    setShowExportDialog(true);
   };
 
   return (
@@ -539,6 +530,33 @@ function ExportSection() {
           </button>
         </div>
       </motion.div>
+
+      <ExportDialog
+        isOpen={showExportDialog}
+        onClose={() => setShowExportDialog(false)}
+        onConfirm={async (delivery) => {
+          setIsExporting(true);
+          try {
+            const res = await exportApi.exportAll(delivery);
+            if (res.success) {
+              toast.success(
+                delivery === 'email'
+                  ? 'Export sent to your email'
+                  : 'PDF downloaded successfully'
+              );
+            } else {
+              toast.error('Export failed');
+            }
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Export failed');
+          }
+          setIsExporting(false);
+          setShowExportDialog(false);
+        }}
+        isExporting={isExporting}
+        userEmail={user?.email ?? ''}
+        mode="all"
+      />
 
       {/* PaywallModal for Export */}
       <PaywallModal
