@@ -372,7 +372,7 @@ function DashboardFooter() {
           <img
             src={isElite ? '/assets/images/logo_elite.png' : '/assets/images/logo.png'}
             alt="diAry"
-            style={{ height: '20px', filter: 'brightness(0.85)' }}
+            style={{ height: '24px', filter: 'brightness(0.85)' }}
           />
           <span
             className="hidden md:inline"
