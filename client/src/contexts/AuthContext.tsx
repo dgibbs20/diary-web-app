@@ -67,7 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await userApi.getProfile();
       if (res.success && res.user) {
         setUser(res.user);
-        localStorage.setItem('diary_user', JSON.stringify(res.user));
       }
     } catch {
       // silent fail
@@ -78,12 +77,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const { accessToken } = getTokens();
     if (accessToken) {
-      const cached = localStorage.getItem('diary_user');
-      if (cached) {
-        try {
-          setUser(JSON.parse(cached));
-        } catch { /* ignore */ }
-      }
       refreshUser().finally(() => setIsLoading(false));
     } else {
       setIsLoading(false);
@@ -96,10 +89,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (res.success) {
         setTokens(res.access_token, res.refresh_token, res.exp);
         setUser(res.user);
-        localStorage.setItem('diary_user', JSON.stringify(res.user));
         return { success: true };
       }
-      // Check if OTP verification needed
       if (res.error?.code === 'OTP_REQUIRED' || res.otp_required) {
         return { success: false, needsVerification: true, email };
       }
