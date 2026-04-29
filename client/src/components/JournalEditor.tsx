@@ -23,6 +23,7 @@ import BurnTimePicker from './BurnTimePicker';
 import BurnCountdown from './BurnCountdown';
 import { journalApi, exportApi } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
+import ExportDialog from './ExportDialog';
 import PaywallModal from './PaywallModal';
 import { MOOD_CONFIG } from '@/lib/constants';
 import { toast } from 'sonner';
@@ -42,8 +43,9 @@ interface JournalEditorProps {
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export default function JournalEditor({ entry, pendingMood, onSave, onDelete, onBack, onToggleAi }: JournalEditorProps) {
-  const { isElite } = useAuth();
+  const { isElite, user } = useAuth();
   const [showExportPaywall, setShowExportPaywall] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [title, setTitle] = useState(entry?.title || '');
   const [mood, setMood] = useState(entry?.mood || pendingMood || '');
@@ -358,23 +360,12 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           {/* Export button — paywalled for free users */}
           {entryId && (
             <button
-              onClick={async () => {
+              onClick={() => {
                 if (!isElite) {
                   setShowExportPaywall(true);
                   return;
                 }
-                setIsExporting(true);
-                try {
-                  const res = await exportApi.exportPdf();
-                  if (res.success) {
-                    toast.success('PDF exported successfully');
-                  } else {
-                    toast.error('Failed to export PDF');
-                  }
-                } catch {
-                  toast.error('Export failed');
-                }
-                setIsExporting(false);
+                setShowExportDialog(true);
               }}
               disabled={isExporting}
               className="p-2 rounded-lg transition-colors relative"
@@ -548,6 +539,35 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           </motion.div>
         </div>
       )}
+
+      {/* Export delivery dialog */}
+      <ExportDialog
+        isOpen={showExportDialog}
+        onClose={() => setShowExportDialog(false)}
+        onConfirm={async (delivery) => {
+          if (!entryId) return;
+          setIsExporting(true);
+          try {
+            const res = await exportApi.exportEntry(entryId, delivery);
+            if (res.success) {
+              toast.success(
+                delivery === 'email'
+                  ? 'Export sent to your email'
+                  : 'PDF downloaded successfully'
+              );
+            } else {
+              toast.error('Export failed');
+            }
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Export failed');
+          }
+          setIsExporting(false);
+          setShowExportDialog(false);
+        }}
+        isExporting={isExporting}
+        userEmail={user?.email ?? ''}
+        mode="entry"
+      />
 
       {/* PaywallModal for Export */}
       <PaywallModal
