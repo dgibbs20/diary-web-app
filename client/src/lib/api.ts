@@ -36,7 +36,6 @@ export function clearTokens() {
   localStorage.removeItem('diary_access_token');
   localStorage.removeItem('diary_refresh_token');
   localStorage.removeItem('diary_token_exp');
-  localStorage.removeItem('diary_user');
 }
 
 function isTokenExpired(): boolean {
