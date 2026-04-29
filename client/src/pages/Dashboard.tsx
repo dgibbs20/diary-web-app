@@ -101,13 +101,11 @@ export default function Dashboard() {
     const handleWindowFocus = async () => {
       if (!isAuthenticated) return;
 
-      // Only verify if user just attempted an upgrade
       const pendingUpgrade = sessionStorage.getItem('pending_upgrade');
       if (!pendingUpgrade) return;
 
       try {
         const result = await subscriptionApi.verify();
-        
         if (result.success && result.subscription) {
           if (result.subscription.is_elite && !isElite) {
             await refreshUser();
@@ -119,13 +117,11 @@ export default function Dashboard() {
       } catch (error) {
         console.error('[Subscription] Sync failed on window focus:', error);
       } finally {
-        // Always clear the flag after attempt
         sessionStorage.removeItem('pending_upgrade');
       }
     };
 
     window.addEventListener('focus', handleWindowFocus);
-    
     return () => {
       window.removeEventListener('focus', handleWindowFocus);
     };
@@ -216,12 +212,10 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* Dashboard grid: header(56px) + content + footer(36px) */}
       <div
         className="flex flex-col"
         style={{ marginTop: '56px', height: 'calc(100vh - 56px)' }}
       >
-        {/* Main content row */}
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar Rail */}
           <Sidebar
@@ -349,6 +343,8 @@ export default function Dashboard() {
 
 /* ─── Compact Dashboard Footer ─── */
 function DashboardFooter() {
+  const { isElite } = useAuth();
+
   const FOOTER_LINKS = [
     { label: 'Features', href: `${MARKETING}/#features` },
     { label: 'How It Works', href: `${MARKETING}/#how-it-works` },
@@ -373,7 +369,11 @@ function DashboardFooter() {
       <div className="flex items-center justify-between gap-4">
         {/* Logo + tagline */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <img src="/assets/images/logo.png" alt="diAry" style={{ height: '20px', filter: 'brightness(0.85)' }} />
+          <img
+            src={isElite ? '/assets/images/logo_elite.png' : '/assets/images/logo.png'}
+            alt="diAry"
+            style={{ height: '20px', filter: 'brightness(0.85)' }}
+          />
           <span
             className="hidden md:inline"
             style={{ fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(245,240,232,0.35)', whiteSpace: 'nowrap' }}
@@ -385,7 +385,7 @@ function DashboardFooter() {
         {/* Links */}
         <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
           {FOOTER_LINKS.map(link => (
-            <a
+            
               key={link.label}
               href={link.href}
               target="_blank"
