@@ -385,7 +385,7 @@ function DashboardFooter() {
         {/* Links */}
         <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
           {FOOTER_LINKS.map(link => (
-            
+            <a
               key={link.label}
               href={link.href}
               target="_blank"
