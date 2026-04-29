@@ -1,4 +1,4 @@
-/**
+﻿﻿/**
  * diAry API Service
  * Handles all communication with the Flask backend
  */
@@ -7,34 +7,28 @@ const API_BASE = 'https://api.diary.gmxquantum.com';
 
 // Token management
 let accessToken: string | null = null;
-let refreshToken: string | null = null;
 let tokenExpiry: number | null = null;
 
-export function setTokens(access: string, refresh: string, exp?: number) {
+export function setTokens(access: string, _refresh: string, exp?: number) {
   accessToken = access;
-  refreshToken = refresh;
   tokenExpiry = exp || null;
   localStorage.setItem('diary_access_token', access);
-  localStorage.setItem('diary_refresh_token', refresh);
   if (exp) localStorage.setItem('diary_token_exp', String(exp));
 }
 
 export function getTokens() {
   if (!accessToken) {
     accessToken = localStorage.getItem('diary_access_token');
-    refreshToken = localStorage.getItem('diary_refresh_token');
     const exp = localStorage.getItem('diary_token_exp');
     tokenExpiry = exp ? Number(exp) : null;
   }
-  return { accessToken, refreshToken, tokenExpiry };
+  return { accessToken, tokenExpiry };
 }
 
 export function clearTokens() {
   accessToken = null;
-  refreshToken = null;
   tokenExpiry = null;
   localStorage.removeItem('diary_access_token');
-  localStorage.removeItem('diary_refresh_token');
   localStorage.removeItem('diary_token_exp');
 }
 
@@ -44,18 +38,15 @@ function isTokenExpired(): boolean {
 }
 
 async function refreshAccessToken(): Promise<boolean> {
-  const { refreshToken: rt } = getTokens();
-  if (!rt) return false;
-
   try {
     const res = await fetch(`${API_BASE}/api/auth/refresh`, {
       method: 'POST',
+      credentials: 'include', // httpOnly cookie sent automatically
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refreshToken: rt }),
     });
     const data = await res.json();
     if (data.success) {
-      setTokens(data.access_token, data.refresh_token, data.exp);
+      setTokens(data.access_token, '', data.exp);
       return true;
     }
     return false;
@@ -85,14 +76,22 @@ async function authFetch(url: string, options: RequestInit = {}): Promise<Respon
     headers['Content-Type'] = 'application/json';
   }
 
-  const res = await fetch(`${API_BASE}${url}`, { ...options, headers });
+  const res = await fetch(`${API_BASE}${url}`, {
+    ...options,
+    headers,
+    credentials: 'include', // sends httpOnly cookie on every authenticated request
+  });
 
   if (res.status === 401) {
     const refreshed = await refreshAccessToken();
     if (refreshed) {
       const newAt = getTokens().accessToken;
       headers['Authorization'] = `Bearer ${newAt}`;
-      return fetch(`${API_BASE}${url}`, { ...options, headers });
+      return fetch(`${API_BASE}${url}`, {
+        ...options,
+        headers,
+        credentials: 'include',
+      });
     }
     clearTokens();
     window.location.href = '/login';
@@ -108,6 +107,7 @@ export const authApi = {
   async login(email: string, password: string) {
     const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: 'POST',
+      credentials: 'include', // receives the httpOnly refresh token cookie
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
@@ -126,6 +126,7 @@ export const authApi = {
   async verifyOtp(email: string, otp: string) {
     const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
       method: 'POST',
+      credentials: 'include', // receives the httpOnly refresh token cookie
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, otp }),
     });
@@ -177,11 +178,6 @@ export const journalApi = {
     mood?: string;
     burn_mode?: boolean;
     ghost_mode?: boolean;
-    /**
-     * ISO 8601 UTC timestamp for when the entry should burn.
-     * Backend reads this from the `end_time` key (see routes/journal.py).
-     * Only respected when burn_mode === true.
-     */
     end_time?: string;
     input_method?: string;
   }) {
@@ -199,13 +195,7 @@ export const journalApi = {
     title?: string;
     content?: string;
     mood?: string;
-    /** Toggle burn mode on/off for an existing entry. */
     burn_mode?: boolean;
-    /**
-     * ISO 8601 UTC timestamp for when the entry should burn.
-     * Pass `null` to clear an existing burn date.
-     * Only respected when burn_mode === true.
-     */
     end_time?: string | null;
   }) {
     const res = await authFetch(`/api/journal/entries/${id}`, {
@@ -244,7 +234,6 @@ export const aiApi = {
       }),
     });
     const json = await res.json();
-    // Backend returns { success, data: { response, model, mode }, usage }
     if (json.success && json.data) {
       return { success: true, response: json.data.response, model: json.data.model, usage: json.usage };
     }
