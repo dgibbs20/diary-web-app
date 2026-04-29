@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /journal
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /analytics
+Allow: /
+Allow: /login
+Allow: /signup
+
+Sitemap: https://app.diary.gmxquantum.com/sitemap.xml
