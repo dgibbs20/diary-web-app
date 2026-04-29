@@ -330,22 +330,68 @@ export const analyticsApi = {
 // ============ EXPORT API ============
 
 export const exportApi = {
-  async exportPdf(startDate?: string, endDate?: string) {
-    const params = new URLSearchParams();
-    if (startDate) params.set('start_date', startDate);
-    if (endDate) params.set('end_date', endDate);
-    const url = `/api/export/pdf${params.toString() ? '?' + params.toString() : ''}`;
-    const res = await authFetch(url);
-    if (res.ok) {
+  async exportAll(
+    delivery: 'download' | 'email',
+    startDate?: string,
+    endDate?: string
+  ): Promise<{ success: boolean; message?: string }> {
+    const body: Record<string, string> = { delivery };
+    if (startDate) body.start_date = startDate;
+    if (endDate) body.end_date = endDate;
+
+    const res = await authFetch('/api/export/entries', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'Export failed');
+    }
+
+    if (delivery === 'download') {
       const blob = await res.blob();
       const downloadUrl = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = downloadUrl;
       a.download = `diary-export-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(downloadUrl);
       return { success: true };
     }
+
+    return res.json();
+  },
+
+  async exportEntry(
+    entryId: number,
+    delivery: 'download' | 'email'
+  ): Promise<{ success: boolean; message?: string }> {
+    const res = await authFetch(`/api/export/entries/${entryId}`, {
+      method: 'POST',
+      body: JSON.stringify({ delivery }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'Export failed');
+    }
+
+    if (delivery === 'download') {
+      const blob = await res.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `diary-entry-${entryId}-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(downloadUrl);
+      return { success: true };
+    }
+
     return res.json();
   },
 };
