@@ -13,6 +13,7 @@ import JournalEditor from '@/components/JournalEditor';
 import AiCompanion from '@/components/AiCompanion';
 import SettingsPanel from '@/components/SettingsPanel';
 import MoodPicker from '@/components/MoodPicker';
+import LoginOnboardingFlow from '@/components/LoginOnboardingFlow';
 import AnalyticsPanel from '@/components/AnalyticsPanel';
 import { journalApi, moodApi, subscriptionApi } from '@/lib/api';
 import { toast } from 'sonner';
@@ -58,6 +59,9 @@ export default function Dashboard() {
   const [filterType, setFilterType] = useState('all');
   const [isLoadingEntries, setIsLoadingEntries] = useState(true);
   const [pendingMoodForEntry, setPendingMoodForEntry] = useState<string | null>(null);
+  // Login onboarding flow — fires once per session when no mood set today
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingShown, setOnboardingShown] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -79,12 +83,15 @@ export default function Dashboard() {
     setIsLoadingEntries(false);
   }, []);
 
-  // Fetch today's mood
+  // Fetch today's mood — if none set, trigger onboarding flow once per session
   const fetchTodayMood = useCallback(async () => {
     try {
       const res = await moodApi.getTodayMood();
       if (res.success && res.mood_entry) {
         setTodayMood(res.mood_entry.mood);
+      } else {
+        // No mood logged today — show the onboarding flow on first load
+        setShowOnboarding(true);
       }
     } catch { /* silent */ }
   }, []);
@@ -126,6 +133,26 @@ export default function Dashboard() {
       window.removeEventListener('focus', handleWindowFocus);
     };
   }, [isAuthenticated, isElite, refreshUser]);
+
+  // Onboarding flow handlers
+  const handleOnboardingJournal = (mood: string) => {
+    setShowOnboarding(false);
+    setOnboardingShown(true);
+    if (mood) setTodayMood(mood);
+    createNewEntry(mood || todayMood || '');
+  };
+
+  const handleOnboardingChat = (mood: string) => {
+    setShowOnboarding(false);
+    setOnboardingShown(true);
+    if (mood) setTodayMood(mood);
+    setShowAiPanel(true);
+  };
+
+  const handleOnboardingDismiss = () => {
+    setShowOnboarding(false);
+    setOnboardingShown(true);
+  };
 
   // Create new entry (mood-first flow)
   const handleNewEntry = () => {
@@ -334,6 +361,17 @@ export default function Dashboard() {
           <MoodPicker
             onSelect={handleMoodSelected}
             onClose={() => setShowMoodPicker(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Login Onboarding Flow — mood check-in + journal/chat intent */}
+      <AnimatePresence>
+        {showOnboarding && !showMoodPicker && (
+          <LoginOnboardingFlow
+            onJournal={handleOnboardingJournal}
+            onChat={handleOnboardingChat}
+            onDismiss={handleOnboardingDismiss}
           />
         )}
       </AnimatePresence>
