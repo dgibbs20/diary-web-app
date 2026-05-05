@@ -3,16 +3,25 @@
  * Premium branded: Cormorant Garamond, gold accents, refined layout
  * Supports all modes: auto, vault, friend, mirror, insight
  * Sends chat history to backend for context continuity
- * 
+ *
+ * QUICK CHAT ACTION BAR (when messages exist):
+ * - Save as Journal Entry (name it inline, POST with type: chat, input_method: ai_quick_chat)
+ * - Export as plain text (browser download)
+ * - Burn (clear chat, no save)
+ * - Delete / Discard (same as burn with confirmation)
+ *
  * PAYWALL GATING:
  * - Free users: 5 AI responses/day, only Auto + Vault modes
  * - Elite users: Unlimited responses, all 5 modes
  * - When limit hit or restricted mode selected → PaywallModal
  */
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { X, Send, Loader2, Bot, Sparkles, Crown, Lock } from 'lucide-react';
-import { aiApi } from '@/lib/api';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  X, Send, Loader2, Bot, Sparkles, Crown, Lock,
+  Save, Download, Flame, Trash2, Check, ChevronDown,
+} from 'lucide-react';
+import { aiApi, journalApi } from '@/lib/api';
 import { AI_MODES } from '@/lib/constants';
 import { useAuth } from '@/contexts/AuthContext';
 import { Streamdown } from 'streamdown';
@@ -39,6 +48,26 @@ interface ChatMessage {
   timestamp: Date;
 }
 
+// ── Utility: build transcript string from messages ──
+function buildTranscript(messages: ChatMessage[]): string {
+  return messages
+    .map(m => `${m.role === 'user' ? 'You' : 'AI'}: ${m.content}`)
+    .join('\n\n');
+}
+
+// ── Utility: download plain text file in browser ──
+function downloadTextFile(filename: string, content: string) {
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 export default function AiCompanion({ entryContext, userName, onClose }: AiCompanionProps) {
   const { isElite } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -48,15 +77,28 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
   const [showModes, setShowModes] = useState(false);
   const [dailyUsage, setDailyUsage] = useState(0);
   const [paywallFeature, setPaywallFeature] = useState<'ai_modes' | 'ai_limit' | null>(null);
+
+  // ── Quick Chat action bar state ──
+  const [entryTitle, setEntryTitle] = useState('');
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showBurnConfirm, setShowBurnConfirm] = useState(false);
+  const [savedEntryId, setSavedEntryId] = useState<number | null>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+
+  // Default title based on current date
+  const defaultTitle = `Quick Chat — ${new Date().toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric',
+  })}`;
 
   // Fetch AI usage on mount for free users
   useEffect(() => {
     if (!isElite) {
       aiApi.getUsage().then(res => {
         if (res.success && res.usage) {
-          // Backend returns: usage.ai_responses.used / limit / remaining
           const used = res.usage.ai_responses?.used ?? res.usage.ai_responses_today ?? 0;
           setDailyUsage(used);
         }
@@ -67,6 +109,13 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    if (editingTitle && titleInputRef.current) {
+      titleInputRef.current.focus();
+      titleInputRef.current.select();
+    }
+  }, [editingTitle]);
 
   const handleModeSelect = (modeId: string) => {
     if (!isElite && !FREE_MODES.includes(modeId)) {
@@ -82,7 +131,6 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
     const msg = input.trim();
     if (!msg || isLoading) return;
 
-    // Check daily limit for free users
     if (!isElite && dailyUsage >= FREE_DAILY_LIMIT) {
       setPaywallFeature('ai_limit');
       return;
@@ -98,10 +146,7 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
     setInput('');
     setIsLoading(true);
 
-    const history = messages.map(m => ({
-      role: m.role,
-      content: m.content,
-    }));
+    const history = messages.map(m => ({ role: m.role, content: m.content }));
 
     try {
       const res = await aiApi.sendMessage(msg, mode, entryContext, history, userName);
@@ -113,11 +158,8 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
           timestamp: new Date(),
         };
         setMessages(prev => [...prev, aiMsg]);
-        if (!isElite) {
-          setDailyUsage(prev => prev + 1);
-        }
+        if (!isElite) setDailyUsage(prev => prev + 1);
       } else {
-        // Check if it's a limit error from the backend
         const errorCode = res.error?.code;
         if (errorCode === 'AI_LIMIT_REACHED' || errorCode === 'DAILY_LIMIT_EXCEEDED') {
           setPaywallFeature('ai_limit');
@@ -149,13 +191,64 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
     }
   };
 
+  // ── Save chat as journal entry ──
+  const handleSave = async () => {
+    if (messages.length === 0) return;
+    setIsSaving(true);
+    const title = entryTitle.trim() || defaultTitle;
+    const content = buildTranscript(messages);
+    try {
+      const res = await journalApi.createEntry({
+        title,
+        content,
+        input_method: 'ai_quick_chat',
+        // type is passed as extra field — backend now accepts it
+        ...(({ type: 'chat' } as unknown) as object),
+      } as Parameters<typeof journalApi.createEntry>[0]);
+
+      if (res && (res.success || res.id || res.entry)) {
+        const id = res.id ?? res.entry?.id ?? null;
+        setSavedEntryId(id);
+        toast.success(`Saved: "${title}"`);
+        setEntryTitle('');
+        setEditingTitle(false);
+      } else {
+        toast.error(res?.error?.message || 'Failed to save entry');
+      }
+    } catch {
+      toast.error('Failed to save entry');
+    }
+    setIsSaving(false);
+  };
+
+  // ── Export transcript as .txt download ──
+  const handleExport = () => {
+    if (messages.length === 0) return;
+    const title = entryTitle.trim() || defaultTitle;
+    const transcript = `${title}\n${'─'.repeat(title.length)}\n\n${buildTranscript(messages)}`;
+    const filename = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+    downloadTextFile(filename, transcript);
+    toast.success('Exported to file');
+  };
+
+  // ── Burn / clear chat ──
+  const handleBurn = () => {
+    setMessages([]);
+    setSavedEntryId(null);
+    setEntryTitle('');
+    setShowBurnConfirm(false);
+    toast.success('Chat cleared');
+  };
+
   const currentMode = AI_MODES.find(m => m.id === mode) || AI_MODES[0];
   const remainingResponses = FREE_DAILY_LIMIT - dailyUsage;
+  const hasMessages = messages.length > 0;
 
   return (
     <>
       <div className="h-full flex flex-col" style={{ width: 380, backgroundColor: 'var(--card)' }}>
-        {/* Header */}
+
+        {/* ── Header ── */}
         <div
           className="flex items-center justify-between px-4 py-3"
           style={{ borderBottom: '1px solid var(--border)' }}
@@ -180,11 +273,11 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
                 style={{ color: GOLD_DARK, fontFamily: FONT, fontWeight: 600 }}
               >
                 {currentMode.icon} {currentMode.label} Mode
+                <ChevronDown size={10} />
               </button>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {/* Usage counter for free users */}
             {!isElite && (
               <div
                 className="px-2.5 py-1 rounded-full text-xs font-medium"
@@ -215,7 +308,7 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
           </div>
         </div>
 
-        {/* Mode selector */}
+        {/* ── Mode selector ── */}
         {showModes && (
           <motion.div
             className="px-3 py-2 space-y-1"
@@ -258,7 +351,143 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
           </motion.div>
         )}
 
-        {/* Messages */}
+        {/* ── Quick Chat Action Bar (visible when messages exist) ── */}
+        <AnimatePresence>
+          {hasMessages && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{ borderBottom: '1px solid var(--border)', overflow: 'hidden' }}
+            >
+              <div className="px-3 py-2">
+                {/* Title row */}
+                <div className="flex items-center gap-2 mb-2">
+                  {editingTitle ? (
+                    <input
+                      ref={titleInputRef}
+                      type="text"
+                      value={entryTitle}
+                      onChange={e => setEntryTitle(e.target.value)}
+                      onBlur={() => setEditingTitle(false)}
+                      onKeyDown={e => { if (e.key === 'Enter') setEditingTitle(false); }}
+                      placeholder={defaultTitle}
+                      className="flex-1 text-xs px-2 py-1 rounded-md focus:outline-none"
+                      style={{
+                        border: `1px solid ${GOLD}`,
+                        backgroundColor: 'var(--background)',
+                        color: 'var(--foreground)',
+                        fontFamily: FONT,
+                      }}
+                    />
+                  ) : (
+                    <button
+                      onClick={() => setEditingTitle(true)}
+                      className="flex-1 text-left text-xs px-2 py-1 rounded-md transition-colors hover:bg-accent truncate"
+                      style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                    >
+                      {entryTitle || defaultTitle}
+                    </button>
+                  )}
+                  {savedEntryId && (
+                    <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full"
+                      style={{ backgroundColor: 'rgba(34,197,94,0.1)', color: '#16a34a', fontFamily: FONT }}>
+                      <Check size={9} /> Saved
+                    </span>
+                  )}
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex gap-1.5">
+                  {/* Save */}
+                  <button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    title="Save as journal entry"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02] disabled:opacity-50"
+                    style={{
+                      fontFamily: FONT,
+                      backgroundColor: 'rgba(201,168,76,0.12)',
+                      color: GOLD_DARK,
+                      border: `1px solid rgba(201,168,76,0.25)`,
+                    }}
+                  >
+                    {isSaving ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />}
+                    Save
+                  </button>
+
+                  {/* Export */}
+                  <button
+                    onClick={handleExport}
+                    title="Export as text file"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
+                    style={{
+                      fontFamily: FONT,
+                      backgroundColor: 'var(--muted)',
+                      color: 'var(--foreground)',
+                      border: '1px solid var(--border)',
+                    }}
+                  >
+                    <Download size={12} />
+                    Export
+                  </button>
+
+                  {/* Burn */}
+                  <button
+                    onClick={() => setShowBurnConfirm(true)}
+                    title="Burn this chat"
+                    className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
+                    style={{
+                      fontFamily: FONT,
+                      backgroundColor: 'rgba(239,68,68,0.08)',
+                      color: '#ef4444',
+                      border: '1px solid rgba(239,68,68,0.2)',
+                    }}
+                  >
+                    <Flame size={12} />
+                    Burn
+                  </button>
+                </div>
+              </div>
+
+              {/* Burn confirmation */}
+              <AnimatePresence>
+                {showBurnConfirm && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    className="mx-3 mb-2 px-3 py-2 rounded-lg"
+                    style={{ backgroundColor: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)' }}
+                  >
+                    <p className="text-xs mb-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                      This cannot be undone. Permanently delete this conversation?
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleBurn}
+                        className="flex-1 py-1 rounded-md text-xs font-semibold transition-colors"
+                        style={{ backgroundColor: '#ef4444', color: '#fff', fontFamily: FONT }}
+                      >
+                        Yes, burn it
+                      </button>
+                      <button
+                        onClick={() => setShowBurnConfirm(false)}
+                        className="flex-1 py-1 rounded-md text-xs transition-colors"
+                        style={{ backgroundColor: 'var(--muted)', color: 'var(--foreground)', fontFamily: FONT }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── Messages ── */}
         <div className="flex-1 overflow-y-auto diary-scrollbar px-4 py-4 space-y-4">
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center px-4">
@@ -336,7 +565,7 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
+        {/* ── Input ── */}
         <div className="px-4 py-3" style={{ borderTop: '1px solid var(--border)' }}>
           {!isElite && dailyUsage >= FREE_DAILY_LIMIT ? (
             <button
