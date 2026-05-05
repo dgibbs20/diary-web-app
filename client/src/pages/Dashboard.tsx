@@ -102,6 +102,14 @@ export default function Dashboard() {
       fetchTodayMood();
     }
   }, [isAuthenticated, fetchEntries, fetchTodayMood]);
+  // Auto-refresh when burn-mode entries exist — removes them from the list when they expire
+  useEffect(() => {
+    const hasBurning = entries.some(e => e.burn_mode && e.burn_date);
+    if (!hasBurning) return;
+    const interval = setInterval(fetchEntries, 30_000);
+    return () => clearInterval(interval);
+  }, [entries, fetchEntries]);
+
 
   // Sync subscription status ONLY after user attempted an upgrade
   useEffect(() => {
@@ -345,6 +353,7 @@ export default function Dashboard() {
                   entryContext={selectedEntry?.content}
                   userName={user?.fullname || user?.username}
                   onClose={() => setShowAiPanel(false)}
+                  onQuickChatSaved={fetchEntries}
                 />
               </motion.div>
             )}
