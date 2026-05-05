@@ -39,6 +39,7 @@ interface AiCompanionProps {
   entryContext?: string;
   userName?: string;
   onClose: () => void;
+  onQuickChatSaved?: () => void;
 }
 
 interface ChatMessage {
@@ -68,7 +69,7 @@ function downloadTextFile(filename: string, content: string) {
   URL.revokeObjectURL(url);
 }
 
-export default function AiCompanion({ entryContext, userName, onClose }: AiCompanionProps) {
+export default function AiCompanion({ entryContext, userName, onClose, onQuickChatSaved }: AiCompanionProps) {
   const { isElite } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -210,6 +211,7 @@ export default function AiCompanion({ entryContext, userName, onClose }: AiCompa
         const id = res.id ?? res.entry?.id ?? null;
         setSavedEntryId(id);
         toast.success(`Saved: "${title}"`);
+        onQuickChatSaved?.();
         setEntryTitle('');
         setEditingTitle(false);
       } else {
