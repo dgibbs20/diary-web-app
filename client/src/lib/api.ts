@@ -1,4 +1,4 @@
-﻿﻿/**
+/**
  * diAry API Service
  * Handles all communication with the Flask backend
  */
@@ -180,6 +180,7 @@ export const journalApi = {
     ghost_mode?: boolean;
     end_time?: string;
     input_method?: string;
+    type?: string;
   }) {
     const res = await authFetch('/api/journal/entries', {
       method: 'POST',
