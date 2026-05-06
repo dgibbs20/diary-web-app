@@ -19,9 +19,9 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, Send, Loader2, Bot, Sparkles, Crown, Lock,
-  Save, Download, Flame, Trash2, Check, ChevronDown,
+  Save, Download, Flame, Trash2, Check, ChevronDown, Mail, FileText, Clock,
 } from 'lucide-react';
-import { aiApi, journalApi } from '@/lib/api';
+import { aiApi, journalApi, exportApi } from '@/lib/api';
 import { AI_MODES } from '@/lib/constants';
 import { useAuth } from '@/contexts/AuthContext';
 import { Streamdown } from 'streamdown';
@@ -85,6 +85,11 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
   const [isSaving, setIsSaving] = useState(false);
   const [showBurnConfirm, setShowBurnConfirm] = useState(false);
   const [savedEntryId, setSavedEntryId] = useState<number | null>(null);
+  const [burnMode, setBurnMode] = useState(false);
+  const [burnDate, setBurnDate] = useState<string>('');
+  const [burnTime, setBurnTime] = useState<string>('');
+  const [showBurnPicker, setShowBurnPicker] = useState(false);
+  const [burnCountdown, setBurnCountdown] = useState<string>('');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -224,20 +229,93 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
   };
 
   // ── Export transcript as .txt download ──
-  const handleExport = () => {
+  const handleExportTxt = () => {
     if (messages.length === 0) return;
     const title = entryTitle.trim() || defaultTitle;
     const transcript = `${title}\n${'─'.repeat(title.length)}\n\n${buildTranscript(messages)}`;
     const filename = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
     downloadTextFile(filename, transcript);
-    toast.success('Exported to file');
+    toast.success('Exported as text file');
   };
 
-  // ── Burn / clear chat ──
+  // ── Export saved entry as PDF (download or email) ──
+  const handleExportPdf = async (delivery: 'download' | 'email') => {
+    if (!savedEntryId) {
+      toast.error('Save the chat first before exporting as PDF');
+      return;
+    }
+    try {
+      await exportApi.exportEntry(savedEntryId, delivery);
+      toast.success(delivery === 'email' ? 'PDF sent to your email' : 'PDF downloaded');
+    } catch {
+      toast.error('Export failed');
+    }
+  };
+
+  // ── Burn mode: save with scheduled burn date ──
+  const handleBurnSchedule = async () => {
+    if (!burnDate || !burnTime) {
+      toast.error('Please select both a date and time');
+      return;
+    }
+    const endTime = new Date(`${burnDate}T${burnTime}`);
+    if (endTime <= new Date()) {
+      toast.error('Burn time must be in the future');
+      return;
+    }
+    if (messages.length === 0) return;
+    setIsSaving(true);
+    const title = entryTitle.trim() || defaultTitle;
+    const content = buildTranscript(messages);
+    try {
+      const res = await journalApi.createEntry({
+        title,
+        content,
+        input_method: 'ai_quick_chat',
+        burn_mode: true,
+        end_time: endTime.toISOString(),
+        ...({ type: 'chat' } as object),
+      } as Parameters<typeof journalApi.createEntry>[0]);
+
+      if (res && (res.success || res.id || res.entry)) {
+        const id = res.id ?? res.entry?.id ?? null;
+        setSavedEntryId(id);
+        setBurnMode(true);
+        setShowBurnPicker(false);
+        onQuickChatSaved?.();
+        // Start countdown
+        const tick = () => {
+          const diff = endTime.getTime() - Date.now();
+          if (diff <= 0) { setBurnCountdown('Burning...'); return; }
+          const d = Math.floor(diff / 86400000);
+          const h = Math.floor((diff % 86400000) / 3600000);
+          const m = Math.floor((diff % 3600000) / 60000);
+          const s = Math.floor((diff % 60000) / 1000);
+          setBurnCountdown(d > 0 ? `Burns in ${d}d ${h}h ${m}m` : `Burns in ${h}h ${m}m ${s}s`);
+        };
+        tick();
+        const interval = setInterval(tick, 1000);
+        // Clean up interval after burn time
+        setTimeout(() => clearInterval(interval), endTime.getTime() - Date.now() + 1000);
+        toast.success(`Saved — will burn ${endTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`);
+      } else {
+        toast.error(res?.error?.message || 'Failed to save with burn mode');
+      }
+    } catch {
+      toast.error('Failed to save with burn mode');
+    }
+    setIsSaving(false);
+  };
+
+  // ── Burn / clear chat immediately (discard) ──
   const handleBurn = () => {
     setMessages([]);
     setSavedEntryId(null);
     setEntryTitle('');
+    setBurnMode(false);
+    setBurnDate('');
+    setBurnTime('');
+    setBurnCountdown('');
     setShowBurnConfirm(false);
     toast.success('Chat cleared');
   };
@@ -420,25 +498,48 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                   </button>
 
                   {/* Export */}
-                  <button
-                    onClick={handleExport}
-                    title="Export as text file"
-                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
-                    style={{
-                      fontFamily: FONT,
-                      backgroundColor: 'var(--muted)',
-                      color: 'var(--foreground)',
-                      border: '1px solid var(--border)',
-                    }}
-                  >
-                    <Download size={12} />
-                    Export
-                  </button>
+                  <div className="relative flex-1">
+                    <button
+                      onClick={handleExportTxt}
+                      onContextMenu={(e) => { e.preventDefault(); }}
+                      title="Export as text file (right-click for more)"
+                      className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
+                      style={{
+                        fontFamily: FONT,
+                        backgroundColor: 'var(--muted)',
+                        color: 'var(--foreground)',
+                        border: '1px solid var(--border)',
+                      }}
+                    >
+                      <Download size={12} />
+                      Export
+                    </button>
+                    {savedEntryId && (
+                      <div className="absolute top-full left-0 right-0 mt-1 rounded-lg overflow-hidden shadow-lg z-10"
+                        style={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)' }}>
+                        <button onClick={handleExportTxt}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
+                          style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
+                          <FileText size={11} /> Download .txt
+                        </button>
+                        <button onClick={() => handleExportPdf('download')}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
+                          style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
+                          <Download size={11} /> Download PDF
+                        </button>
+                        <button onClick={() => handleExportPdf('email')}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
+                          style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
+                          <Mail size={11} /> Email PDF
+                        </button>
+                      </div>
+                    )}
+                  </div>
 
                   {/* Burn */}
                   <button
-                    onClick={() => setShowBurnConfirm(true)}
-                    title="Burn this chat"
+                    onClick={() => burnMode ? setShowBurnConfirm(true) : setShowBurnPicker(true)}
+                    title={burnMode ? 'Discard chat' : 'Schedule burn'}
                     className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
                     style={{
                       fontFamily: FONT,
@@ -453,7 +554,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                 </div>
               </div>
 
-              {/* Burn confirmation */}
+              {/* Burn confirmation — immediate discard */}
               <AnimatePresence>
                 {showBurnConfirm && (
                   <motion.div
@@ -464,7 +565,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                     style={{ backgroundColor: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)' }}
                   >
                     <p className="text-xs mb-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
-                      This cannot be undone. Permanently delete this conversation?
+                      Discard this conversation permanently?
                     </p>
                     <div className="flex gap-2">
                       <button
@@ -472,7 +573,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                         className="flex-1 py-1 rounded-md text-xs font-semibold transition-colors"
                         style={{ backgroundColor: '#ef4444', color: '#fff', fontFamily: FONT }}
                       >
-                        Yes, burn it
+                        Yes, discard it
                       </button>
                       <button
                         onClick={() => setShowBurnConfirm(false)}
@@ -482,6 +583,89 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                         Cancel
                       </button>
                     </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Burn date/time picker */}
+              <AnimatePresence>
+                {showBurnPicker && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    className="mx-3 mb-2 px-3 py-3 rounded-lg"
+                    style={{ backgroundColor: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)' }}
+                  >
+                    <p className="text-xs font-semibold mb-2 flex items-center gap-1.5"
+                      style={{ color: '#ef4444', fontFamily: FONT }}>
+                      <Flame size={11} /> Schedule Burn
+                    </p>
+                    <p className="text-xs mb-3" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+                      Chat will be saved as a journal entry and auto-deleted at the selected time.
+                    </p>
+                    <div className="flex gap-2 mb-3">
+                      <input
+                        type="date"
+                        value={burnDate}
+                        min={new Date().toISOString().split('T')[0]}
+                        onChange={(e) => setBurnDate(e.target.value)}
+                        className="flex-1 rounded-md px-2 py-1.5 text-xs"
+                        style={{
+                          fontFamily: FONT,
+                          backgroundColor: 'var(--background)',
+                          border: '1px solid var(--border)',
+                          color: 'var(--foreground)',
+                        }}
+                      />
+                      <input
+                        type="time"
+                        value={burnTime}
+                        onChange={(e) => setBurnTime(e.target.value)}
+                        className="flex-1 rounded-md px-2 py-1.5 text-xs"
+                        style={{
+                          fontFamily: FONT,
+                          backgroundColor: 'var(--background)',
+                          border: '1px solid var(--border)',
+                          color: 'var(--foreground)',
+                        }}
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleBurnSchedule}
+                        disabled={isSaving || !burnDate || !burnTime}
+                        className="flex-1 py-1.5 rounded-md text-xs font-semibold transition-colors disabled:opacity-50"
+                        style={{ backgroundColor: '#ef4444', color: '#fff', fontFamily: FONT }}
+                      >
+                        {isSaving ? 'Saving...' : 'Set Burn Time'}
+                      </button>
+                      <button
+                        onClick={() => setShowBurnPicker(false)}
+                        className="flex-1 py-1.5 rounded-md text-xs transition-colors"
+                        style={{ backgroundColor: 'var(--muted)', color: 'var(--foreground)', fontFamily: FONT }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Burn countdown pill */}
+              <AnimatePresence>
+                {burnMode && burnCountdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="mx-3 mb-2 px-3 py-1.5 rounded-lg flex items-center gap-1.5"
+                    style={{ backgroundColor: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}
+                  >
+                    <Clock size={11} style={{ color: '#ef4444', flexShrink: 0 }} />
+                    <span className="text-xs" style={{ color: '#ef4444', fontFamily: FONT }}>
+                      {burnCountdown}
+                    </span>
                   </motion.div>
                 )}
               </AnimatePresence>
