@@ -209,6 +209,7 @@ export default function Dashboard() {
     });
     setSelectedEntry(entry);
     setPendingMoodForEntry(null);
+    setViewMode('list');
   };
 
   const handleEntryDeleted = (id: number) => {
@@ -328,7 +329,9 @@ export default function Dashboard() {
                 >
                   <UploadJournalEntry
                     onSave={handleEntrySaved}
+                    onDelete={handleEntryDeleted}
                     onBack={handleBackToList}
+                    onToggleAi={() => setShowAiPanel(!showAiPanel)}
                     pendingMood={pendingMoodForEntry}
                   />
                 </motion.div>
