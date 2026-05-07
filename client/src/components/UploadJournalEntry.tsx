@@ -1,6 +1,6 @@
 /**
  * UploadJournalEntry — Web / Desktop Camera & File Upload
- * Supports: JPG, PNG, WEBP, PDF, TXT (individual files)
+ * Supports: JPG, PNG, WEBP, PDF, TXT, DOCX (individual files)
  *           ZIP (batch import, Elite only)
  * Scanner/printer: user scans to file, uploads here — no direct device camera
  * Elite gate: multi-file / ZIP upload
@@ -26,8 +26,9 @@ const BORDER = 'var(--border)';
 const TEXT = 'var(--foreground)';
 const MUTED = 'var(--muted-foreground)';
 
-const ACCEPTED_SINGLE = ['jpg', 'jpeg', 'png', 'webp', 'pdf', 'txt'];
+const ACCEPTED_SINGLE = ['jpg', 'jpeg', 'png', 'webp', 'pdf', 'txt', 'docx', 'doc'];
 const ACCEPTED_IMAGES = ['jpg', 'jpeg', 'png', 'webp'];
+const ACCEPTED_DOCS = ['pdf', 'txt', 'docx', 'doc'];
 const MAX_FILES = 20;
 
 interface UploadedFile {
@@ -168,7 +169,7 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
       } else {
         throw new Error(res.error?.message || 'OCR failed');
       }
-    } else if (uf.ext === 'pdf') {
+    } else if (uf.ext === 'pdf' || uf.ext === 'docx' || uf.ext === 'doc') {
       const fd = new FormData();
       fd.append('files[]', uf.file, uf.name);
       const res = await mediaApi.batchImport(fd);
@@ -178,19 +179,8 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
         setIsDone(true);
         fetchReflection(text);
       } else {
-        // PDF has no text layer (scanned PDF) — tell user to upload as images instead
-        const reason = res.results?.length === 0 && res.rejected?.length
-          ? res.rejected[0]?.reason
-          : res.error?.message;
-        const isScanned = reason?.toLowerCase().includes('readable text') ||
-                          reason?.toLowerCase().includes('photos of each page');
-        if (isScanned) {
-          throw new Error(
-            'This PDF appears to be a scanned document with no text layer. ' +
-            'Please take photos of each page and upload them as JPG images instead.'
-          );
-        }
-        throw new Error(reason || 'PDF extraction failed');
+        const reason = res.rejected?.[0]?.reason || res.error?.message || 'Extraction failed';
+        throw new Error(reason);
       }
     }
   };
@@ -218,22 +208,15 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
           } else {
             rejected.push({ name: uf.name, reason: res.error?.message || 'OCR failed' });
           }
-        } else if (uf.ext === 'pdf') {
+        } else if (ACCEPTED_DOCS.includes(uf.ext)) {
           const fd = new FormData();
           fd.append('files[]', uf.file, uf.name);
           const res = await mediaApi.batchImport(fd);
           if (res.success && res.results?.length) {
             pageTexts.push(`Page ${i + 1}\n\n${res.results[0].text || '[No text found]'}`);
           } else {
-            const reason = res.rejected?.[0]?.reason || res.error?.message || 'PDF extraction failed';
-            const isScanned = reason.toLowerCase().includes('readable text') ||
-                              reason.toLowerCase().includes('photos of each page');
-            rejected.push({
-              name: uf.name,
-              reason: isScanned
-                ? 'Scanned PDF — no text layer. Upload photos of each page as JPG instead.'
-                : reason,
-            });
+            const reason = res.rejected?.[0]?.reason || res.error?.message || 'Extraction failed';
+            rejected.push({ name: uf.name, reason });
           }
         }
 
@@ -502,7 +485,7 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
             ref={fileInputRef}
             type="file"
             multiple={mode === 'multi'}
-            accept=".jpg,.jpeg,.png,.webp,.pdf,.txt"
+            accept=".jpg,.jpeg,.png,.webp,.pdf,.txt,.docx,.doc"
             onChange={handleFileChange}
             className="hidden"
           />
