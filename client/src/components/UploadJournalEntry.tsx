@@ -234,7 +234,7 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
                 ? 'Scanned PDF — no text layer. Upload photos of each page as JPG instead.'
                 : reason,
             });
-        }
+          }
 
         // Update transcription live after each page
         setTranscription(pageTexts.join('\n\n---\n\n'));
