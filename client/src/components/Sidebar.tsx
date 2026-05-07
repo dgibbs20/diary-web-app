@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   BookOpen, PenLine, Settings, BarChart3, Bot,
-  LogOut, ChevronRight
+  LogOut, ChevronRight, ScanLine
 } from 'lucide-react';
 import type { ViewMode } from '@/pages/Dashboard';
 
@@ -17,6 +17,7 @@ interface SidebarProps {
   viewMode: ViewMode;
   onViewChange: (mode: ViewMode) => void;
   onNewEntry: () => void;
+  onUploadEntry: () => void;
   onToggleAi: () => void;
   showAiPanel: boolean;
 }
@@ -27,7 +28,7 @@ const navItems = [
   { id: 'settings' as ViewMode, icon: Settings, label: 'Settings' },
 ];
 
-export default function Sidebar({ viewMode, onViewChange, onNewEntry, onToggleAi, showAiPanel }: SidebarProps) {
+export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEntry, onToggleAi, showAiPanel }: SidebarProps) {
   const { user, logout } = useAuth();
   const [expanded, setExpanded] = useState(false);
 
@@ -69,6 +70,35 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onToggleAi
             transition={{ duration: 0.15 }}
           >
             NEW ENTRY
+          </motion.span>
+        </button>
+
+        {/* Scan / Upload button */}
+        <button
+          onClick={onUploadEntry}
+          className="w-full flex items-center justify-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 mt-2 border"
+          style={{
+            background: 'transparent',
+            color: '#C9A84C',
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontWeight: 600,
+            letterSpacing: '0.08em',
+            borderColor: 'rgba(201,168,76,0.35)',
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.08)';
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLElement).style.background = 'transparent';
+          }}
+        >
+          <ScanLine size={16} className="flex-shrink-0" />
+          <motion.span
+            className="text-sm whitespace-nowrap overflow-hidden"
+            animate={{ opacity: expanded ? 1 : 0, width: expanded ? 'auto' : 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            SCAN / UPLOAD
           </motion.span>
         </button>
       </div>
