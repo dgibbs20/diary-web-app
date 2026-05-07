@@ -18,8 +18,8 @@ import {
   FileText, Mic, PenTool, Lock, Zap, ArrowRight
 } from 'lucide-react';
 
-const REVENUECAT_MONTHLY = 'https://pay.rev.cat/fcxkvesvqsmqyjgj';
-const REVENUECAT_ANNUAL = 'https://pay.rev.cat/dgnllmadailgfknc';
+const REVENUECAT_MONTHLY = 'https://pay.rev.cat/jbzggzwkaffvajvq';
+const REVENUECAT_ANNUAL = 'https://pay.rev.cat/ffgbkzxszqlfjdnm';
 
 const LOGO_FREE = '/assets/images/logo.png';
 const LOGO_ELITE = '/assets/images/logo_elite.png';
