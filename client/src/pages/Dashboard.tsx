@@ -15,6 +15,7 @@ import SettingsPanel from '@/components/SettingsPanel';
 import MoodPicker from '@/components/MoodPicker';
 import LoginOnboardingFlow from '@/components/LoginOnboardingFlow';
 import AnalyticsPanel from '@/components/AnalyticsPanel';
+import UploadJournalEntry from '@/components/UploadJournalEntry';
 import { journalApi, moodApi, subscriptionApi } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -41,7 +42,7 @@ export interface JournalEntry {
   updated_at: string;
 }
 
-export type ViewMode = 'list' | 'editor' | 'settings' | 'analytics';
+export type ViewMode = 'list' | 'editor' | 'upload' | 'settings' | 'analytics';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const MARKETING = 'https://diary.gmxquantum.com';
@@ -171,6 +172,11 @@ export default function Dashboard() {
     }
   };
 
+  const handleUploadEntry = () => {
+    setSelectedEntry(null);
+    setViewMode('upload');
+  };
+
   const handleMoodSelected = async (mood: string) => {
     setShowMoodPicker(false);
     setTodayMood(mood);
@@ -257,6 +263,7 @@ export default function Dashboard() {
             viewMode={viewMode}
             onViewChange={setViewMode}
             onNewEntry={handleNewEntry}
+            onUploadEntry={handleUploadEntry}
             onToggleAi={() => setShowAiPanel(!showAiPanel)}
             showAiPanel={showAiPanel}
           />
@@ -306,6 +313,23 @@ export default function Dashboard() {
                     onDelete={handleEntryDeleted}
                     onBack={handleBackToList}
                     onToggleAi={() => setShowAiPanel(!showAiPanel)}
+                  />
+                </motion.div>
+              )}
+
+              {viewMode === 'upload' && (
+                <motion.div
+                  key="upload"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 overflow-hidden"
+                >
+                  <UploadJournalEntry
+                    onSave={handleEntrySaved}
+                    onBack={handleBackToList}
+                    pendingMood={pendingMoodForEntry}
                   />
                 </motion.div>
               )}
