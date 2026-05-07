@@ -178,7 +178,19 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
         setIsDone(true);
         fetchReflection(text);
       } else {
-        throw new Error(res.error?.message || 'PDF extraction failed');
+        // PDF has no text layer (scanned PDF) — tell user to upload as images instead
+        const reason = res.results?.length === 0 && res.rejected?.length
+          ? res.rejected[0]?.reason
+          : res.error?.message;
+        const isScanned = reason?.toLowerCase().includes('readable text') ||
+                          reason?.toLowerCase().includes('photos of each page');
+        if (isScanned) {
+          throw new Error(
+            'This PDF appears to be a scanned document with no text layer. ' +
+            'Please take photos of each page and upload them as JPG images instead.'
+          );
+        }
+        throw new Error(reason || 'PDF extraction failed');
       }
     }
   };
@@ -213,8 +225,15 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
           if (res.success && res.results?.length) {
             pageTexts.push(`Page ${i + 1}\n\n${res.results[0].text || '[No text found]'}`);
           } else {
-            rejected.push({ name: uf.name, reason: res.error?.message || 'PDF extraction failed' });
-          }
+            const reason = res.rejected?.[0]?.reason || res.error?.message || 'PDF extraction failed';
+            const isScanned = reason.toLowerCase().includes('readable text') ||
+                              reason.toLowerCase().includes('photos of each page');
+            rejected.push({
+              name: uf.name,
+              reason: isScanned
+                ? 'Scanned PDF — no text layer. Upload photos of each page as JPG instead.'
+                : reason,
+            });
         }
 
         // Update transcription live after each page
