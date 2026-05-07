@@ -181,12 +181,14 @@ export const journalApi = {
     end_time?: string;
     input_method?: string;
     type?: string;
+    entry_date?: string;
   }) {
     const res = await authFetch('/api/journal/entries', {
       method: 'POST',
       body: JSON.stringify({
         ...data,
         input_method: data.input_method || 'text',
+        ...(data.entry_date ? { entry_date: data.entry_date } : {}),
       }),
     });
     return res.json();
@@ -405,6 +407,26 @@ export const subscriptionApi = {
 
   async getTiers() {
     const res = await fetch(`${API_BASE}/api/subscription/tiers`);
+    return res.json();
+  },
+};
+
+// ============ MEDIA / OCR API ============
+
+export const mediaApi = {
+  async ocrImage(formData: FormData) {
+    const res = await authFetch('/api/media/ocr', {
+      method: 'POST',
+      body: formData,
+    });
+    return res.json();
+  },
+
+  async batchImport(formData: FormData) {
+    const res = await authFetch('/api/media/ocr/batch-import', {
+      method: 'POST',
+      body: formData,
+    });
     return res.json();
   },
 };
