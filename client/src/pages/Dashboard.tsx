@@ -55,6 +55,7 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [showAiPanel, setShowAiPanel] = useState(false);
   const [showMoodPicker, setShowMoodPicker] = useState(false);
+  const [moodPickerForEntry, setMoodPickerForEntry] = useState(false); // true = creating entry, false = just changing mood
   const [todayMood, setTodayMood] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
@@ -84,15 +85,21 @@ export default function Dashboard() {
     setIsLoadingEntries(false);
   }, []);
 
-  // Fetch today's mood — if none set, trigger onboarding flow once per session
+  // Fetch today's mood — if none set, trigger onboarding flow once per day
   const fetchTodayMood = useCallback(async () => {
     try {
       const res = await moodApi.getTodayMood();
       if (res.success && res.mood_entry) {
+        // Mood already set today — use it, no prompt needed
         setTodayMood(res.mood_entry.mood);
       } else {
-        // No mood logged today — show the onboarding flow on first load
-        setShowOnboarding(true);
+        // No mood logged today — show onboarding once per calendar day
+        const today = new Date().toISOString().split('T')[0];
+        const lastShown = sessionStorage.getItem('diary_mood_prompt_date');
+        if (lastShown !== today) {
+          setShowOnboarding(true);
+          sessionStorage.setItem('diary_mood_prompt_date', today);
+        }
       }
     } catch { /* silent */ }
   }, []);
@@ -166,7 +173,17 @@ export default function Dashboard() {
   // Create new entry (mood-first flow)
   const handleNewEntry = () => {
     if (!todayMood) {
-      setShowMoodPicker(true);
+      // Only show picker if not already shown today
+      const today = new Date().toISOString().split('T')[0];
+      const lastShown = sessionStorage.getItem('diary_mood_prompt_date');
+      if (lastShown !== today) {
+        sessionStorage.setItem('diary_mood_prompt_date', today);
+        setMoodPickerForEntry(true);
+        setShowMoodPicker(true);
+      } else {
+        // Already prompted today, user can proceed without mood
+        createNewEntry('');
+      }
     } else {
       createNewEntry(todayMood);
     }
@@ -174,16 +191,23 @@ export default function Dashboard() {
 
   const handleUploadEntry = () => {
     setSelectedEntry(null);
+    // Pass today's mood to upload view
+    setPendingMoodForEntry(todayMood);
     setViewMode('upload');
   };
 
   const handleMoodSelected = async (mood: string) => {
     setShowMoodPicker(false);
+    const wasForEntry = moodPickerForEntry;
+    setMoodPickerForEntry(false);
     setTodayMood(mood);
+    const today = new Date().toISOString().split('T')[0];
+    sessionStorage.setItem('diary_mood_prompt_date', today);
     try {
       await moodApi.saveMood(mood);
     } catch { /* silent */ }
-    createNewEntry(mood);
+    // Only navigate to new entry if picker was opened for that purpose
+    if (wasForEntry) createNewEntry(mood);
   };
 
   const createNewEntry = (mood: string) => {
@@ -292,7 +316,7 @@ export default function Dashboard() {
                     onNewEntry={handleNewEntry}
                     user={user}
                     todayMood={todayMood}
-                    onMoodClick={() => setShowMoodPicker(true)}
+                    onMoodClick={() => { setMoodPickerForEntry(false); setShowMoodPicker(true); }}
                     ghostModeEnabled={user?.preferences?.privacy_mode ?? false}
                   />
                 </motion.div>
