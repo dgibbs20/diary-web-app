@@ -170,7 +170,7 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
       }
     } else if (uf.ext === 'pdf') {
       const fd = new FormData();
-      fd.append('files', uf.file, uf.name);
+      fd.append('files[]', uf.file, uf.name);
       const res = await mediaApi.batchImport(fd);
       if (res.success && res.results?.length) {
         const text = res.results.map((r: { text: string }) => r.text).join('\n\n---\n\n');
@@ -208,7 +208,7 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
           }
         } else if (uf.ext === 'pdf') {
           const fd = new FormData();
-          fd.append('files', uf.file, uf.name);
+          fd.append('files[]', uf.file, uf.name);
           const res = await mediaApi.batchImport(fd);
           if (res.success && res.results?.length) {
             pageTexts.push(`Page ${i + 1}\n\n${res.results[0].text || '[No text found]'}`);
