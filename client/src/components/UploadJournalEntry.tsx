@@ -235,6 +235,7 @@ export default function UploadJournalEntry({ onSave, onBack, pendingMood }: Prop
                 : reason,
             });
           }
+        }
 
         // Update transcription live after each page
         setTranscription(pageTexts.join('\n\n---\n\n'));
