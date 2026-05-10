@@ -14,6 +14,7 @@ const FOOTER_LINKS = [
   { label: 'Screenshots', href: `${MARKETING}/#screenshots` },
   { label: 'Videos', href: `${MARKETING}/#videos` },
   { label: 'Pricing', href: `${MARKETING}/#pricing` },
+  { label: 'Download', href: `${MARKETING}/#download` },
   { label: 'FAQ', href: `${MARKETING}/faq.html` },
   { label: 'Privacy Policy', href: `${MARKETING}/#privacy` },
   { label: 'Contact', href: `${MARKETING}/#contact` },
