@@ -107,12 +107,14 @@ export default function Header() {
             href={DOWNLOAD_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              ...ctaBtnStyle,
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+            style={linkStyle}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#C9A84C';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = isDashboard
+                ? 'var(--muted-foreground)'
+                : '#5C3D2A';
             }}
           >
             Download
