@@ -7,6 +7,7 @@ import { Menu, X, Crown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const MARKETING = 'https://diary.gmxquantum.com';
+const DOWNLOAD_URL = `${MARKETING}/#download`;
 
 const NAV_LINKS = [
   { label: 'Features', href: `${MARKETING}/#features` },
@@ -101,7 +102,23 @@ export default function Header() {
             </a>
           </li>
         ))}
-
+        <li>
+          <a
+            href={DOWNLOAD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              ...ctaBtnStyle,
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            Download
+          </a>
+        </li>
+        
         <li>
           {isAuthenticated ? (
             <button onClick={handleLogout} style={ctaBtnStyle}>
