@@ -72,9 +72,11 @@ export default function Header() {
       {/* Logo */}
       <Link href={isAuthenticated ? '/dashboard' : '/'} className="flex items-center gap-2">
         <img
-          src={user?.subscription_tier === 'diary_elite'
-            ? '/assets/images/logo_elite.png'
-            : '/assets/images/logo.png'}
+          src={
+            user?.subscription_tier === 'diary_elite'
+              ? '/assets/images/logo_elite.png'
+              : '/assets/images/logo.png'
+          }
           alt="diAry"
           style={{ height: '36px' }}
         />
@@ -82,7 +84,7 @@ export default function Header() {
 
       {/* Desktop Nav */}
       <ul className="hidden lg:flex items-center" style={{ gap: '24px', listStyle: 'none' }}>
-        {NAV_LINKS.map(link => (
+        {NAV_LINKS.map((link) => (
           <li key={link.label}>
             <a
               href={link.href}
@@ -102,6 +104,7 @@ export default function Header() {
             </a>
           </li>
         ))}
+
         <li>
           <a
             href={DOWNLOAD_URL}
@@ -120,7 +123,7 @@ export default function Header() {
             Download
           </a>
         </li>
-        
+
         <li>
           {isAuthenticated ? (
             <button onClick={handleLogout} style={ctaBtnStyle}>
@@ -152,7 +155,7 @@ export default function Header() {
             padding: '12px 5%',
           }}
         >
-          {NAV_LINKS.map(link => (
+          {NAV_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
@@ -173,6 +176,25 @@ export default function Header() {
               {link.label}
             </a>
           ))}
+
+          <a
+            href={DOWNLOAD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileOpen(false)}
+            style={{
+              display: 'block',
+              padding: '12px 0',
+              textTransform: 'uppercase',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+              color: '#5C3D2A',
+              textDecoration: 'none',
+              borderBottom: '1px solid rgba(201,168,76,0.1)',
+            }}
+          >
+            Download
+          </a>
 
           <div style={{ marginTop: 12 }}>
             {isAuthenticated ? (
