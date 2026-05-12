@@ -64,6 +64,9 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
   const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasChangesRef = useRef(false);
   const editorContentRef = useRef('');
+  const performSaveRef = useRef<(() => Promise<void>) | null>(null);
+  const onSaveRef = useRef(onSave);
+  useEffect(() => { onSaveRef.current = onSave; }, [onSave]);
 
   const editor = useEditor({
     extensions: [
@@ -142,7 +145,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           end_time: burnMode && burnDate ? burnDate.toISOString() : null,
         });
         if (res.success) {
-          onSave(res.entry);
+          onSaveRef.current(res.entry);
           setSaveStatus('saved');
           hasChangesRef.current = false;
           // Auto-hide "saved" message after 2 seconds
@@ -163,7 +166,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
         });
         if (res.success) {
           setEntryId(res.entry.id);
-          onSave(res.entry);
+          onSaveRef.current(res.entry);
           setSaveStatus('saved');
           hasChangesRef.current = false;
           // Auto-hide "saved" message after 2 seconds
@@ -177,7 +180,10 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
       setSaveStatus('error');
       toast.error('An error occurred while saving');
     }
-  }, [title, mood, burnMode, burnDate, entryId, onSave, editor]);
+  }, [title, mood, burnMode, burnDate, entryId, editor]);
+
+  // Keep ref in sync so auto-save can call latest version without it being a dep
+  performSaveRef.current = performSave;
 
   // Ctrl+S save
   useEffect(() => {
@@ -199,15 +205,15 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
     
     autoSaveTimerRef.current = setTimeout(() => {
-      if (hasChangesRef.current) {
-        performSave();
+      if (hasChangesRef.current && performSaveRef.current) {
+        performSaveRef.current();
       }
     }, 3000);
     
     return () => {
       if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
     };
-  }, [title, wordCount, mood, burnMode, burnDate, performSave]);
+  }, [title, wordCount, mood, burnMode, burnDate]);
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
