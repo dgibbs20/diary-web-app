@@ -233,7 +233,6 @@ export default function Dashboard() {
     });
     setSelectedEntry(entry);
     setPendingMoodForEntry(null);
-    setViewMode('list');
   };
 
   const handleEntryDeleted = (id: number) => {
