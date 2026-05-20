@@ -14,12 +14,18 @@
  * - Free users: 5 AI responses/day, only Auto + Vault modes
  * - Elite users: Unlimited responses, all 5 modes
  * - When limit hit or restricted mode selected → PaywallModal
+ *
+ * MESSAGE ACTIONS (hover to reveal):
+ * - User messages: Edit (pencil) + Copy
+ * - AI messages: Copy only
+ * - Edit triggers AI re-response with corrected message
  */
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, Send, Loader2, Bot, Sparkles, Crown, Lock,
   Save, Download, Flame, Trash2, Check, ChevronDown, Mail, FileText, Clock,
+  Pencil, Copy,
 } from 'lucide-react';
 import { aiApi, journalApi, exportApi } from '@/lib/api';
 import { AI_MODES } from '@/lib/constants';
@@ -47,6 +53,7 @@ interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  isEdited?: boolean;
 }
 
 // ── Utility: build transcript string from messages ──
@@ -78,6 +85,10 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
   const [showModes, setShowModes] = useState(false);
   const [dailyUsage, setDailyUsage] = useState(0);
   const [paywallFeature, setPaywallFeature] = useState<'ai_modes' | 'ai_limit' | null>(null);
+
+  // ── Edit message state ──
+  const [editingMessageIndex, setEditingMessageIndex] = useState<number | null>(null);
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
   // ── Quick Chat action bar state ──
   const [entryTitle, setEntryTitle] = useState('');
@@ -123,6 +134,13 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
     }
   }, [editingTitle]);
 
+  // Focus input when edit mode starts
+  useEffect(() => {
+    if (editingMessageIndex !== null) {
+      inputRef.current?.focus();
+    }
+  }, [editingMessageIndex]);
+
   const handleModeSelect = (modeId: string) => {
     if (!isElite && !FREE_MODES.includes(modeId)) {
       setPaywallFeature('ai_modes');
@@ -131,6 +149,30 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
     }
     setMode(modeId);
     setShowModes(false);
+  };
+
+  // ── Copy message to clipboard ──
+  const handleCopy = async (msg: ChatMessage) => {
+    try {
+      await navigator.clipboard.writeText(msg.content);
+      setCopiedMessageId(msg.id);
+      setTimeout(() => setCopiedMessageId(null), 1500);
+    } catch {
+      toast.error('Failed to copy');
+    }
+  };
+
+  // ── Start editing a user message ──
+  const handleStartEdit = (index: number, msg: ChatMessage) => {
+    setEditingMessageIndex(index);
+    setInput(msg.content);
+  };
+
+  // ── Cancel edit mode ──
+  const handleCancelEdit = () => {
+    setEditingMessageIndex(null);
+    setInput('');
+    inputRef.current?.focus();
   };
 
   const handleSend = async () => {
@@ -142,6 +184,50 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
       return;
     }
 
+    // ── Edit mode: trim messages after edited index, update edited message, re-send ──
+    if (editingMessageIndex !== null) {
+      const idx = editingMessageIndex;
+      const updatedMessages = messages.slice(0, idx + 1).map((m, i) =>
+        i === idx ? { ...m, content: msg, isEdited: true } : m
+      );
+      setMessages(updatedMessages);
+      setInput('');
+      setEditingMessageIndex(null);
+      setIsLoading(true);
+
+      const history = updatedMessages.slice(0, idx).map(m => ({ role: m.role, content: m.content }));
+
+      try {
+        const res = await aiApi.sendMessage(msg, mode, entryContext, history, userName);
+        if (res.success && res.response) {
+          const aiMsg: ChatMessage = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: res.response,
+            timestamp: new Date(),
+          };
+          setMessages(prev => [...prev, aiMsg]);
+          if (!isElite) setDailyUsage(prev => prev + 1);
+        } else {
+          const errorCode = res.error?.code;
+          if (errorCode === 'AI_LIMIT_REACHED' || errorCode === 'DAILY_LIMIT_EXCEEDED') {
+            setPaywallFeature('ai_limit');
+          } else if (errorCode === 'ELITE_ONLY' || errorCode === 'MODE_RESTRICTED') {
+            setPaywallFeature('ai_modes');
+          } else {
+            const errorMsg = res.error?.message || 'AI companion is unavailable right now.';
+            toast.error(errorMsg);
+          }
+        }
+      } catch {
+        toast.error('Failed to reach AI companion');
+      }
+      setIsLoading(false);
+      inputRef.current?.focus();
+      return;
+    }
+
+    // ── Normal send ──
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       role: 'user',
@@ -195,6 +281,9 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
       e.preventDefault();
       handleSend();
     }
+    if (e.key === 'Escape' && editingMessageIndex !== null) {
+      handleCancelEdit();
+    }
   };
 
   // ── Save chat as journal entry ──
@@ -208,7 +297,6 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
         title,
         content,
         input_method: 'ai_quick_chat',
-        // type is passed as extra field — backend now accepts it
         ...(({ type: 'chat' } as unknown) as object),
       } as Parameters<typeof journalApi.createEntry>[0]);
 
@@ -283,7 +371,6 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
         setBurnMode(true);
         setShowBurnPicker(false);
         onQuickChatSaved?.();
-        // Start countdown
         const tick = () => {
           const diff = endTime.getTime() - Date.now();
           if (diff <= 0) { setBurnCountdown('Burning...'); return; }
@@ -295,7 +382,6 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
         };
         tick();
         const interval = setInterval(tick, 1000);
-        // Clean up interval after burn time
         setTimeout(() => clearInterval(interval), endTime.getTime() - Date.now() + 1000);
         toast.success(`Saved — will burn ${endTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`);
       } else {
@@ -317,12 +403,15 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
     setBurnTime('');
     setBurnCountdown('');
     setShowBurnConfirm(false);
+    setEditingMessageIndex(null);
+    setInput('');
     toast.success('Chat cleared');
   };
 
   const currentMode = AI_MODES.find(m => m.id === mode) || AI_MODES[0];
   const remainingResponses = FREE_DAILY_LIMIT - dailyUsage;
   const hasMessages = messages.length > 0;
+  const isEditMode = editingMessageIndex !== null;
 
   return (
     <>
@@ -713,26 +802,88 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
               )}
             </div>
           ) : (
-            messages.map(msg => (
-              <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div
-                  className="max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed"
-                  style={msg.role === 'user' ? {
-                    background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`,
-                    color: '#FFF9F0',
-                    borderBottomRightRadius: '4px',
-                    fontFamily: FONT,
-                  } : {
-                    background: 'var(--muted)',
-                    color: 'var(--foreground)',
-                    borderBottomLeftRadius: '4px',
-                    fontFamily: FONT,
-                  }}
-                >
-                  {msg.role === 'assistant' ? (
-                    <Streamdown>{msg.content}</Streamdown>
-                  ) : (
-                    msg.content
+            messages.map((msg, index) => (
+              <div
+                key={msg.id}
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} group`}
+              >
+                <div className={`relative max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'} flex flex-col`}>
+
+                  {/* ── Hover action buttons ── */}
+                  <div
+                    className={`
+                      flex items-center gap-1 mb-1
+                      opacity-0 group-hover:opacity-100 transition-opacity duration-150
+                      ${msg.role === 'user' ? 'self-end' : 'self-start'}
+                    `}
+                  >
+                    {/* Copy button — all messages */}
+                    <button
+                      onClick={() => handleCopy(msg)}
+                      title="Copy message"
+                      className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-medium transition-all hover:scale-105"
+                      style={{
+                        backgroundColor: 'var(--muted)',
+                        color: copiedMessageId === msg.id ? '#16a34a' : 'var(--muted-foreground)',
+                        border: '1px solid var(--border)',
+                        fontFamily: FONT,
+                      }}
+                    >
+                      {copiedMessageId === msg.id ? (
+                        <><Check size={10} /> Copied!</>
+                      ) : (
+                        <><Copy size={10} /> Copy</>
+                      )}
+                    </button>
+
+                    {/* Edit button — user messages only */}
+                    {msg.role === 'user' && (
+                      <button
+                        onClick={() => handleStartEdit(index, msg)}
+                        title="Edit and re-send"
+                        className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-medium transition-all hover:scale-105"
+                        style={{
+                          backgroundColor: 'rgba(201,168,76,0.1)',
+                          color: GOLD_DARK,
+                          border: `1px solid rgba(201,168,76,0.25)`,
+                          fontFamily: FONT,
+                        }}
+                      >
+                        <Pencil size={10} /> Edit
+                      </button>
+                    )}
+                  </div>
+
+                  {/* ── Message bubble ── */}
+                  <div
+                    className="px-4 py-3 rounded-2xl text-sm leading-relaxed"
+                    style={msg.role === 'user' ? {
+                      background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`,
+                      color: '#FFF9F0',
+                      borderBottomRightRadius: '4px',
+                      fontFamily: FONT,
+                    } : {
+                      background: 'var(--muted)',
+                      color: 'var(--foreground)',
+                      borderBottomLeftRadius: '4px',
+                      fontFamily: FONT,
+                    }}
+                  >
+                    {msg.role === 'assistant' ? (
+                      <Streamdown>{msg.content}</Streamdown>
+                    ) : (
+                      msg.content
+                    )}
+                  </div>
+
+                  {/* ── Edited label ── */}
+                  {msg.isEdited && (
+                    <span
+                      className={`text-[10px] mt-0.5 italic ${msg.role === 'user' ? 'self-end' : 'self-start'}`}
+                      style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                    >
+                      edited
+                    </span>
                   )}
                 </div>
               </div>
@@ -753,7 +904,36 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
 
         {/* ── Input ── */}
         <div className="px-4 py-3" style={{ borderTop: '1px solid var(--border)' }}>
-          {!isElite && dailyUsage >= FREE_DAILY_LIMIT ? (
+
+          {/* ── Edit mode banner ── */}
+          <AnimatePresence>
+            {isEditMode && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="flex items-center gap-2 mb-2 px-3 py-1.5 rounded-lg"
+                style={{
+                  backgroundColor: `rgba(201,168,76,0.08)`,
+                  border: `1px solid rgba(201,168,76,0.2)`,
+                }}
+              >
+                <Pencil size={11} style={{ color: GOLD_DARK, flexShrink: 0 }} />
+                <span className="flex-1 text-xs" style={{ color: GOLD_DARK, fontFamily: FONT }}>
+                  Editing message — AI will re-respond
+                </span>
+                <button
+                  onClick={handleCancelEdit}
+                  className="p-0.5 rounded transition-colors hover:bg-accent"
+                  style={{ color: 'var(--muted-foreground)' }}
+                >
+                  <X size={12} />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {!isElite && dailyUsage >= FREE_DAILY_LIMIT && !isEditMode ? (
             <button
               onClick={() => setPaywallFeature('ai_limit')}
               className="w-full py-3 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
@@ -774,17 +954,21 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask your companion..."
+                placeholder={isEditMode ? 'Edit your message...' : 'Ask your companion...'}
                 rows={1}
                 className="flex-1 px-4 py-2.5 rounded-xl text-sm resize-none focus:outline-none transition-shadow"
                 style={{
-                  border: '1px solid var(--border)',
+                  border: isEditMode ? `1px solid rgba(201,168,76,0.4)` : '1px solid var(--border)',
                   backgroundColor: 'var(--background)',
                   color: 'var(--foreground)',
                   fontFamily: FONT,
                   maxHeight: '120px',
                 }}
-                onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = isEditMode
+                    ? `0 0 0 2px rgba(201,168,76,0.25)`
+                    : `0 0 0 2px rgba(201,168,76,0.2)`;
+                }}
                 onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
                 onInput={(e) => {
                   const t = e.currentTarget;
@@ -798,7 +982,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                 className="p-2.5 rounded-xl transition-all disabled:opacity-40"
                 style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
               >
-                <Send size={16} />
+                {isEditMode ? <Check size={16} /> : <Send size={16} />}
               </button>
             </div>
           )}
