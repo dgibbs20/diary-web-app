@@ -126,6 +126,41 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
     }
   }, [editingTitle]);
 
+  // Auto-greet when entry context is provided — fires once, shows only AI response
+  useEffect(() => {
+    if (!entryContext || messages.length > 0) return;
+    const autoGreet = async () => {
+      if (!isElite && dailyUsage >= FREE_DAILY_LIMIT) return;
+      setIsLoading(true);
+      try {
+        const registerProfile = user?.preferences?.register_profile || 'general';
+        const res = await aiApi.sendMessage(
+          'I just wrote something. What do you notice?',
+          mode,
+          entryContext,
+          [],
+          userName,
+          registerProfile,
+          i18n.language
+        );
+        if (res.success && res.response) {
+          setMessages([{
+            id: Date.now().toString(),
+            role: 'assistant',
+            content: res.response,
+            timestamp: new Date(),
+          }]);
+          if (!isElite) setDailyUsage(prev => prev + 1);
+        }
+      } catch {
+        // silent fail — user can still type manually
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    autoGreet();
+  }, [entryContext]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleModeSelect = (modeId: string) => {
     if (!isElite && !FREE_MODES.includes(modeId)) {
       setPaywallFeature('ai_modes');
