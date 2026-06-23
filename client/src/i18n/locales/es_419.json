@@ -169,6 +169,7 @@
   "journalList_noContent": "Sin contenido",
   "journalList_aiInsight": "Perspectiva IA",
   "journalList_ghostHidden": "Contenido oculto — Modo fantasma activo",
+  "journalList_wordCount": "{{count}} palabras",
   "loginOnboarding_welcomeBack": "Bienvenido de nuevo",
   "loginOnboarding_moodTitle": "¿Cómo te sientes hoy?",
   "loginOnboarding_moodSubtitle": "Tu estado de ánimo ayuda a tu compañero IA a entenderte mejor",

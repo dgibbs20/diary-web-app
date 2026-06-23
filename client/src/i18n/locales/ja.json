@@ -169,6 +169,7 @@
   "journalList_noContent": "コンテンツなし",
   "journalList_aiInsight": "AI洞察",
   "journalList_ghostHidden": "コンテンツ非表示 — Ghost Mode有効",
+  "journalList_wordCount": "{{count}} 語",
   "loginOnboarding_welcomeBack": "おかえりなさい",
   "loginOnboarding_moodTitle": "今日の気分はどうですか？",
   "loginOnboarding_moodSubtitle": "あなたの気分はAI Companionがあなたをよりよく理解するのに役立ちます",

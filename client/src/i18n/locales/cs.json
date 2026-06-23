@@ -169,6 +169,7 @@
   "journalList_noContent": "Žádný obsah",
   "journalList_aiInsight": "AI vhled",
   "journalList_ghostHidden": "Obsah skryt — Režim přízraku aktivní",
+  "journalList_wordCount": "{{count}} slov",
   "loginOnboarding_welcomeBack": "Vítejte zpět",
   "loginOnboarding_moodTitle": "Jak se dnes cítíte?",
   "loginOnboarding_moodSubtitle": "Vaše nálada pomáhá AI průvodci lépe vám porozumět",

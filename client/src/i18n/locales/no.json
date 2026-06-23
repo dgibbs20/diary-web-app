@@ -169,6 +169,7 @@
   "journalList_noContent": "Ingen innhold",
   "journalList_aiInsight": "AI innsikt",
   "journalList_ghostHidden": "Innhold skjult — Ghost Mode aktiv",
+  "journalList_wordCount": "{{count}} ord",
   "loginOnboarding_welcomeBack": "Velkommen tilbake",
   "loginOnboarding_moodTitle": "Hvordan har du det i dag?",
   "loginOnboarding_moodSubtitle": "Humøret ditt hjelper AI Companion å forstå deg bedre",

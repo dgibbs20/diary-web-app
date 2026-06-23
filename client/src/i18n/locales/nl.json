@@ -169,6 +169,7 @@
   "journalList_noContent": "Geen inhoud",
   "journalList_aiInsight": "AI inzicht",
   "journalList_ghostHidden": "Inhoud verborgen — Ghost Mode actief",
+  "journalList_wordCount": "{{count}} woorden",
   "loginOnboarding_welcomeBack": "Welkom terug",
   "loginOnboarding_moodTitle": "Hoe voel je je vandaag?",
   "loginOnboarding_moodSubtitle": "Je stemming helpt je AI Companion je beter te begrijpen",

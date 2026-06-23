@@ -169,6 +169,7 @@
   "journalList_noContent": "Tidak ada konten",
   "journalList_aiInsight": "Wawasan AI",
   "journalList_ghostHidden": "Konten tersembunyi — Mode hantu aktif",
+  "journalList_wordCount": "{{count}} kata",
   "loginOnboarding_welcomeBack": "Selamat datang kembali",
   "loginOnboarding_moodTitle": "Bagaimana perasaanmu hari ini?",
   "loginOnboarding_moodSubtitle": "Suasana hatimu membantu Teman AI memahami kamu lebih baik",

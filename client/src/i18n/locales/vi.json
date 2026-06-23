@@ -169,6 +169,7 @@
   "journalList_noContent": "Không có nội dung",
   "journalList_aiInsight": "Hiểu biết AI",
   "journalList_ghostHidden": "Nội dung bị ẩn — Chế độ bóng ma đang hoạt động",
+  "journalList_wordCount": "{{count}} từ",
   "loginOnboarding_welcomeBack": "Chào mừng trở lại",
   "loginOnboarding_moodTitle": "Hôm nay bạn cảm thấy thế nào?",
   "loginOnboarding_moodSubtitle": "Tâm trạng của bạn giúp người bạn AI hiểu bạn tốt hơn",

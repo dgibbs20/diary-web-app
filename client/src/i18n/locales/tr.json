@@ -169,6 +169,7 @@
   "journalList_noContent": "İçerik yok",
   "journalList_aiInsight": "AI içgörüsü",
   "journalList_ghostHidden": "İçerik gizlendi — Hayalet Modu aktif",
+  "journalList_wordCount": "{{count}} kelime",
   "loginOnboarding_welcomeBack": "Tekrar hoş geldiniz",
   "loginOnboarding_moodTitle": "Bugün nasıl hissediyorsunuz?",
   "loginOnboarding_moodSubtitle": "Ruh haliniz AI arkadaşınızın sizi daha iyi anlamasına yardımcı olur",

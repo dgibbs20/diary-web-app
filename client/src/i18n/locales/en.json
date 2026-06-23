@@ -181,6 +181,7 @@
   "journalList_noContent": "No content",
   "journalList_aiInsight": "AI insight",
   "journalList_ghostHidden": "Content hidden — Ghost Mode active",
+  "journalList_wordCount": "{{count}} words",
 
   "loginOnboarding_welcomeBack": "Welcome back",
   "loginOnboarding_moodTitle": "How are you feeling today?",

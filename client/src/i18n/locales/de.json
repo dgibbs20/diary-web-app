@@ -169,6 +169,7 @@
   "journalList_noContent": "Kein Inhalt",
   "journalList_aiInsight": "KI-Einblick",
   "journalList_ghostHidden": "Inhalt ausgeblendet — Geistermodus aktiv",
+  "journalList_wordCount": "{{count}} Wörter",
   "loginOnboarding_welcomeBack": "Willkommen zurück",
   "loginOnboarding_moodTitle": "Wie fühlen Sie sich heute?",
   "loginOnboarding_moodSubtitle": "Ihre Stimmung hilft Ihrem KI-Begleiter, Sie besser zu verstehen",

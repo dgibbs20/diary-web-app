@@ -169,6 +169,7 @@
   "journalList_noContent": "कोई सामग्री नहीं",
   "journalList_aiInsight": "AI अंतर्दृष्टि",
   "journalList_ghostHidden": "सामग्री छुपी है — भूत मोड सक्रिय है",
+  "journalList_wordCount": "{{count}} शब्द",
   "loginOnboarding_welcomeBack": "वापस स्वागत है",
   "loginOnboarding_moodTitle": "आज आप कैसा महसूस कर रहे हैं?",
   "loginOnboarding_moodSubtitle": "आपका मनोदशा आपके AI साथी को बेहतर ढंग से समझने में मदद करती है",

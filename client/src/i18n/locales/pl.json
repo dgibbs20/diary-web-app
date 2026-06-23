@@ -169,6 +169,7 @@
   "journalList_noContent": "Brak treści",
   "journalList_aiInsight": "Spostrzeżenie AI",
   "journalList_ghostHidden": "Treść ukryta — Ghost Mode aktywny",
+  "journalList_wordCount": "{{count}} słów",
   "loginOnboarding_welcomeBack": "Witaj z powrotem",
   "loginOnboarding_moodTitle": "Jak się dzisiaj czujesz?",
   "loginOnboarding_moodSubtitle": "Twój nastrój pomaga AI Companion lepiej Cię zrozumieć",

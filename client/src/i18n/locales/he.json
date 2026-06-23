@@ -169,6 +169,7 @@
   "journalList_noContent": "אין תוכן",
   "journalList_aiInsight": "תובנת AI",
   "journalList_ghostHidden": "התוכן מוסתר — מצב רוח פעיל",
+  "journalList_wordCount": "{{count}} מילים",
   "loginOnboarding_welcomeBack": "ברוך שובך",
   "loginOnboarding_moodTitle": "איך אתה מרגיש היום?",
   "loginOnboarding_moodSubtitle": "מצב הרוח שלך עוזר למלווה ה-AI שלך להבין אותך טוב יותר",

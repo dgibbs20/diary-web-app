@@ -169,6 +169,7 @@
   "journalList_noContent": "Нет содержимого",
   "journalList_aiInsight": "Идея AI",
   "journalList_ghostHidden": "Содержимое скрыто — Ghost Mode активен",
+  "journalList_wordCount": "{{count}} слов",
   "loginOnboarding_welcomeBack": "Добро пожаловать обратно",
   "loginOnboarding_moodTitle": "Как вы себя чувствуете сегодня?",
   "loginOnboarding_moodSubtitle": "Ваше настроение помогает AI Companion лучше понять вас",

@@ -169,6 +169,7 @@
   "journalList_noContent": "Χωρίς περιεχόμενο",
   "journalList_aiInsight": "AI Ιδέα",
   "journalList_ghostHidden": "Το περιεχόμενο είναι κρυφό — Λειτουργία φαντάσματος ενεργή",
+  "journalList_wordCount": "{{count}} λέξεις",
   "loginOnboarding_welcomeBack": "Καλώς ήρθατε πίσω",
   "loginOnboarding_moodTitle": "Πώς νιώθετε σήμερα;",
   "loginOnboarding_moodSubtitle": "Η διάθεσή σας βοηθά τον AI Σύντροφό σας να σας καταλάβει καλύτερα",

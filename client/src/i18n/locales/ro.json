@@ -169,6 +169,7 @@
   "journalList_noContent": "Fără conținut",
   "journalList_aiInsight": "Perspectivă AI",
   "journalList_ghostHidden": "Conținut ascuns — Ghost Mode activ",
+  "journalList_wordCount": "{{count}} cuvinte",
   "loginOnboarding_welcomeBack": "Bun venit înapoi",
   "loginOnboarding_moodTitle": "Cum te simți astăzi?",
   "loginOnboarding_moodSubtitle": "Starea ta ajută AI Companion să te înțeleagă mai bine",

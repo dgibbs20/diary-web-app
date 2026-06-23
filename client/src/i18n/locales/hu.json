@@ -169,6 +169,7 @@
   "journalList_noContent": "Nincs tartalom",
   "journalList_aiInsight": "AI betekintés",
   "journalList_ghostHidden": "Tartalom elrejtve — Szellemüzemmód aktív",
+  "journalList_wordCount": "{{count}} szó",
   "loginOnboarding_welcomeBack": "Üdvözöljük vissza",
   "loginOnboarding_moodTitle": "Hogy érzi magát ma?",
   "loginOnboarding_moodSubtitle": "A hangulata segít az AI Társának jobban megérteni Önt",

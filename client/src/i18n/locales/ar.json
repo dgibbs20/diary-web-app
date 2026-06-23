@@ -169,6 +169,7 @@
   "journalList_noContent": "لا يوجد محتوى",
   "journalList_aiInsight": "رؤية ذكاء اصطناعي",
   "journalList_ghostHidden": "المحتوى مخفي — وضع الشبح نشط",
+  "journalList_wordCount": "{{count}} كلمة",
   "loginOnboarding_welcomeBack": "مرحباً بعودتك",
   "loginOnboarding_moodTitle": "كيف تشعر اليوم؟",
   "loginOnboarding_moodSubtitle": "يساعد مزاجك مرافق الذكاء الاصطناعي على فهمك بشكل أفضل",

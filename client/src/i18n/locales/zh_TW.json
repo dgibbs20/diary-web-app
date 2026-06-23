@@ -169,6 +169,7 @@
   "journalList_noContent": "無內容",
   "journalList_aiInsight": "AI 洞察",
   "journalList_ghostHidden": "內容已隱藏 — 幽靈模式已啟用",
+  "journalList_wordCount": "{{count}} 字",
   "loginOnboarding_welcomeBack": "歡迎回來",
   "loginOnboarding_moodTitle": "今天感覺怎麼樣？",
   "loginOnboarding_moodSubtitle": "你的心情幫助 AI 夥伴更好地了解你",

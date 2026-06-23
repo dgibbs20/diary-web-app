@@ -169,6 +169,7 @@
   "journalList_noContent": "Aucun contenu",
   "journalList_aiInsight": "Perspective IA",
   "journalList_ghostHidden": "Contenu masqué — Mode fantôme actif",
+  "journalList_wordCount": "{{count}} mots",
   "loginOnboarding_welcomeBack": "Bon retour",
   "loginOnboarding_moodTitle": "Comment vous sentez-vous aujourd'hui?",
   "loginOnboarding_moodSubtitle": "Votre humeur aide votre compagnon IA à mieux vous comprendre",

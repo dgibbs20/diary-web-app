@@ -169,6 +169,7 @@
   "journalList_noContent": "Sem conteúdo",
   "journalList_aiInsight": "Perspetiva AI",
   "journalList_ghostHidden": "Conteúdo oculto — Ghost Mode ativo",
+  "journalList_wordCount": "{{count}} palavras",
   "loginOnboarding_welcomeBack": "Bem-vindo de volta",
   "loginOnboarding_moodTitle": "Como se sente hoje?",
   "loginOnboarding_moodSubtitle": "O seu humor ajuda o AI Companion a compreendê-lo melhor",

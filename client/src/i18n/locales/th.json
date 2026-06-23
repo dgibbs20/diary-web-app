@@ -169,6 +169,7 @@
   "journalList_noContent": "ไม่มีเนื้อหา",
   "journalList_aiInsight": "ข้อมูลเชิงลึก AI",
   "journalList_ghostHidden": "เนื้อหาถูกซ่อน — โหมดผีกำลังทำงาน",
+  "journalList_wordCount": "{{count}} คำ",
   "loginOnboarding_welcomeBack": "ยินดีต้อนรับกลับ",
   "loginOnboarding_moodTitle": "วันนี้คุณรู้สึกอย่างไร?",
   "loginOnboarding_moodSubtitle": "อารมณ์ของคุณช่วยให้เพื่อน AI เข้าใจคุณได้ดีขึ้น",

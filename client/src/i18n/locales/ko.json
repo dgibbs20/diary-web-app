@@ -169,6 +169,7 @@
   "journalList_noContent": "내용 없음",
   "journalList_aiInsight": "AI 통찰",
   "journalList_ghostHidden": "콘텐츠 숨김 — Ghost Mode 활성",
+  "journalList_wordCount": "{{count}} 단어",
   "loginOnboarding_welcomeBack": "다시 오셨군요",
   "loginOnboarding_moodTitle": "오늘 기분이 어떠세요?",
   "loginOnboarding_moodSubtitle": "당신의 기분은 AI Companion이 당신을 더 잘 이해하는 데 도움이 됩니다",

@@ -169,6 +169,7 @@
   "journalList_noContent": "Intet indhold",
   "journalList_aiInsight": "AI indsigt",
   "journalList_ghostHidden": "Indhold skjult — Spøgelsestilstand aktiv",
+  "journalList_wordCount": "{{count}} ord",
   "loginOnboarding_welcomeBack": "Velkommen tilbage",
   "loginOnboarding_moodTitle": "Hvordan har du det i dag?",
   "loginOnboarding_moodSubtitle": "Dit humør hjælper din AI-ledsager med at forstå dig bedre",

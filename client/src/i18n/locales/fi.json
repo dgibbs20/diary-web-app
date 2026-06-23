@@ -169,6 +169,7 @@
   "journalList_noContent": "Ei sisältöä",
   "journalList_aiInsight": "AI Näkemys",
   "journalList_ghostHidden": "Sisältö piilotettu — Haamumoodi aktiivinen",
+  "journalList_wordCount": "{{count}} sanaa",
   "loginOnboarding_welcomeBack": "Tervetuloa takaisin",
   "loginOnboarding_moodTitle": "Miltä sinusta tuntuu tänään?",
   "loginOnboarding_moodSubtitle": "Mielialasi auttaa AI Kumppaniasi ymmärtämään sinua paremmin",
