@@ -117,7 +117,7 @@ export default function AnalyticsPanel() {
               <img
                 src={getLogoSrc(i18n.language, user?.subscription_tier === 'diary_elite')}
                 alt="diAry"
-                style={{ height: '24px', width: 'auto' }}
+                style={{ height: '40px', width: 'auto' }}
               />
             </div>
             <p
