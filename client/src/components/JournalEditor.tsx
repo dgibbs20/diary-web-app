@@ -38,7 +38,7 @@ interface JournalEditorProps {
   onSave: (entry: JournalEntry) => void;
   onDelete: (id: number) => void;
   onBack: () => void;
-  onToggleAi: () => void;
+  onToggleAi: (content?: string) => void;
 }
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
@@ -388,7 +388,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           )}
 
           <button
-            onClick={onToggleAi}
+            onClick={() => onToggleAi(editor?.getHTML() || editor?.getText() || '')}
             className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium text-sm tracking-wide"
             style={{
               color: '#C9A84C',

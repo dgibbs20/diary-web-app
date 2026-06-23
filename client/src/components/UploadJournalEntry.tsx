@@ -50,7 +50,7 @@ interface Props {
   onSave: (entry: JournalEntry) => void;
   onDelete: (id: number) => void;
   onBack: () => void;
-  onToggleAi: () => void;
+  onToggleAi: (content?: string) => void;
   pendingMood?: string | null;
 }
 
@@ -436,7 +436,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
           )}
 
           <button
-            onClick={onToggleAi}
+            onClick={() => onToggleAi(editor?.getHTML() || '')}
             className="p-2 rounded-lg transition-colors"
             style={{ color: GOLD, backgroundColor: 'rgba(201,168,76,0.06)' }}
             title={t('journalEditor_aiCompanion')}

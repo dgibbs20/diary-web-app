@@ -58,6 +58,7 @@ export default function Dashboard() {
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [showAiPanel, setShowAiPanel] = useState(false);
+  const [currentEditorContent, setCurrentEditorContent] = useState<string>('');
   const [showMoodPicker, setShowMoodPicker] = useState(false);
   const [moodPickerForEntry, setMoodPickerForEntry] = useState(false); // true = creating entry, false = just changing mood
   const [todayMood, setTodayMood] = useState<string | null>(null);
@@ -122,6 +123,11 @@ export default function Dashboard() {
       fetchTodayMood();
     }
   }, [isAuthenticated, fetchEntries, fetchTodayMood]);
+  // Clear live editor content when switching entries
+  useEffect(() => {
+    setCurrentEditorContent('');
+  }, [selectedEntry?.id]);
+
   // Auto-refresh when burn-mode entries exist — removes them from the list when they expire
   useEffect(() => {
     const hasBurning = entries.some(e => e.burn_mode && e.burn_date);
@@ -348,7 +354,10 @@ export default function Dashboard() {
                     onSave={handleEntrySaved}
                     onDelete={handleEntryDeleted}
                     onBack={handleBackToList}
-                    onToggleAi={() => setShowAiPanel(!showAiPanel)}
+                    onToggleAi={(content?: string) => {
+                      if (content) setCurrentEditorContent(content);
+                      setShowAiPanel(prev => !prev);
+                    }}
                   />
                 </motion.div>
               )}
@@ -366,7 +375,10 @@ export default function Dashboard() {
                     onSave={handleEntrySaved}
                     onDelete={handleEntryDeleted}
                     onBack={handleBackToList}
-                    onToggleAi={() => setShowAiPanel(!showAiPanel)}
+                    onToggleAi={(content?: string) => {
+                      if (content) setCurrentEditorContent(content);
+                      setShowAiPanel(prev => !prev);
+                    }}
                     pendingMood={pendingMoodForEntry}
                   />
                 </motion.div>
@@ -412,7 +424,7 @@ export default function Dashboard() {
                 style={{ borderLeft: '1px solid var(--border)' }}
               >
                 <AiCompanion
-                  entryContext={selectedEntry?.content}
+                  entryContext={currentEditorContent || selectedEntry?.content || ''}
                   userName={user?.fullname || user?.username}
                   onClose={() => setShowAiPanel(false)}
                   onQuickChatSaved={fetchEntries}
