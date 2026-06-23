@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { analyticsApi } from '@/lib/api';
 import { MOOD_CONFIG } from '@/lib/constants';
 import { Streamdown } from 'streamdown';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -114,7 +115,7 @@ export default function AnalyticsPanel() {
           >
             <div className="flex items-center justify-center mb-3">
               <img
-                src="/assets/images/logo.png"
+                src={getLogoSrc(i18n.language, user?.subscription_tier === 'diary_elite')}
                 alt="diAry"
                 style={{ height: '24px', width: 'auto' }}
               />
