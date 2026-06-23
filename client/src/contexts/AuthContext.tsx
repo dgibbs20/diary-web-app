@@ -9,6 +9,7 @@ export interface UserPreferences {
   notifications_enabled: boolean;
   page_flip_sound: boolean;
   privacy_mode: boolean;
+  register_profile: string;
   theme: string;
   voice_enabled: boolean;
 }

@@ -73,7 +73,7 @@ function downloadTextFile(filename: string, content: string) {
 
 export default function AiCompanion({ entryContext, userName, onClose, onQuickChatSaved }: AiCompanionProps) {
   const { t, i18n } = useTranslation();
-  const { isElite } = useAuth();
+  const { isElite, user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState('auto');
@@ -158,7 +158,8 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
     const history = messages.map(m => ({ role: m.role, content: m.content }));
 
     try {
-      const res = await aiApi.sendMessage(msg, mode, entryContext, history, userName, undefined, i18n.language);
+      const registerProfile = user?.preferences?.register_profile || 'general';
+      const res = await aiApi.sendMessage(msg, mode, entryContext, history, userName, registerProfile, i18n.language);
       if (res.success && res.response) {
         const aiMsg: ChatMessage = {
           id: (Date.now() + 1).toString(),

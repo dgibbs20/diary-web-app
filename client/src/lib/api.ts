@@ -234,8 +234,8 @@ export const aiApi = {
         entry_context: entryContext || '',
         history,
         user_name: userName || '',
-        user_style: userStyle || '',
-        language: language || 'en',
+        register_profile: userStyle || 'general',
+        lang_code: language || 'en',
       }),
     });
     const json = await res.json();
