@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Se afișează date din cache din profilul tău",
   "analytics_unableConnect": "Imposibil de conectat la serviciul de analiză",
   "analytics_failedLoad": "Încărcarea analizei a eșuat",
+  "analytics_yourWordsHavePower": "Cuvintele tale au putere.",
   "burnCountdown_burningNow": "Se arde acum…",
   "burnCountdown_burnsIn": "Arde în {{time}}",
   "burnSwitch_label": "Mod ardere",

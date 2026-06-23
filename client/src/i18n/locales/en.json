@@ -85,6 +85,7 @@
   "analytics_errorMsg": "Showing cached data from your profile",
   "analytics_unableConnect": "Unable to connect to analytics service",
   "analytics_failedLoad": "Failed to load analytics",
+  "analytics_yourWordsHavePower": "Your words have power.",
 
   "burnCountdown_burningNow": "Burning now…",
   "burnCountdown_burnsIn": "Burns in {{time}}",

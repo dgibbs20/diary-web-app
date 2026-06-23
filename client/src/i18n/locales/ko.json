@@ -80,6 +80,7 @@
   "analytics_errorMsg": "프로필의 캐시 데이터를 표시하고 있습니다",
   "analytics_unableConnect": "분석 서비스에 연결할 수 없습니다",
   "analytics_failedLoad": "분석 로드 실패",
+  "analytics_yourWordsHavePower": "당신의 말에는 힘이 있습니다.",
   "burnCountdown_burningNow": "삭제 중…",
   "burnCountdown_burnsIn": "{{time}} 후 삭제",
   "burnSwitch_label": "Burn Mode",

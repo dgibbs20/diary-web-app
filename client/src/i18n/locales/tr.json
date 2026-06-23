@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Profilinizdeki önbellek verileri gösteriliyor",
   "analytics_unableConnect": "Analiz servisine bağlanılamıyor",
   "analytics_failedLoad": "Analiz yüklenemedi",
+  "analytics_yourWordsHavePower": "Kelimelerinizin gücü var.",
   "burnCountdown_burningNow": "Şu an yakılıyor…",
   "burnCountdown_burnsIn": "{{time}} içinde yakılacak",
   "burnSwitch_label": "Yakma Modu",

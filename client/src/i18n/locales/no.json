@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Viser hurtigbufrede data fra profilen din",
   "analytics_unableConnect": "Kan ikke koble til analysetjenesten",
   "analytics_failedLoad": "Kunne ikke laste analyse",
+  "analytics_yourWordsHavePower": "Ordene dine har kraft.",
   "burnCountdown_burningNow": "Brenner nå…",
   "burnCountdown_burnsIn": "Brenner om {{time}}",
   "burnSwitch_label": "Burn Mode",

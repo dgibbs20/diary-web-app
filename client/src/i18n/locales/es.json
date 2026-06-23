@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Mostrando datos en caché de tu perfil",
   "analytics_unableConnect": "No se puede conectar al servicio de analíticas",
   "analytics_failedLoad": "Error al cargar analíticas",
+  "analytics_yourWordsHavePower": "Tus palabras tienen poder.",
   "burnCountdown_burningNow": "Quemando ahora…",
   "burnCountdown_burnsIn": "Se quema en {{time}}",
   "burnSwitch_label": "Modo de quema",

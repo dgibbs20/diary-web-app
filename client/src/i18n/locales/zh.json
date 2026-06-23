@@ -80,6 +80,7 @@
   "analytics_errorMsg": "显示来自你个人资料的缓存数据",
   "analytics_unableConnect": "无法连接到分析服务",
   "analytics_failedLoad": "分析加载失败",
+  "analytics_yourWordsHavePower": "你的文字有力量。",
   "burnCountdown_burningNow": "正在销毁…",
   "burnCountdown_burnsIn": "将在 {{time}} 后销毁",
   "burnSwitch_label": "销毁模式",

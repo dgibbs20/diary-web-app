@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Zeige gecachte Daten aus Ihrem Profil",
   "analytics_unableConnect": "Verbindung zum Analysedienst nicht möglich",
   "analytics_failedLoad": "Analytik konnte nicht geladen werden",
+  "analytics_yourWordsHavePower": "Deine Worte haben Kraft.",
   "burnCountdown_burningNow": "Wird jetzt verbrannt…",
   "burnCountdown_burnsIn": "Verbrennt in {{time}}",
   "burnSwitch_label": "Verbrennungsmodus",

@@ -80,6 +80,7 @@
   "analytics_errorMsg": "מציג נתונים שמורים מהפרופיל שלך",
   "analytics_unableConnect": "לא ניתן להתחבר לשירות האנליטיקה",
   "analytics_failedLoad": "טעינת האנליטיקה נכשלה",
+  "analytics_yourWordsHavePower": "למילים שלך יש כוח.",
   "burnCountdown_burningNow": "נשרף עכשיו…",
   "burnCountdown_burnsIn": "נשרף בעוד {{time}}",
   "burnSwitch_label": "מצב שריפה",

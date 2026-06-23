@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Viser cachelagrede data fra din profil",
   "analytics_unableConnect": "Kan ikke oprette forbindelse til analysetjenesten",
   "analytics_failedLoad": "Kunne ikke indlæse analyser",
+  "analytics_yourWordsHavePower": "Dine ord har kraft.",
   "burnCountdown_burningNow": "Brænder nu…",
   "burnCountdown_burnsIn": "Brænder om {{time}}",
   "burnSwitch_label": "Brændetilstand",

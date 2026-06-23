@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Wyświetlanie danych z pamięci podręcznej profilu",
   "analytics_unableConnect": "Nie można połączyć się z usługą analityczną",
   "analytics_failedLoad": "Nie udało się załadować analityki",
+  "analytics_yourWordsHavePower": "Twoje słowa mają moc.",
   "burnCountdown_burningNow": "Trwa niszczenie…",
   "burnCountdown_burnsIn": "Niszczenie za {{time}}",
   "burnSwitch_label": "Burn Mode",

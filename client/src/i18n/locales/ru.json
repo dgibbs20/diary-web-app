@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Отображаются кэшированные данные из вашего профиля",
   "analytics_unableConnect": "Не удаётся подключиться к службе аналитики",
   "analytics_failedLoad": "Не удалось загрузить аналитику",
+  "analytics_yourWordsHavePower": "Твои слова обладают силой.",
   "burnCountdown_burningNow": "Сжигается сейчас…",
   "burnCountdown_burnsIn": "Сгорит через {{time}}",
   "burnSwitch_label": "Режим сжигания",

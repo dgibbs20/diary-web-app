@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Gecachte gegevens uit je profiel weergeven",
   "analytics_unableConnect": "Kan geen verbinding maken met analyseservice",
   "analytics_failedLoad": "Analyse laden mislukt",
+  "analytics_yourWordsHavePower": "Jouw woorden hebben kracht.",
   "burnCountdown_burningNow": "Nu verbranden…",
   "burnCountdown_burnsIn": "Verbrandt over {{time}}",
   "burnSwitch_label": "Burn Mode",

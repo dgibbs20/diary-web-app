@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Zobrazení uložených dat z vašeho profilu",
   "analytics_unableConnect": "Nelze se připojit ke službě analytiky",
   "analytics_failedLoad": "Nepodařilo se načíst analytiku",
+  "analytics_yourWordsHavePower": "Tvá slova mají sílu.",
   "burnCountdown_burningNow": "Právě se spaluje…",
   "burnCountdown_burnsIn": "Spálí se za {{time}}",
   "burnSwitch_label": "Režim spálení",

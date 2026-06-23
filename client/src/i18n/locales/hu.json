@@ -80,6 +80,7 @@
   "analytics_errorMsg": "A profilból gyorsítótárból tárolt adatok megjelenítése",
   "analytics_unableConnect": "Nem sikerült csatlakozni az elemzési szolgáltatáshoz",
   "analytics_failedLoad": "Az elemzés betöltése sikertelen",
+  "analytics_yourWordsHavePower": "A szavaidnak erejük van.",
   "burnCountdown_burningNow": "Éppen ég…",
   "burnCountdown_burnsIn": "{{time}} múlva ég el",
   "burnSwitch_label": "Égetési mód",

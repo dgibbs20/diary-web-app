@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Đang hiển thị dữ liệu đã lưu từ hồ sơ của bạn",
   "analytics_unableConnect": "Không thể kết nối với dịch vụ phân tích",
   "analytics_failedLoad": "Không tải được phân tích",
+  "analytics_yourWordsHavePower": "Lời nói của bạn có sức mạnh.",
   "burnCountdown_burningNow": "Đang đốt…",
   "burnCountdown_burnsIn": "Đốt trong {{time}}",
   "burnSwitch_label": "Chế độ đốt",

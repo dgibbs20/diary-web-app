@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Visualizzazione dei dati memorizzati dal tuo profilo",
   "analytics_unableConnect": "Impossibile connettersi al servizio di analisi",
   "analytics_failedLoad": "Caricamento analisi non riuscito",
+  "analytics_yourWordsHavePower": "Le tue parole hanno potere.",
   "burnCountdown_burningNow": "Eliminazione in corso…",
   "burnCountdown_burnsIn": "Eliminazione tra {{time}}",
   "burnSwitch_label": "Burn Mode",

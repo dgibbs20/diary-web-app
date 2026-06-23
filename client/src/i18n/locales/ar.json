@@ -80,6 +80,7 @@
   "analytics_errorMsg": "عرض البيانات المخزنة من ملفك الشخصي",
   "analytics_unableConnect": "تعذر الاتصال بخدمة التحليلات",
   "analytics_failedLoad": "فشل تحميل التحليلات",
+  "analytics_yourWordsHavePower": "كلماتك لها قوة.",
   "burnCountdown_burningNow": "يُحرق الآن…",
   "burnCountdown_burnsIn": "يُحرق في {{time}}",
   "burnSwitch_label": "وضع الحرق",

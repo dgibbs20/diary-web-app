@@ -80,6 +80,7 @@
   "analytics_errorMsg": "プロフィールからキャッシュデータを表示しています",
   "analytics_unableConnect": "分析サービスに接続できません",
   "analytics_failedLoad": "分析の読み込みに失敗しました",
+  "analytics_yourWordsHavePower": "あなたの言葉には力があります。",
   "burnCountdown_burningNow": "削除中…",
   "burnCountdown_burnsIn": "{{time}}後に削除",
   "burnSwitch_label": "Burn Mode",

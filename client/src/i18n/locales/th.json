@@ -80,6 +80,7 @@
   "analytics_errorMsg": "กำลังแสดงข้อมูลแคชจากโปรไฟล์ของคุณ",
   "analytics_unableConnect": "ไม่สามารถเชื่อมต่อกับบริการวิเคราะห์",
   "analytics_failedLoad": "โหลดการวิเคราะห์ไม่สำเร็จ",
+  "analytics_yourWordsHavePower": "คำพูดของคุณมีพลัง",
   "burnCountdown_burningNow": "กำลังเผาอยู่…",
   "burnCountdown_burnsIn": "จะเผาใน {{time}}",
   "burnSwitch_label": "โหมดเผา",

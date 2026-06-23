@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Affichage des données en cache de votre profil",
   "analytics_unableConnect": "Impossible de se connecter au service d'analytique",
   "analytics_failedLoad": "Échec du chargement de l'analytique",
+  "analytics_yourWordsHavePower": "Vos mots ont du pouvoir.",
   "burnCountdown_burningNow": "En train de brûler…",
   "burnCountdown_burnsIn": "Brûle dans {{time}}",
   "burnSwitch_label": "Mode de destruction",

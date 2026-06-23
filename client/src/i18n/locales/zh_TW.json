@@ -80,6 +80,7 @@
   "analytics_errorMsg": "顯示來自你個人資料的快取資料",
   "analytics_unableConnect": "無法連接到分析服務",
   "analytics_failedLoad": "分析載入失敗",
+  "analytics_yourWordsHavePower": "你的文字有力量。",
   "burnCountdown_burningNow": "正在銷毀…",
   "burnCountdown_burnsIn": "將在 {{time}} 後銷毀",
   "burnSwitch_label": "銷毀模式",

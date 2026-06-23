@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Menampilkan data cache dari profil kamu",
   "analytics_unableConnect": "Tidak dapat terhubung ke layanan analitik",
   "analytics_failedLoad": "Gagal memuat analitik",
+  "analytics_yourWordsHavePower": "Kata-katamu memiliki kekuatan.",
   "burnCountdown_burningNow": "Sedang terbakar…",
   "burnCountdown_burnsIn": "Terbakar dalam {{time}}",
   "burnSwitch_label": "Mode Pembakaran",

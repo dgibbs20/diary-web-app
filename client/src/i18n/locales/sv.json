@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Visar cachad data från din profil",
   "analytics_unableConnect": "Kan inte ansluta till analystjänsten",
   "analytics_failedLoad": "Det gick inte att ladda analysen",
+  "analytics_yourWordsHavePower": "Dina ord har kraft.",
   "burnCountdown_burningNow": "Förstörs nu…",
   "burnCountdown_burnsIn": "Förstörs om {{time}}",
   "burnSwitch_label": "Förstörningsläge",

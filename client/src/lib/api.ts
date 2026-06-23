@@ -312,8 +312,9 @@ export const userApi = {
 // ============ ANALYTICS API ============
 
 export const analyticsApi = {
-  async getStats() {
-    const res = await authFetch('/api/analytics/stats');
+  async getStats(language?: string) {
+    const query = language ? `?language=${encodeURIComponent(language)}` : '';
+    const res = await authFetch(`/api/analytics/stats${query}`);
     return res.json();
   },
 };

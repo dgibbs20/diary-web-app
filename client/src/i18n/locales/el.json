@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Εμφάνιση δεδομένων κρυφής μνήμης",
   "analytics_unableConnect": "Αδυναμία σύνδεσης με την υπηρεσία αναλυτικών",
   "analytics_failedLoad": "Αποτυχία φόρτωσης αναλυτικών",
+  "analytics_yourWordsHavePower": "Τα λόγια σου έχουν δύναμη.",
   "burnCountdown_burningNow": "Καίγεται τώρα…",
   "burnCountdown_burnsIn": "Καίγεται σε {{time}}",
   "burnSwitch_label": "Λειτουργία Καύσης",

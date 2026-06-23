@@ -80,6 +80,7 @@
   "analytics_errorMsg": "Näytetään välimuistissa olevat tiedot profiilista",
   "analytics_unableConnect": "Yhteys analytiikkapalveluun ei onnistu",
   "analytics_failedLoad": "Analytiikan lataaminen epäonnistui",
+  "analytics_yourWordsHavePower": "Sanasi ovat voimakkaita.",
   "burnCountdown_burningNow": "Palaa nyt…",
   "burnCountdown_burnsIn": "Palaa {{time}} kuluttua",
   "burnSwitch_label": "Polttatila",
