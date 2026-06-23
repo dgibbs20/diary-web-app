@@ -70,6 +70,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
   const [rejectedFiles, setRejectedFiles] = useState<{ name: string; reason: string }[]>([]);
   const [title, setTitle] = useState('');
   const [entryDate, setEntryDate] = useState(new Date().toISOString().split('T')[0]);
+  const [sortByOriginalDate, setSortByOriginalDate] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [savedEntryId, setSavedEntryId] = useState<number | null>(null);
   const [isDone, setIsDone] = useState(false);
@@ -323,6 +324,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
           end_time: burnDate ? burnDate.toISOString() : undefined,
           input_method: 'text',
           entry_date: entryDate,
+          sort_by_original_date: sortByOriginalDate,
         });
         if (res.success && res.entry) {
           setSaveStatus('saved');
@@ -479,6 +481,77 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             onFocus={e => { e.currentTarget.style.borderColor = GOLD; }}
             onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; }}
           />
+
+          {/* Entry date — always visible */}
+          {(() => {
+            const isTodayDate = (dateStr: string): boolean =>
+              dateStr === new Date().toISOString().split('T')[0];
+            return (
+              <>
+                <div className="flex items-center gap-3">
+                  <label className="text-xs tracking-widest uppercase flex-shrink-0"
+                         style={{ color: 'var(--muted-foreground)' }}>
+                    {t('upload_entryDateLabel')}
+                  </label>
+                  <input
+                    type="date"
+                    value={entryDate}
+                    onChange={e => setEntryDate(e.target.value)}
+                    className="px-3 py-1.5 rounded-lg border text-sm outline-none transition-colors"
+                    style={{ background: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
+                    onFocus={e => { e.currentTarget.style.borderColor = GOLD; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; }}
+                  />
+                </div>
+
+                {!isTodayDate(entryDate) && (
+                  <div className="p-3 rounded-xl border space-y-2"
+                       style={{ borderColor: 'var(--border)', background: 'var(--card)' }}>
+                    <p className="text-xs font-semibold"
+                       style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                      {t('upload_sortToggleTitle')}
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setSortByOriginalDate(true)}
+                        className="flex-1 p-2.5 rounded-lg border text-left transition-all text-xs"
+                        style={{
+                          borderColor: sortByOriginalDate ? GOLD : 'var(--border)',
+                          borderWidth: sortByOriginalDate ? 2 : 1,
+                          background: sortByOriginalDate ? 'rgba(201,168,76,0.06)' : 'var(--background)',
+                          fontFamily: FONT,
+                        }}
+                      >
+                        <p className="font-semibold mb-0.5" style={{ color: 'var(--foreground)' }}>
+                          {t('upload_sortByOriginal')}
+                        </p>
+                        <p style={{ color: 'var(--muted-foreground)' }}>
+                          {t('upload_sortByOriginalDesc')}
+                        </p>
+                      </button>
+                      <button
+                        onClick={() => setSortByOriginalDate(false)}
+                        className="flex-1 p-2.5 rounded-lg border text-left transition-all text-xs"
+                        style={{
+                          borderColor: !sortByOriginalDate ? GOLD : 'var(--border)',
+                          borderWidth: !sortByOriginalDate ? 2 : 1,
+                          background: !sortByOriginalDate ? 'rgba(201,168,76,0.06)' : 'var(--background)',
+                          fontFamily: FONT,
+                        }}
+                      >
+                        <p className="font-semibold mb-0.5" style={{ color: 'var(--foreground)' }}>
+                          {t('upload_sortByUpload')}
+                        </p>
+                        <p style={{ color: 'var(--muted-foreground)' }}>
+                          {t('upload_sortByUploadDesc')}
+                        </p>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            );
+          })()}
 
           {/* Mode toggle */}
           <div className="flex items-center gap-3">
@@ -674,28 +747,6 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                     <EditorContent editor={editor} />
                   )}
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Entry date */}
-          <AnimatePresence>
-            {isDone && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="flex items-center gap-3"
-              >
-                <label className="text-xs tracking-widest uppercase" style={{ color: 'var(--muted-foreground)' }}>
-                  {t('upload_entryDateLabel')}
-                </label>
-                <input
-                  type="date"
-                  value={entryDate}
-                  onChange={e => setEntryDate(e.target.value)}
-                  className="px-3 py-1.5 rounded-lg border text-sm outline-none transition-colors"
-                  style={{ background: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
-                  onFocus={e => { e.currentTarget.style.borderColor = GOLD; }}
-                  onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; }}
-                />
               </motion.div>
             )}
           </AnimatePresence>

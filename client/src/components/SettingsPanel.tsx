@@ -8,7 +8,7 @@
  */
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield, ArrowRight, Globe } from 'lucide-react';
+import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield, ArrowRight, Globe, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -248,6 +248,30 @@ function ProfileSection() {
 
 function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme?: () => void }) {
   const { t, i18n } = useTranslation();
+  const { user } = useAuth();
+  const [companionName, setCompanionName] = useState<string>(
+    user?.preferences?.companion_name ?? ''
+  );
+  const [isSavingName, setIsSavingName] = useState(false);
+
+  const handleSaveCompanionName = async (nameOverride?: string | null) => {
+    setIsSavingName(true);
+    try {
+      const value = nameOverride === undefined
+        ? companionName.trim()
+        : nameOverride;
+      await userApi.updatePreferences({ companion_name: value || null });
+      if (value) {
+        toast.success(t('settings_companion_nameSaved', { name: value }));
+      } else {
+        setCompanionName('');
+        toast.success(t('settings_companion_nameCleared'));
+      }
+    } catch {
+      toast.error('Failed to save companion name');
+    }
+    setIsSavingName(false);
+  };
 
   const mobileFeatures = [
     { id: 'voice', key: 'settings_pref_voiceTranscription' },
@@ -311,6 +335,89 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
             <option key={code} value={code}>{name}</option>
           ))}
         </select>
+      </div>
+
+      {/* Companion name */}
+      <div className="p-4 rounded-xl space-y-3" style={{ background: 'var(--muted)' }}>
+        <div>
+          <p style={{ fontFamily: FONT, fontSize: '0.875rem', fontWeight: 600, color: 'var(--foreground)' }}>
+            {t('settings_companion_nameTitle')}
+          </p>
+          <p style={{ fontFamily: FONT, fontSize: '0.75rem', color: 'var(--muted-foreground)', marginTop: 2 }}>
+            {t('settings_companion_nameSubtitle')}
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input
+            type="text"
+            maxLength={20}
+            value={companionName}
+            onChange={(e) => setCompanionName(e.target.value)}
+            placeholder={t('settings_companion_namePlaceholder')}
+            onKeyDown={(e) => { if (e.key === 'Enter') handleSaveCompanionName(); }}
+            style={{
+              flex: 1,
+              padding: '8px 12px',
+              borderRadius: 8,
+              border: '1px solid var(--border)',
+              background: 'var(--card)',
+              color: 'var(--foreground)',
+              fontFamily: FONT,
+              fontSize: '0.875rem',
+              outline: 'none',
+            }}
+            onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 2px rgba(201,168,76,0.2)'; }}
+            onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+          />
+
+          {companionName && (
+            <button
+              onClick={() => handleSaveCompanionName(null)}
+              disabled={isSavingName}
+              style={{
+                padding: '8px',
+                borderRadius: 8,
+                border: '1px solid var(--border)',
+                background: 'transparent',
+                color: 'var(--muted-foreground)',
+                cursor: 'pointer',
+              }}
+              title="Clear name"
+            >
+              <X size={14} />
+            </button>
+          )}
+
+          <button
+            onClick={() => handleSaveCompanionName()}
+            disabled={isSavingName}
+            style={{
+              padding: '8px 16px',
+              borderRadius: 8,
+              background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`,
+              color: '#FFF9F0',
+              fontFamily: FONT,
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              cursor: isSavingName ? 'not-allowed' : 'pointer',
+              opacity: isSavingName ? 0.6 : 1,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              border: 'none',
+            }}
+          >
+            {isSavingName
+              ? <Loader2 size={13} className="animate-spin" />
+              : <Check size={13} />}
+            {t('settings_companion_nameSaveBtn')}
+          </button>
+        </div>
+
+        <p style={{ fontSize: '0.7rem', color: 'var(--muted-foreground)', textAlign: 'right', fontFamily: FONT }}>
+          {companionName.length} / 20
+        </p>
       </div>
 
       {/* Mobile-only features */}

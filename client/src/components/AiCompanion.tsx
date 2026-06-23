@@ -74,6 +74,7 @@ function downloadTextFile(filename: string, content: string) {
 export default function AiCompanion({ entryContext, userName, onClose, onQuickChatSaved }: AiCompanionProps) {
   const { t, i18n } = useTranslation();
   const { isElite, user } = useAuth();
+  const companionName = user?.preferences?.companion_name;
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState('auto');
@@ -388,7 +389,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                 className="text-sm font-semibold tracking-wide"
                 style={{ color: 'var(--foreground)', fontFamily: FONT }}
               >
-                {t('aiCompanion_title')}
+                {companionName || t('aiCompanion_title')}
               </h3>
               <button
                 onClick={() => setShowModes(!showModes)}
@@ -729,7 +730,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
                 className="text-lg mb-2 font-semibold"
                 style={{ fontFamily: FONT, color: 'var(--foreground)' }}
               >
-                {t('aiCompanion_emptyTitle')}
+                {companionName || t('aiCompanion_emptyTitle')}
               </h4>
               <p
                 className="text-sm leading-relaxed"

@@ -182,6 +182,7 @@ export const journalApi = {
     input_method?: string;
     type?: string;
     entry_date?: string;
+    sort_by_original_date?: boolean;
   }) {
     const res = await authFetch('/api/journal/entries', {
       method: 'POST',
@@ -189,6 +190,7 @@ export const journalApi = {
         ...data,
         input_method: data.input_method || 'text',
         ...(data.entry_date ? { entry_date: data.entry_date } : {}),
+        ...(data.sort_by_original_date ? { sort_by_original_date: true } : {}),
       }),
     });
     return res.json();

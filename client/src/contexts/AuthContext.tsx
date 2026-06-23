@@ -4,6 +4,7 @@ import { authApi, setTokens, getTokens, clearTokens, userApi } from '@/lib/api';
 export interface UserPreferences {
   ai_mode: string;
   auto_save: boolean;
+  companion_name?: string | null;
   handwriting_enabled: boolean;
   line_style: string;
   notifications_enabled: boolean;
