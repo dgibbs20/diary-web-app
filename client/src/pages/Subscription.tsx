@@ -10,6 +10,7 @@
  * TOGGLE: billingCycle state drives price display on Elite card.
  */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,30 +26,31 @@ const LOGO_FREE = '/assets/images/logo.png';
 const LOGO_ELITE = '/assets/images/logo_elite.png';
 
 interface PlanFeature {
-  label: string;
+  key: string;
   icon: React.ReactNode;
   free: boolean | string;
   elite: boolean | string;
 }
 
 const FEATURES: PlanFeature[] = [
-  { label: 'Unlimited Journal Entries', icon: <BookOpen size={18} />, free: true, elite: true },
-  { label: 'Text Input', icon: <PenTool size={18} />, free: true, elite: true },
-  { label: 'Basic Mood Tracking', icon: <Sparkles size={18} />, free: true, elite: true },
-  { label: 'Basic Statistics', icon: <BarChart3 size={18} />, free: true, elite: true },
-  { label: 'Biometric Lock', icon: <Lock size={18} />, free: true, elite: true },
-  { label: 'AI Companion Responses', icon: <Brain size={18} />, free: '5 / day', elite: 'Unlimited' },
-  { label: 'AI Modes (Auto & Vault)', icon: <Brain size={18} />, free: true, elite: true },
-  { label: 'AI Modes (Friend, Mirror, Insight)', icon: <Brain size={18} />, free: false, elite: true },
-  { label: 'Voice Transcription', icon: <Mic size={18} />, free: '3 / day', elite: 'Unlimited' },
-  { label: 'Advanced Analytics & Insights', icon: <BarChart3 size={18} />, free: false, elite: true },
-  { label: 'Mood Trends & Pattern Detection', icon: <Sparkles size={18} />, free: false, elite: true },
-  { label: 'Journal Export (PDF)', icon: <FileText size={18} />, free: false, elite: true },
-  { label: 'Ghost Mode (Privacy)', icon: <Shield size={18} />, free: false, elite: true },
-  { label: 'Priority Support', icon: <Zap size={18} />, free: false, elite: true },
+  { key: 'subscription_feat_unlimitedEntries', icon: <BookOpen size={18} />, free: true, elite: true },
+  { key: 'subscription_feat_textInput', icon: <PenTool size={18} />, free: true, elite: true },
+  { key: 'subscription_feat_basicMood', icon: <Sparkles size={18} />, free: true, elite: true },
+  { key: 'subscription_feat_basicStats', icon: <BarChart3 size={18} />, free: true, elite: true },
+  { key: 'subscription_feat_biometric', icon: <Lock size={18} />, free: true, elite: true },
+  { key: 'subscription_feat_aiResponses', icon: <Brain size={18} />, free: '5 / day', elite: 'Unlimited' },
+  { key: 'subscription_feat_aiModesBasic', icon: <Brain size={18} />, free: true, elite: true },
+  { key: 'subscription_feat_aiModesAdvanced', icon: <Brain size={18} />, free: false, elite: true },
+  { key: 'subscription_feat_voice', icon: <Mic size={18} />, free: '3 / day', elite: 'Unlimited' },
+  { key: 'subscription_feat_analytics', icon: <BarChart3 size={18} />, free: false, elite: true },
+  { key: 'subscription_feat_moodTrends', icon: <Sparkles size={18} />, free: false, elite: true },
+  { key: 'subscription_feat_export', icon: <FileText size={18} />, free: false, elite: true },
+  { key: 'subscription_feat_ghost', icon: <Shield size={18} />, free: false, elite: true },
+  { key: 'subscription_feat_priority', icon: <Zap size={18} />, free: false, elite: true },
 ];
 
 export default function Subscription() {
+  const { t } = useTranslation();
   const { user, isElite } = useAuth();
   const [, navigate] = useLocation();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual');
@@ -76,8 +78,8 @@ export default function Subscription() {
   // Derived display values based on billingCycle
   const displayPrice = billingCycle === 'annual' ? annualMonthly : monthlyPrice.toFixed(2);
   const billingNote = billingCycle === 'annual'
-    ? `Billed $${annualPrice} annually`
-    : 'Billed monthly, cancel anytime';
+    ? t('subscription_billedAnnually', { price: annualPrice })
+    : t('subscription_billedMonthly');
 
   return (
     <div className="min-h-screen pt-[70px]" style={{ backgroundColor: '#FAF6F0' }}>
@@ -94,15 +96,14 @@ export default function Subscription() {
               className="text-4xl md:text-5xl lg:text-6xl font-bold"
               style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#2C1A0E' }}
             >
-              Choose Your Plan
+              {t('subscription_title')}
             </h1>
           </div>
           <p
             className="text-lg md:text-xl max-w-2xl mx-auto"
             style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#6B5B4E' }}
           >
-            Unlock the full power of your private journaling companion.
-            {isElite && ' You are currently on the Elite plan.'}
+            {isElite ? t('subscription_subtitleElite') : t('subscription_subtitle')}
           </p>
         </motion.div>
 
@@ -125,7 +126,7 @@ export default function Subscription() {
                 border: `1.5px solid ${billingCycle === 'monthly' ? '#C9A84C' : '#D4C5B0'}`,
               }}
             >
-              Monthly
+              {t('subscription_monthly')}
             </button>
             <button
               onClick={() => setBillingCycle('annual')}
@@ -138,12 +139,12 @@ export default function Subscription() {
                 border: `1.5px solid ${billingCycle === 'annual' ? '#C9A84C' : '#D4C5B0'}`,
               }}
             >
-              Annual
+              {t('subscription_annual')}
               <span
                 className="absolute -top-3 -right-3 px-2 py-0.5 rounded-full text-xs font-bold"
                 style={{ backgroundColor: '#2C1A0E', color: '#C9A84C', fontSize: '0.65rem' }}
               >
-                SAVE {savings}%
+                {t('subscription_save', { percent: savings })}
               </span>
             </button>
           </motion.div>
@@ -176,17 +177,17 @@ export default function Subscription() {
                 className="text-sm mb-6"
                 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#8B7B6E' }}
               >
-                Your private journaling companion
+                {t('subscription_freeTagline')}
               </p>
               <div className="flex items-baseline gap-1">
                 <span
                   className="text-4xl md:text-5xl font-bold"
                   style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#2C1A0E' }}
                 >
-                  Free
+                  {t('settings_profile_free')}
                 </span>
               </div>
-              <p className="text-sm mt-2" style={{ color: '#8B7B6E' }}>Forever</p>
+              <p className="text-sm mt-2" style={{ color: '#8B7B6E' }}>{t('subscription_forever')}</p>
             </div>
 
             <div className="space-y-3">
@@ -215,7 +216,7 @@ export default function Subscription() {
                         textDecoration: available ? 'none' : 'line-through',
                       }}
                     >
-                      {f.label}
+                      {t(f.key)}
                       {typeof val === 'string' && (
                         <span className="ml-1 font-semibold" style={{ color: '#8B7B6E' }}>
                           ({val})
@@ -239,7 +240,7 @@ export default function Subscription() {
                     border: '1px solid #E8DFD4',
                   }}
                 >
-                  Current Plan
+                  {t('subscription_currentPlan')}
                 </div>
               </div>
             )}
@@ -268,7 +269,7 @@ export default function Subscription() {
               className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold"
               style={{ backgroundColor: '#C9A84C', color: '#2C1A0E' }}
             >
-              MOST POPULAR
+              {t('subscription_mostPopular')}
             </div>
 
             <div className="mb-8 relative z-10">
@@ -282,7 +283,7 @@ export default function Subscription() {
                 className="text-sm mb-6"
                 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: 'rgba(201, 168, 76, 0.7)' }}
               >
-                Unlock every feature, no limits
+                {t('subscription_eliteTagline')}
               </p>
 
               {/* Price — animated on toggle change */}
@@ -301,7 +302,7 @@ export default function Subscription() {
                     >
                       ${displayPrice}
                     </span>
-                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>/month</span>
+                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>{t('subscription_perMonth')}</span>
                   </div>
                   <p className="text-sm mt-2" style={{ color: 'rgba(201, 168, 76, 0.7)' }}>
                     {billingNote}
@@ -328,7 +329,7 @@ export default function Subscription() {
                         color: 'rgba(255, 255, 255, 0.9)',
                       }}
                     >
-                      {f.label}
+                      {t(f.key)}
                       {typeof val === 'string' && (
                         <span className="ml-1 font-semibold" style={{ color: '#C9A84C' }}>
                           ({val})
@@ -353,7 +354,7 @@ export default function Subscription() {
                   }}
                 >
                   <Crown size={16} />
-                  Your Current Plan
+                  {t('subscription_yourPlan')}
                 </div>
               ) : (
                 <button
@@ -368,7 +369,7 @@ export default function Subscription() {
                     boxShadow: '0 4px 20px rgba(201, 168, 76, 0.4)',
                   }}
                 >
-                  Upgrade to Elite
+                  {t('subscription_upgradeBtn')}
                   <ArrowRight size={18} />
                 </button>
               )}
@@ -387,13 +388,13 @@ export default function Subscription() {
             className="text-sm"
             style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#8B7B6E' }}
           >
-            Secure payment powered by Stripe via RevenueCat. Cancel anytime.
+            {t('subscription_trustStripe')}
           </p>
           <p
             className="text-sm mt-2"
             style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#8B7B6E' }}
           >
-            Your subscription syncs across all your devices — mobile and web.
+            {t('subscription_trustSync')}
           </p>
         </motion.div>
       </section>

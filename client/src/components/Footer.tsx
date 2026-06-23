@@ -5,24 +5,27 @@
  */
 import { useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 const MARKETING = 'https://diary.gmxquantum.com';
 
 const FOOTER_LINKS = [
-  { label: 'Features', href: `${MARKETING}/#features` },
-  { label: 'How It Works', href: `${MARKETING}/#how-it-works` },
-  { label: 'Screenshots', href: `${MARKETING}/#screenshots` },
-  { label: 'Videos', href: `${MARKETING}/#videos` },
-  { label: 'Pricing', href: `${MARKETING}/#pricing` },
-  { label: 'Download', href: `${MARKETING}/#download` },
-  { label: 'FAQ', href: `${MARKETING}/faq.html` },
-  { label: 'Privacy Policy', href: `${MARKETING}/#privacy` },
-  { label: 'Contact', href: `${MARKETING}/#contact` },
+  { key: 'footer_features', href: `${MARKETING}/#features` },
+  { key: 'footer_howItWorks', href: `${MARKETING}/#how-it-works` },
+  { key: 'footer_screenshots', href: `${MARKETING}/#screenshots` },
+  { key: 'footer_videos', href: `${MARKETING}/#videos` },
+  { key: 'footer_pricing', href: `${MARKETING}/#pricing` },
+  { key: 'header_download', href: `${MARKETING}/#download` },
+  { key: 'footer_faq', href: `${MARKETING}/faq.html` },
+  { key: 'footer_privacy', href: `${MARKETING}/#privacy` },
+  { key: 'footer_contact', href: `${MARKETING}/#contact` },
 ];
 
 export default function Footer() {
   const [location] = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
+  const { t, i18n } = useTranslation();
 
   const isDashboard = location.startsWith('/dashboard');
 
@@ -41,11 +44,7 @@ export default function Footer() {
     >
       {/* Logo */}
       <img
-        src={
-          user?.subscription_tier === 'diary_elite'
-            ? '/assets/images/logo_elite.png'
-            : '/assets/images/logo.png'
-        }
+        src={getLogoSrc(i18n.language, user?.subscription_tier === 'diary_elite')}
         alt="diAry"
         style={{
           height: '180px',
@@ -65,7 +64,7 @@ export default function Footer() {
           fontWeight: 300,
         }}
       >
-        "I'll never tell..."
+        {t('footer_tagline')}
       </p>
 
       {/* Footer Links */}
@@ -81,7 +80,7 @@ export default function Footer() {
         }}
       >
         {FOOTER_LINKS.map((link) => (
-          <li key={link.label}>
+          <li key={link.key}>
             <a
               href={link.href}
               target="_blank"
@@ -102,7 +101,7 @@ export default function Footer() {
                 e.currentTarget.style.color = 'rgba(245,240,232,0.45)';
               }}
             >
-              {link.label}
+              {t(link.key)}
             </a>
           </li>
         ))}
@@ -136,7 +135,7 @@ export default function Footer() {
               e.currentTarget.style.borderColor = 'rgba(201,168,76,0.35)';
             }}
           >
-            Sign Out
+            {t('header_signOut')}
           </button>
         ) : (
           <button
@@ -162,7 +161,7 @@ export default function Footer() {
               boxShadow: '0 4px 20px rgba(168,134,58,0.25)',
             }}
           >
-            Sign In
+            {t('header_signIn')}
           </button>
         )}
       </div>
@@ -179,7 +178,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <p style={{ fontSize: '0.72rem', color: 'rgba(245,240,232,0.3)' }}>
-        &copy; 2026 GMX Quantum LLC. All rights reserved. A GMCG Holdings Inc. company.
+        {t('footer_copyright')}
       </p>
     </footer>
   );

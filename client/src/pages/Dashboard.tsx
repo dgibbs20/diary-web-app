@@ -7,6 +7,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { getLogoSrc } from '@/utils/logoHelper';
 import Sidebar from '@/components/Sidebar';
 import JournalList from '@/components/JournalList';
 import JournalEditor from '@/components/JournalEditor';
@@ -50,6 +52,7 @@ const MARKETING = 'https://diary.gmxquantum.com';
 export default function Dashboard() {
   const [, navigate] = useLocation();
   const { user, isAuthenticated, isLoading, isElite, refreshUser } = useAuth();
+  const { t } = useTranslation();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
@@ -268,7 +271,7 @@ export default function Dashboard() {
             className="text-sm tracking-widest uppercase"
             style={{ color: 'var(--muted-foreground)', fontFamily: FONT, letterSpacing: '0.15em' }}
           >
-            Loading your space...
+            {t('dashboard_loadingSpace')}
           </p>
         </div>
       </div>
@@ -441,17 +444,18 @@ export default function Dashboard() {
 /* ─── Compact Dashboard Footer ─── */
 function DashboardFooter() {
   const { isElite } = useAuth();
+  const { t, i18n } = useTranslation();
 
   const FOOTER_LINKS = [
-    { label: 'Features', href: `${MARKETING}/#features` },
-    { label: 'How It Works', href: `${MARKETING}/#how-it-works` },
-    { label: 'Screenshots', href: `${MARKETING}/#screenshots` },
-    { label: 'Videos', href: `${MARKETING}/#videos` },
-    { label: 'Pricing', href: `${MARKETING}/#pricing` },
-    { label: 'Download', href: `${MARKETING}/#download` },
-    { label: 'FAQ', href: `${MARKETING}/faq.html` },
-    { label: 'Privacy', href: `${MARKETING}/#privacy` },
-    { label: 'Contact', href: `${MARKETING}/#contact` },
+    { key: 'footer_features', href: `${MARKETING}/#features` },
+    { key: 'footer_howItWorks', href: `${MARKETING}/#how-it-works` },
+    { key: 'footer_screenshots', href: `${MARKETING}/#screenshots` },
+    { key: 'footer_videos', href: `${MARKETING}/#videos` },
+    { key: 'footer_pricing', href: `${MARKETING}/#pricing` },
+    { key: 'header_download', href: `${MARKETING}/#download` },
+    { key: 'footer_faq', href: `${MARKETING}/faq.html` },
+    { key: 'footer_privacy', href: `${MARKETING}/#privacy` },
+    { key: 'footer_contact', href: `${MARKETING}/#contact` },
   ];
 
   return (
@@ -468,7 +472,7 @@ function DashboardFooter() {
         {/* Logo + tagline */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <img
-            src={isElite ? '/assets/images/logo_elite.png' : '/assets/images/logo.png'}
+            src={getLogoSrc(i18n.language, isElite)}
             alt="diAry"
             style={{ height: '29px', filter: 'brightness(0.85)' }}
           />
@@ -476,7 +480,7 @@ function DashboardFooter() {
             className="hidden md:inline"
             style={{ fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(245,240,232,0.35)', whiteSpace: 'nowrap' }}
           >
-            "I'll never tell..."
+            {t('footer_tagline')}
           </span>
         </div>
 
@@ -484,7 +488,7 @@ function DashboardFooter() {
         <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
           {FOOTER_LINKS.map(link => (
             <a
-              key={link.label}
+              key={link.key}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
@@ -500,7 +504,7 @@ function DashboardFooter() {
               onMouseEnter={(e) => { e.currentTarget.style.color = '#C9A84C'; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245,240,232,0.35)'; }}
             >
-              {link.label}
+              {t(link.key)}
             </a>
           ))}
         </div>
@@ -510,7 +514,7 @@ function DashboardFooter() {
           className="flex-shrink-0"
           style={{ fontSize: '0.58rem', color: 'rgba(245,240,232,0.25)', whiteSpace: 'nowrap' }}
         >
-          &copy; 2026 GMX Quantum LLC. A GMCG Holdings Inc. company.
+          {t('footer_copyright')}
         </p>
       </div>
     </footer>

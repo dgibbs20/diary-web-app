@@ -7,10 +7,13 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 export default function Register() {
   const [, navigate] = useLocation();
   const { register } = useAuth();
+  const { t, i18n } = useTranslation();
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -78,7 +81,7 @@ export default function Register() {
           transition={{ duration: 0.8, delay: 0.3 }}
         >
           <img
-            src="/assets/images/logo.png"
+            src={getLogoSrc(i18n.language, false)}
             alt="diAry"
             style={{ height: '200px', display: 'block', margin: '0 auto 32px', filter: 'drop-shadow(0 8px 32px rgba(201,168,76,0.35))' }}
           />
@@ -86,12 +89,12 @@ export default function Register() {
             className="font-serif italic"
             style={{ fontSize: '1.65rem', color: '#5C3D2A', marginBottom: '20px', letterSpacing: '0.04em' }}
           >
-            "Begin the journey of knowing yourself —<br />one page at a time."
+            {t('register_heroTagline')}
           </p>
           <p
             style={{ fontSize: '1.05rem', color: '#8B6347', maxWidth: '420px', margin: '0 auto', fontWeight: 300, lineHeight: 1.75, fontFamily: "'Cormorant Garamond', Georgia, serif" }}
           >
-            Join thousands who trust diAry with their most private thoughts. Military-grade encryption. Zero-knowledge architecture.
+            {t('register_heroDesc')}
           </p>
         </motion.div>
       </div>
@@ -101,31 +104,31 @@ export default function Register() {
         <motion.div className="w-full max-w-sm" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           {/* Mobile logo */}
           <div className="lg:hidden flex flex-col items-center mb-8">
-            <img src="/assets/images/logo.png" alt="diAry" className="h-16 w-auto mb-3" />
-            <p className="font-serif italic text-sm" style={{ color: '#8B7355' }}>"I'll never tell..."</p>
+            <img src={getLogoSrc(i18n.language, false)} alt="diAry" className="h-16 w-auto mb-3" />
+            <p className="font-serif italic text-sm" style={{ color: '#8B7355' }}>{t('login_tagline')}</p>
           </div>
 
           <div className="mb-8">
-            <p className="text-xs tracking-[0.2em] uppercase font-medium mb-2" style={{ color: '#A8863A' }}>Get Started</p>
-            <h1 className="font-serif text-3xl font-light" style={{ color: '#3D2B1F' }}>Create Your Space</h1>
-            <p className="mt-2 text-sm" style={{ color: '#8B7355' }}>Your words, your world, your diary</p>
+            <p className="text-xs tracking-[0.2em] uppercase font-medium mb-2" style={{ color: '#A8863A' }}>{t('register_getStarted')}</p>
+            <h1 className="font-serif text-3xl font-light" style={{ color: '#3D2B1F' }}>{t('register_title')}</h1>
+            <p className="mt-2 text-sm" style={{ color: '#8B7355' }}>{t('register_subtitle')}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>Full Name</label>
-              <input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder="Your full name" autoComplete="name" />
+              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>{t('register_fullName')}</label>
+              <input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_fullNamePlaceholder')} autoComplete="name" />
             </div>
 
             <div>
-              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>Email</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder="your@email.com" autoComplete="email" />
+              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>{t('register_email')}</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_emailPlaceholder')} autoComplete="email" />
             </div>
 
             <div>
-              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>Password</label>
+              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>{t('register_password')}</label>
               <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} className={`${inputCls} pr-11`} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder="Min. 8 characters" autoComplete="new-password" />
+                <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} className={`${inputCls} pr-11`} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_passwordPlaceholder')} autoComplete="new-password" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 p-1" style={{ color: '#8B7355' }}>
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -133,8 +136,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>Confirm Password</label>
-              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder="Confirm your password" autoComplete="new-password" />
+              <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>{t('register_confirmPassword')}</label>
+              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_confirmPlaceholder')} autoComplete="new-password" />
             </div>
 
             <button
@@ -145,13 +148,13 @@ export default function Register() {
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 16px rgba(168, 134, 58, 0.25)'; }}
             >
               {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : null}
-              {isSubmitting ? 'Creating Account...' : 'Create Account'}
+              {isSubmitting ? t('register_submitting') : t('register_submitBtn')}
             </button>
           </form>
 
           <p className="mt-8 text-center text-sm" style={{ color: '#8B7355' }}>
-            Already have an account?{' '}
-            <Link href="/login" className="font-medium hover:underline" style={{ color: '#A8863A' }}>Sign In</Link>
+            {t('register_alreadyAccount')}{' '}
+            <Link href="/login" className="font-medium hover:underline" style={{ color: '#A8863A' }}>{t('register_signIn')}</Link>
           </p>
         </motion.div>
       </div>

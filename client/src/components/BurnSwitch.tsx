@@ -18,6 +18,7 @@
 
 import { Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const GOLD = 'var(--color-gold)';
 const FONT = "'Cormorant Garamond', Georgia, serif";
@@ -39,13 +40,14 @@ export default function BurnSwitch({
   disabled = false,
   id,
 }: BurnSwitchProps) {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
       role="group"
-      aria-label="Burn Mode toggle"
+      aria-label={t('burnSwitch_label')}
       className="inline-flex items-center gap-3 px-3 py-2 rounded-full select-none"
       style={{
         background: value
@@ -77,7 +79,7 @@ export default function BurnSwitch({
           transition: 'color 200ms ease',
         }}
       >
-        Burn Mode
+        {t('burnSwitch_label')}
       </label>
 
       {/* Custom pill toggle — matches the SettingsPanel Dark Mode toggle pattern */}

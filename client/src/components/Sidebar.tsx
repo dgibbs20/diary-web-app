@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import {
   BookOpen, PenLine, Settings, BarChart3, Bot,
   LogOut, ChevronRight, ScanLine
@@ -23,13 +24,14 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { id: 'list' as ViewMode, icon: BookOpen, label: 'Journal' },
-  { id: 'analytics' as ViewMode, icon: BarChart3, label: 'Analytics' },
-  { id: 'settings' as ViewMode, icon: Settings, label: 'Settings' },
+  { id: 'list' as ViewMode, icon: BookOpen, labelKey: 'sidebar_journal' },
+  { id: 'analytics' as ViewMode, icon: BarChart3, labelKey: 'sidebar_analytics' },
+  { id: 'settings' as ViewMode, icon: Settings, labelKey: 'sidebar_settings' },
 ];
 
 export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEntry, onToggleAi, showAiPanel }: SidebarProps) {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   const handleLogout = async () => {
@@ -69,7 +71,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
             animate={{ opacity: expanded ? 1 : 0, width: expanded ? 'auto' : 0 }}
             transition={{ duration: 0.15 }}
           >
-            NEW ENTRY
+            {t('sidebar_newEntry')}
           </motion.span>
         </button>
 
@@ -98,7 +100,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
             animate={{ opacity: expanded ? 1 : 0, width: expanded ? 'auto' : 0 }}
             transition={{ duration: 0.15 }}
           >
-            SCAN / UPLOAD
+            {t('sidebar_scanUpload')}
           </motion.span>
         </button>
       </div>
@@ -134,7 +136,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
                 animate={{ opacity: expanded ? 1 : 0, width: expanded ? 'auto' : 0 }}
                 transition={{ duration: 0.15 }}
               >
-                {item.label}
+                {t(item.labelKey)}
               </motion.span>
             </button>
           );
@@ -156,7 +158,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
             animate={{ opacity: expanded ? 1 : 0, width: expanded ? 'auto' : 0 }}
             transition={{ duration: 0.15 }}
           >
-            AI Companion
+            {t('sidebar_aiCompanion')}
           </motion.span>
           {expanded && (
             <ChevronRight
@@ -209,7 +211,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
             animate={{ opacity: expanded ? 1 : 0, width: expanded ? 'auto' : 0 }}
             transition={{ duration: 0.15 }}
           >
-            Sign Out
+            {t('sidebar_signOut')}
           </motion.span>
         </button>
       </div>

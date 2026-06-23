@@ -8,10 +8,12 @@
  */
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield, ArrowRight } from 'lucide-react';
+import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield, ArrowRight, Globe } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { userApi, exportApi } from '@/lib/api';
+import { LANGUAGE_OPTIONS } from '@/i18n';
 import { toast } from 'sonner';
 import { useLocation } from 'wouter';
 import PaywallModal from './PaywallModal';
@@ -24,15 +26,16 @@ const GOLD_DARK = '#A8863A';
 type SettingsTab = 'profile' | 'preferences' | 'security' | 'export';
 
 export default function SettingsPanel() {
+  const { t } = useTranslation();
   const { user, isElite, refreshUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
 
   const tabs = [
-    { id: 'profile' as SettingsTab, icon: User, label: 'Profile' },
-    { id: 'preferences' as SettingsTab, icon: Moon, label: 'Preferences' },
-    { id: 'security' as SettingsTab, icon: Lock, label: 'Security' },
-    { id: 'export' as SettingsTab, icon: Download, label: 'Export' },
+    { id: 'profile' as SettingsTab, icon: User, key: 'settings_tabProfile' },
+    { id: 'preferences' as SettingsTab, icon: Moon, key: 'settings_tabPreferences' },
+    { id: 'security' as SettingsTab, icon: Lock, key: 'settings_tabSecurity' },
+    { id: 'export' as SettingsTab, icon: Download, key: 'settings_tabExport' },
   ];
 
   return (
@@ -42,7 +45,7 @@ export default function SettingsPanel() {
           className="text-2xl font-semibold"
           style={{ fontFamily: FONT, color: 'var(--foreground)', letterSpacing: '0.02em' }}
         >
-          Settings
+          {t('settings_title')}
         </h1>
       </header>
 
@@ -65,7 +68,7 @@ export default function SettingsPanel() {
                 }}
               >
                 <tab.icon size={14} />
-                <span className="hidden sm:inline">{tab.label}</span>
+                <span className="hidden sm:inline">{t(tab.key)}</span>
               </button>
             ))}
           </div>
@@ -81,6 +84,7 @@ export default function SettingsPanel() {
 }
 
 function ProfileSection() {
+  const { t } = useTranslation();
   const { user, isElite, refreshUser } = useAuth();
   const [firstName, setFirstName] = useState(user?.first_name || '');
   const [lastName, setLastName] = useState(user?.last_name || '');
@@ -136,13 +140,13 @@ function ProfileSection() {
           className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold tracking-wider"
           style={{ background: 'rgba(201,168,76,0.12)', color: GOLD, fontFamily: FONT }}
         >
-          <Crown size={12} /> {user?.subscription_tier === 'diary_elite' ? 'Elite' : 'Free'}
+          <Crown size={12} /> {user?.subscription_tier === 'diary_elite' ? 'Elite' : t('settings_profile_free')}
         </span>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs uppercase mb-2" style={labelStyle}>First Name</label>
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>{t('settings_profile_firstName')}</label>
           <input
             type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
@@ -152,7 +156,7 @@ function ProfileSection() {
           />
         </div>
         <div>
-          <label className="block text-xs uppercase mb-2" style={labelStyle}>Last Name</label>
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>{t('settings_profile_lastName')}</label>
           <input
             type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
@@ -164,7 +168,7 @@ function ProfileSection() {
       </div>
 
       <div>
-        <label className="block text-xs uppercase mb-2" style={labelStyle}>Username</label>
+        <label className="block text-xs uppercase mb-2" style={labelStyle}>{t('settings_profile_username')}</label>
         <input
           type="text" value={username} onChange={(e) => setUsername(e.target.value)}
           className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
@@ -175,12 +179,12 @@ function ProfileSection() {
       </div>
 
       <div>
-        <label className="block text-xs uppercase mb-2" style={labelStyle}>Bio</label>
+        <label className="block text-xs uppercase mb-2" style={labelStyle}>{t('settings_profile_bio')}</label>
         <textarea
           value={bio} onChange={(e) => setBio(e.target.value)} rows={3}
           className="w-full px-4 py-2.5 rounded-lg text-sm bg-background resize-none focus:outline-none transition-shadow"
           style={inputStyle}
-          placeholder="Tell us about yourself..."
+          placeholder={t('settings_profile_bioPlaceholder')}
           onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
           onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
         />
@@ -192,7 +196,7 @@ function ProfileSection() {
         style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
       >
         {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
-        {isSaving ? 'Saving...' : 'Save Changes'}
+        {isSaving ? t('settings_profile_saving') : t('settings_profile_saveChanges')}
       </button>
 
       {/* Manage Subscription */}
@@ -214,10 +218,10 @@ function ProfileSection() {
             </div>
             <div>
               <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
-                {isElite ? 'Manage Subscription' : 'Upgrade to Elite'}
+                {isElite ? t('settings_profile_manageSubscription') : t('settings_profile_upgradeElite')}
               </p>
               <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
-                {isElite ? 'View your plan details and billing' : 'Unlock unlimited AI, export, ghost mode & more'}
+                {isElite ? t('settings_profile_manageDesc') : t('settings_profile_upgradeDesc')}
               </p>
             </div>
           </div>
@@ -228,9 +232,9 @@ function ProfileSection() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 pt-4" style={{ borderTop: '1px solid var(--border)' }}>
         {[
-          { value: user?.stats?.total_entries || 0, label: 'Entries' },
-          { value: user?.stats?.current_streak || 0, label: 'Day Streak' },
-          { value: user?.stats?.total_words || 0, label: 'Words' },
+          { value: user?.stats?.total_entries || 0, label: t('settings_profile_entries') },
+          { value: user?.stats?.current_streak || 0, label: t('settings_profile_dayStreak') },
+          { value: user?.stats?.total_words || 0, label: t('settings_profile_words') },
         ].map(s => (
           <div key={s.label} className="text-center p-3 rounded-lg" style={{ background: 'var(--muted)' }}>
             <p className="text-xl font-semibold" style={{ color: GOLD, fontFamily: FONT }}>{s.value}</p>
@@ -243,6 +247,15 @@ function ProfileSection() {
 }
 
 function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme?: () => void }) {
+  const { t, i18n } = useTranslation();
+
+  const mobileFeatures = [
+    { id: 'voice', key: 'settings_pref_voiceTranscription' },
+    { id: 'handwriting', key: 'settings_pref_handwriting' },
+    { id: 'biometric', key: 'settings_pref_biometric' },
+    { id: 'pageFlip', key: 'settings_pref_pageFlip' },
+  ];
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
       {/* Theme toggle */}
@@ -250,8 +263,8 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
         <div className="flex items-center gap-3">
           {theme === 'dark' ? <Moon size={18} style={{ color: GOLD }} /> : <Sun size={18} style={{ color: GOLD }} />}
           <div>
-            <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>Dark Mode</p>
-            <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>Switch between light and dark themes</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>{t('settings_pref_darkMode')}</p>
+            <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{t('settings_pref_darkModeDesc')}</p>
           </div>
         </div>
         <button
@@ -266,21 +279,53 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
         </button>
       </div>
 
+      {/* Language selector */}
+      <div className="flex items-center justify-between p-4 rounded-xl" style={{ background: 'var(--muted)' }}>
+        <div className="flex items-center gap-3">
+          <Globe size={18} style={{ color: GOLD }} />
+          <div>
+            <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>{t('settings_pref_language')}</p>
+            <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{t('settings_pref_languageDesc')}</p>
+          </div>
+        </div>
+        <select
+          value={i18n.language}
+          onChange={(e) => {
+            i18n.changeLanguage(e.target.value);
+            localStorage.setItem('diary_language', e.target.value);
+          }}
+          style={{
+            fontFamily: FONT,
+            fontSize: '0.85rem',
+            background: 'var(--card)',
+            color: 'var(--foreground)',
+            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            padding: '6px 10px',
+            cursor: 'pointer',
+          }}
+        >
+          {LANGUAGE_OPTIONS.map(({ code, name }) => (
+            <option key={code} value={code}>{name}</option>
+          ))}
+        </select>
+      </div>
+
       {/* Mobile-only features */}
       <div className="p-4 rounded-xl" style={{ border: '1px solid var(--border)' }}>
         <div className="flex items-center gap-2 mb-3">
           <Smartphone size={16} style={{ color: 'var(--muted-foreground)' }} />
-          <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>Mobile-Only Features</p>
+          <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>{t('settings_pref_mobileOnly')}</p>
         </div>
         <div className="space-y-2">
-          {['Voice Transcription', 'Handwriting Input', 'Biometric Lock', 'Page Flip Sound'].map(f => (
-            <div key={f} className="flex items-center justify-between py-1.5">
-              <span className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{f}</span>
+          {mobileFeatures.map(f => (
+            <div key={f.id} className="flex items-center justify-between py-1.5">
+              <span className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{t(f.key)}</span>
               <span
                 className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
                 style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
               >
-                Mobile
+                {t('settings_pref_mobile')}
               </span>
             </div>
           ))}
@@ -291,6 +336,7 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
 }
 
 function SecuritySection() {
+  const { t } = useTranslation();
   const { user, isElite, refreshUser } = useAuth();
   const [ghostMode, setGhostMode] = useState(user?.preferences?.privacy_mode ?? false);
   const [isTogglingGhost, setIsTogglingGhost] = useState(false);
@@ -373,7 +419,7 @@ function SecuritySection() {
               </div>
               <div>
                 <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
-                  Ghost Mode
+                  {t('settings_security_ghostMode')}
                   {!isElite && (
                     <span
                       className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
@@ -384,7 +430,7 @@ function SecuritySection() {
                   )}
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
-                  Hide your activity from analytics and streak tracking
+                  {t('settings_security_ghostModeDesc')}
                 </p>
               </div>
             </div>
@@ -404,7 +450,7 @@ function SecuritySection() {
             <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(201,168,76,0.06)' }}>
               <Shield size={14} style={{ color: GOLD_DARK }} />
               <p className="text-xs" style={{ color: GOLD_DARK, fontFamily: FONT, fontWeight: 600 }}>
-                Ghost Mode is active — your entries are hidden from analytics
+                {t('settings_security_ghostActive')}
               </p>
             </div>
           )}
@@ -412,10 +458,10 @@ function SecuritySection() {
 
         {/* Change Password */}
         <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
-        <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>Change Password</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>{t('settings_security_changePassword')}</h3>
 
         <div>
-          <label className="block text-xs uppercase mb-2" style={labelStyle}>Current Password</label>
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>{t('settings_security_currentPw')}</label>
           <div className="relative">
             <input
               type={showCurrent ? 'text' : 'password'} value={currentPw} onChange={(e) => setCurrentPw(e.target.value)}
@@ -431,7 +477,7 @@ function SecuritySection() {
         </div>
 
         <div>
-          <label className="block text-xs uppercase mb-2" style={labelStyle}>New Password</label>
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>{t('settings_security_newPw')}</label>
           <div className="relative">
             <input
               type={showNew ? 'text' : 'password'} value={newPw} onChange={(e) => setNewPw(e.target.value)}
@@ -447,7 +493,7 @@ function SecuritySection() {
         </div>
 
         <div>
-          <label className="block text-xs uppercase mb-2" style={labelStyle}>Confirm New Password</label>
+          <label className="block text-xs uppercase mb-2" style={labelStyle}>{t('settings_security_confirmPw')}</label>
           <input
             type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
@@ -463,7 +509,7 @@ function SecuritySection() {
           style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
         >
           {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-          {isSaving ? 'Changing...' : 'Change Password'}
+          {isSaving ? t('settings_security_changingPw') : t('settings_security_changePwBtn')}
         </button>
         </div>
       </motion.div>
@@ -479,6 +525,7 @@ function SecuritySection() {
 }
 
 function ExportSection() {
+  const { t } = useTranslation();
   const { isElite, user } = useAuth();
   const [isExporting, setIsExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -501,13 +548,13 @@ function ExportSection() {
             className="text-lg mb-2 font-semibold"
             style={{ fontFamily: FONT, color: 'var(--foreground)' }}
           >
-            Export Your Journal
+            {t('settings_export_title')}
           </h3>
           <p
             className="text-sm mb-6"
             style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
           >
-            Download all your entries as a beautifully formatted PDF
+            {t('settings_export_desc')}
           </p>
 
           {!isElite && (
@@ -516,7 +563,7 @@ function ExportSection() {
               style={{ color: GOLD, fontFamily: FONT }}
             >
               <Crown size={14} />
-              <span>Elite Feature</span>
+              <span>{t('settings_export_eliteFeature')}</span>
             </div>
           )}
 
@@ -526,7 +573,7 @@ function ExportSection() {
             style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
           >
             {isExporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-            {isExporting ? 'Exporting...' : isElite ? 'Export as PDF' : 'Upgrade to Export'}
+            {isExporting ? t('settings_export_exporting') : isElite ? t('settings_export_exportBtn') : t('settings_export_upgradeBtn')}
           </button>
         </div>
       </motion.div>

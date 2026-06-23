@@ -16,6 +16,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 
@@ -33,6 +34,7 @@ export default function BurnCountdown({
   compact = false,
   style,
 }: BurnCountdownProps) {
+  const { t } = useTranslation();
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function BurnCountdown({
           ...style,
         }}
       >
-        Burning now…
+        {t('burnCountdown_burningNow')}
       </span>
     );
   }
@@ -79,7 +81,7 @@ export default function BurnCountdown({
         ...style,
       }}
     >
-      {compact ? label : `Burns in ${label}`}
+      {compact ? label : t('burnCountdown_burnsIn', { time: label })}
     </span>
   );
 }

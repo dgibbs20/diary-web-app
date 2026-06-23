@@ -5,24 +5,27 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'wouter';
 import { Menu, X, Crown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 const MARKETING = 'https://diary.gmxquantum.com';
 const DOWNLOAD_URL = `${MARKETING}/#download`;
 
 const NAV_LINKS = [
-  { label: 'Features', href: `${MARKETING}/#features` },
-  { label: 'How It Works', href: `${MARKETING}/#how-it-works` },
-  { label: 'Screenshots', href: `${MARKETING}/#screenshots` },
-  { label: 'Videos', href: `${MARKETING}/#videos` },
-  { label: 'Pricing', href: `${MARKETING}/#pricing` },
-  { label: 'FAQ', href: `${MARKETING}/faq.html` },
-  { label: 'Privacy', href: `${MARKETING}/#privacy` },
-  { label: 'Contact', href: `${MARKETING}/#contact` },
+  { key: 'footer_features', href: `${MARKETING}/#features` },
+  { key: 'footer_howItWorks', href: `${MARKETING}/#how-it-works` },
+  { key: 'footer_screenshots', href: `${MARKETING}/#screenshots` },
+  { key: 'footer_videos', href: `${MARKETING}/#videos` },
+  { key: 'footer_pricing', href: `${MARKETING}/#pricing` },
+  { key: 'footer_faq', href: `${MARKETING}/faq.html` },
+  { key: 'footer_privacy', href: `${MARKETING}/#privacy` },
+  { key: 'footer_contact', href: `${MARKETING}/#contact` },
 ];
 
 export default function Header() {
   const [location] = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
+  const { t, i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isDashboard = location.startsWith('/dashboard');
@@ -72,11 +75,7 @@ export default function Header() {
       {/* Logo */}
       <Link href={isAuthenticated ? '/dashboard' : '/'} className="flex items-center gap-2">
         <img
-          src={
-            user?.subscription_tier === 'diary_elite'
-              ? '/assets/images/logo_elite.png'
-              : '/assets/images/logo.png'
-          }
+          src={getLogoSrc(i18n.language, user?.subscription_tier === 'diary_elite')}
           alt="diAry"
           style={{ height: '36px' }}
         />
@@ -85,7 +84,7 @@ export default function Header() {
       {/* Desktop Nav */}
       <ul className="hidden lg:flex items-center" style={{ gap: '24px', listStyle: 'none' }}>
         {NAV_LINKS.map((link) => (
-          <li key={link.label}>
+          <li key={link.key}>
             <a
               href={link.href}
               target="_blank"
@@ -100,7 +99,7 @@ export default function Header() {
                   : '#5C3D2A';
               }}
             >
-              {link.label}
+              {t(link.key)}
             </a>
           </li>
         ))}
@@ -120,18 +119,18 @@ export default function Header() {
                 : '#5C3D2A';
             }}
           >
-            Download
+            {t('header_download')}
           </a>
         </li>
 
         <li>
           {isAuthenticated ? (
             <button onClick={handleLogout} style={ctaBtnStyle}>
-              Sign Out
+              {t('header_signOut')}
             </button>
           ) : (
             <Link href="/login" style={{ ...ctaBtnStyle, textDecoration: 'none' }}>
-              Sign In
+              {t('header_signIn')}
             </Link>
           )}
         </li>
@@ -157,7 +156,7 @@ export default function Header() {
         >
           {NAV_LINKS.map((link) => (
             <a
-              key={link.label}
+              key={link.key}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
@@ -173,7 +172,7 @@ export default function Header() {
                 borderBottom: '1px solid rgba(201,168,76,0.1)',
               }}
             >
-              {link.label}
+              {t(link.key)}
             </a>
           ))}
 
@@ -193,13 +192,13 @@ export default function Header() {
               borderBottom: '1px solid rgba(201,168,76,0.1)',
             }}
           >
-            Download
+            {t('header_download')}
           </a>
 
           <div style={{ marginTop: 12 }}>
             {isAuthenticated ? (
               <button onClick={handleLogout} style={{ ...ctaBtnStyle, width: '100%' }}>
-                Sign Out
+                {t('header_signOut')}
               </button>
             ) : (
               <Link
@@ -207,7 +206,7 @@ export default function Header() {
                 style={{ ...ctaBtnStyle, display: 'block', textAlign: 'center' }}
                 onClick={() => setMobileOpen(false)}
               >
-                Sign In
+                {t('header_signIn')}
               </Link>
             )}
           </div>

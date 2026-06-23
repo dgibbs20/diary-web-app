@@ -4,6 +4,7 @@
  * Cormorant Garamond typography, gold accents, luxury spacing
  */
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search } from 'lucide-react';
 import { MOOD_CONFIG } from '@/lib/constants';
@@ -17,16 +18,19 @@ interface MoodPickerProps {
 }
 
 export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<string | null>(null);
   const [query, setQuery] = useState('');
 
   const moods = useMemo(() => {
     const all = Object.entries(MOOD_CONFIG);
     if (!query.trim()) return all;
-    return all.filter(([, config]) =>
-      config.label.toLowerCase().includes(query.toLowerCase())
+    const q = query.toLowerCase();
+    return all.filter(([key, config]) =>
+      t('mood_' + key).toLowerCase().includes(q) ||
+      config.label.toLowerCase().includes(q)
     );
-  }, [query]);
+  }, [query, t]);
 
   const handleContinue = () => {
     if (selected) onSelect(selected);
@@ -68,7 +72,7 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
                 lineHeight: 1.2,
               }}
             >
-              How are you feeling?
+              {t('moodPicker_title')}
             </h2>
             <p style={{
               fontFamily: FONT,
@@ -78,7 +82,7 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
               fontStyle: 'italic',
               letterSpacing: '0.04em',
             }}>
-              Your mood helps your AI companion understand you better
+              {t('moodPicker_subtitle')}
             </p>
           </div>
           <button
@@ -106,7 +110,7 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
             />
             <input
               type="text"
-              placeholder="Search emotions..."
+              placeholder={t('moodPicker_searchPlaceholder')}
               value={query}
               onChange={(e) => { setQuery(e.target.value); setSelected(null); }}
               style={{
@@ -152,7 +156,7 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
                   padding: '40px 0',
                 }}
               >
-                No emotions match "{query}"
+                {t('moodPicker_noResults', { query })}
               </motion.p>
             ) : (
               <motion.div
@@ -210,7 +214,7 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
                           transition: 'color 0.2s',
                         }}
                       >
-                        {config.label}
+                        {t('mood_' + key)}
                       </span>
                     </motion.button>
                   );
@@ -248,7 +252,7 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
               transition: 'background 0.25s, color 0.25s',
             }}
           >
-            Continue
+            {t('common_continue')}
           </motion.button>
           <button
             onClick={onClose}
@@ -263,7 +267,7 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
               padding: '4px 8px',
             }}
           >
-            Skip
+            {t('moodPicker_skip')}
           </button>
         </div>
       </motion.div>

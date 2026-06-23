@@ -7,8 +7,11 @@ import { motion } from 'framer-motion';
 import { authApi } from '@/lib/api';
 import { Loader2, Mail } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 export default function VerifyEmail() {
+  const { t, i18n } = useTranslation();
   const [, navigate] = useLocation();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,16 +77,16 @@ export default function VerifyEmail() {
   return (
     <div className="min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: '#F5F0E8', paddingTop: '90px' }}>
       <motion.div className="w-full max-w-md text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <Link href="/"><img src="/assets/images/logo.png" alt="diAry" className="h-14 w-auto mx-auto mb-8" /></Link>
+        <Link href="/"><img src={getLogoSrc(i18n.language, false)} alt="diAry" className="h-14 w-auto mx-auto mb-8" /></Link>
 
         <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ background: 'rgba(168, 134, 58, 0.1)' }}>
           <Mail size={28} style={{ color: '#A8863A' }} />
         </div>
 
-        <p className="text-xs tracking-[0.2em] uppercase font-medium mb-2" style={{ color: '#A8863A' }}>Verification</p>
-        <h1 className="font-serif text-2xl font-light mb-2" style={{ color: '#3D2B1F' }}>Verify Your Email</h1>
+        <p className="text-xs tracking-[0.2em] uppercase font-medium mb-2" style={{ color: '#A8863A' }}>{t('verifyEmail_category')}</p>
+        <h1 className="font-serif text-2xl font-light mb-2" style={{ color: '#3D2B1F' }}>{t('verifyEmail_title')}</h1>
         <p className="text-sm mb-8" style={{ color: '#8B7355' }}>
-          We sent a 6-digit code to<br />
+          {t('verifyEmail_subtitle')}<br />
           <span className="font-medium" style={{ color: '#5C3D2A' }}>{email}</span>
         </p>
 
@@ -106,19 +109,19 @@ export default function VerifyEmail() {
             className="w-full py-3.5 rounded-lg text-sm font-medium tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8', boxShadow: '0 2px 16px rgba(168, 134, 58, 0.25)' }}>
             {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : null}
-            {isSubmitting ? 'Verifying...' : 'Verify Email'}
+            {isSubmitting ? t('verifyEmail_verifying') : t('verifyEmail_submitBtn')}
           </button>
         </form>
 
         <p className="mt-6 text-sm" style={{ color: '#8B7355' }}>
-          Didn't receive the code?{' '}
+          {t('verifyEmail_noCode')}{' '}
           <button onClick={handleResend} disabled={resendCooldown > 0} className="font-medium hover:underline disabled:opacity-50" style={{ color: '#A8863A' }}>
-            {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend'}
+            {resendCooldown > 0 ? t('verifyEmail_resendIn', { seconds: resendCooldown }) : t('verifyEmail_resend')}
           </button>
         </p>
 
         <Link href="/login" className="inline-block mt-4 text-sm hover:underline" style={{ color: '#8B7355' }}>
-          Back to sign in
+          {t('verifyEmail_backToSignIn')}
         </Link>
       </motion.div>
     </div>

@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, Calendar, BookOpen, PenLine, Flame, Award, Sparkles, BarChart3 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { analyticsApi } from '@/lib/api';
 import { MOOD_CONFIG } from '@/lib/constants';
@@ -53,6 +54,7 @@ interface BackendStats {
 }
 
 export default function AnalyticsPanel() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [data, setData] = useState<BackendStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,10 +74,10 @@ export default function AnalyticsPanel() {
         if (res.success && res.stats) {
           setData(res.stats);
         } else {
-          setError(res.error?.message || 'Failed to load analytics');
+          setError('analytics_failedLoad');
         }
       } catch (e) {
-        setError('Unable to connect to analytics service');
+        setError('analytics_unableConnect');
       }
       setIsLoading(false);
     };
@@ -94,12 +96,12 @@ export default function AnalyticsPanel() {
   const aiReflection = data?.ai_reflection ?? '';
 
   const statCards = [
-    { icon: BookOpen, label: 'Total Entries', value: totalEntries, color: GOLD },
-    { icon: PenLine, label: 'Total Words', value: totalWords.toLocaleString(), color: GOLD_DARK },
-    { icon: Flame, label: 'Current Streak', value: `${currentStreak} days`, color: '#E85D4A' },
-    { icon: Calendar, label: 'This Month', value: entriesThisMonth, color: '#6B8EC2' },
-    { icon: TrendingUp, label: 'Avg Words/Entry', value: avgWords, color: '#8BC34A' },
-    { icon: Award, label: 'Days Since Last', value: daysSinceLastEntry === 0 ? 'Today!' : `${daysSinceLastEntry} days`, color: GOLD },
+    { icon: BookOpen, label: t('analytics_totalEntries'), value: totalEntries, color: GOLD },
+    { icon: PenLine, label: t('analytics_totalWords'), value: totalWords.toLocaleString(), color: GOLD_DARK },
+    { icon: Flame, label: t('analytics_currentStreak'), value: `${currentStreak} ${t('analytics_days')}`, color: '#E85D4A' },
+    { icon: Calendar, label: t('analytics_thisMonth'), value: entriesThisMonth, color: '#6B8EC2' },
+    { icon: TrendingUp, label: t('analytics_avgWords'), value: avgWords, color: '#8BC34A' },
+    { icon: Award, label: t('analytics_daysSinceLast'), value: daysSinceLastEntry === 0 ? t('analytics_today') : `${daysSinceLastEntry} ${t('analytics_days')}`, color: GOLD },
   ];
 
   const moodEntries = Object.entries(moodDistribution).sort((a, b) => b[1] - a[1]);
@@ -115,13 +117,13 @@ export default function AnalyticsPanel() {
               className="text-2xl font-semibold"
               style={{ fontFamily: FONT, color: 'var(--foreground)', letterSpacing: '0.02em' }}
             >
-              Analytics
+              {t('analytics_title')}
             </h1>
             <p
               className="text-sm mt-0.5"
               style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
             >
-              Your journaling journey at a glance
+              {t('analytics_subtitle')}
             </p>
           </div>
         </div>
@@ -172,9 +174,9 @@ export default function AnalyticsPanel() {
           ) : error ? (
             <div className="text-center py-12">
               <BarChart3 size={40} className="mx-auto mb-4" style={{ color: 'var(--muted-foreground)', opacity: 0.5 }} />
-              <p className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{error}</p>
+              <p className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{error ? t(error) : ''}</p>
               <p className="text-xs mt-2" style={{ color: 'var(--muted-foreground)', fontFamily: FONT, opacity: 0.7 }}>
-                Showing cached data from your profile
+                {t('analytics_errorMsg')}
               </p>
               {/* Still show stat cards from user profile fallback */}
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -207,7 +209,7 @@ export default function AnalyticsPanel() {
                       className="text-lg font-semibold"
                       style={{ fontFamily: FONT, color: 'var(--foreground)' }}
                     >
-                      AI Reflection
+                      {t('analytics_aiReflection')}
                     </h3>
                   </div>
                   <div
@@ -232,7 +234,7 @@ export default function AnalyticsPanel() {
                     className="text-lg mb-4 font-semibold"
                     style={{ fontFamily: FONT, color: 'var(--foreground)' }}
                   >
-                    Mood Distribution (Last 30 Days)
+                    {t('analytics_moodDistribution')}
                   </h3>
                   <div className="space-y-3">
                     {moodEntries.map(([moodKey, count]) => {
@@ -275,7 +277,7 @@ export default function AnalyticsPanel() {
                   className="text-xs tracking-wider uppercase font-semibold"
                   style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
                 >
-                  Member since {memberSince || 'the beginning'}
+                  {t('analytics_memberSince')} {memberSince || t('analytics_theBeginning')}
                 </p>
               </div>
             </>

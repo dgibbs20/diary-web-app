@@ -2,6 +2,8 @@
  * 404 Not Found — Premium branded with diAry design system
  */
 import { useLocation } from 'wouter';
+import { useTranslation } from 'react-i18next';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -9,6 +11,7 @@ const GOLD_DARK = '#A8863A';
 
 export default function NotFound() {
   const [, setLocation] = useLocation();
+  const { t, i18n } = useTranslation();
 
   return (
     <div
@@ -16,7 +19,7 @@ export default function NotFound() {
       style={{ backgroundColor: '#F5F0E8', paddingTop: '70px' }}
     >
       <img
-        src="/assets/images/logo.png"
+        src={getLogoSrc(i18n.language, false)}
         alt="diAry"
         className="w-24 h-24 object-contain mb-6 opacity-40"
       />
@@ -30,13 +33,13 @@ export default function NotFound() {
         className="text-2xl mb-4 font-semibold"
         style={{ fontFamily: FONT, color: '#3E2B1E' }}
       >
-        Page Not Found
+        {t('notFound_title')}
       </h2>
       <p
         className="text-center mb-8 max-w-md leading-relaxed"
         style={{ fontFamily: FONT, color: '#7A6B5D', fontSize: '16px' }}
       >
-        The page you're looking for doesn't exist. It may have been moved or deleted.
+        {t('notFound_body')}
       </p>
       <button
         onClick={() => setLocation('/')}
@@ -48,7 +51,7 @@ export default function NotFound() {
           letterSpacing: '0.1em',
         }}
       >
-        Return Home
+        {t('notFound_returnHome')}
       </button>
     </div>
   );

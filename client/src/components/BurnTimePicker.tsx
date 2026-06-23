@@ -20,6 +20,7 @@
  */
 
 import { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -65,6 +66,7 @@ export default function BurnTimePicker({
   onConfirm,
   onCancel,
 }: BurnTimePickerProps) {
+  const { t } = useTranslation();
   // Compute date bounds once — Flutter parity: now → now+365d
   const { minDate, maxDate } = useMemo(() => {
     const now = new Date();
@@ -112,11 +114,11 @@ export default function BurnTimePicker({
 
   const handleConfirm = () => {
     if (!combined) {
-      setError('Pick a date and a valid time.');
+      setError(t('burnTimePicker_errorPickDate'));
       return;
     }
     if (combined.getTime() <= Date.now()) {
-      setError('Burn time must be in the future.');
+      setError(t('burnTimePicker_errorFuture'));
       return;
     }
     onConfirm(combined);
@@ -134,8 +136,8 @@ export default function BurnTimePicker({
       hour: 'numeric',
       minute: '2-digit',
     });
-    return `Burns on ${date} — ${time}`;
-  }, [combined]);
+    return t('burnTimePicker_burnsOn', { date, time });
+  }, [combined, t]);
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onCancel()}>
@@ -158,7 +160,7 @@ export default function BurnTimePicker({
                 letterSpacing: '0.01em',
               }}
             >
-              Set Burn Time
+              {t('burnTimePicker_title')}
             </DialogTitle>
           </div>
           <DialogDescription
@@ -167,9 +169,7 @@ export default function BurnTimePicker({
               fontFamily: FONT_SERIF,
             }}
           >
-            Choose when this entry should be permanently destroyed. After this
-            moment passes, the entry is deleted server-side and cannot be
-            recovered.
+            {t('burnTimePicker_description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -186,7 +186,7 @@ export default function BurnTimePicker({
                   letterSpacing: '0.15em',
                 }}
               >
-                Date
+                {t('burnTimePicker_dateLabel')}
               </span>
             </div>
             <div
@@ -216,7 +216,7 @@ export default function BurnTimePicker({
                     letterSpacing: '0.15em',
                   }}
                 >
-                  Time
+                  {t('burnTimePicker_timeLabel')}
                 </span>
               </div>
 
@@ -289,7 +289,7 @@ export default function BurnTimePicker({
                     letterSpacing: '0.15em',
                   }}
                 >
-                  24-hour
+                  {t('burnTimePicker_24hour')}
                 </span>
               </div>
             </div>
@@ -304,17 +304,17 @@ export default function BurnTimePicker({
                   letterSpacing: '0.15em',
                 }}
               >
-                Quick set
+                {t('burnTimePicker_quickSet')}
               </span>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { label: '+1 hour', ms: 60 * 60 * 1000 },
-                  { label: '+24 hours', ms: 24 * 60 * 60 * 1000 },
-                  { label: '+3 days', ms: 3 * 24 * 60 * 60 * 1000 },
-                  { label: '+7 days', ms: 7 * 24 * 60 * 60 * 1000 },
+                  { key: 'plus1h', ms: 60 * 60 * 1000 },
+                  { key: 'plus24h', ms: 24 * 60 * 60 * 1000 },
+                  { key: 'plus3d', ms: 3 * 24 * 60 * 60 * 1000 },
+                  { key: 'plus7d', ms: 7 * 24 * 60 * 60 * 1000 },
                 ].map((p) => (
                   <button
-                    key={p.label}
+                    key={p.key}
                     type="button"
                     onClick={() => {
                       const target = new Date(Date.now() + p.ms);
@@ -332,7 +332,7 @@ export default function BurnTimePicker({
                       letterSpacing: '0.02em',
                     }}
                   >
-                    {p.label}
+                    {t('burnTimePicker_' + p.key)}
                   </button>
                 ))}
               </div>
@@ -360,7 +360,7 @@ export default function BurnTimePicker({
                     lineHeight: 1.4,
                   }}
                 >
-                  {previewLabel || 'Pick a date and time to preview.'}
+                  {previewLabel || t('burnTimePicker_previewFallback')}
                 </p>
               </div>
             </div>
@@ -386,7 +386,7 @@ export default function BurnTimePicker({
             onClick={onCancel}
             style={{ fontFamily: FONT_SERIF }}
           >
-            Cancel
+            {t('common_cancel')}
           </Button>
           <Button
             onClick={handleConfirm}
@@ -397,7 +397,7 @@ export default function BurnTimePicker({
               letterSpacing: '0.02em',
             }}
           >
-            Set Burn Time
+            {t('burnTimePicker_confirm')}
           </Button>
         </DialogFooter>
       </DialogContent>

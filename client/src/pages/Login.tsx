@@ -9,12 +9,15 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 const DOWNLOAD_URL = 'https://diary.gmxquantum.com/#download';
 
 export default function Login() {
   const [, navigate] = useLocation();
   const { login } = useAuth();
+  const { t, i18n } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -107,7 +110,7 @@ export default function Login() {
         >
           {/* Logo */}
           <img
-            src="/assets/images/logo.png"
+            src={getLogoSrc(i18n.language, false)}
             alt="diAry"
             style={{
               height: '200px',
@@ -127,7 +130,7 @@ export default function Login() {
               letterSpacing: '0.04em',
             }}
           >
-            "I'll never tell..."
+            {t('login_tagline')}
           </p>
 
           {/* Description */}
@@ -142,9 +145,7 @@ export default function Login() {
               fontFamily: "'Cormorant Garamond', Georgia, serif",
             }}
           >
-            Your thoughts deserve a space that truly understands them.
-            Write it, speak it, draw it — diAry listens with warmth
-            and keeps your secrets forever.
+            {t('login_heroDesc')}
           </p>
 
           {/* Download Link */}
@@ -170,7 +171,7 @@ export default function Login() {
                 e.currentTarget.style.color = '#7A5A3B';
               }}
             >
-              Download App
+              {t('login_downloadApp')}
             </a>
           </div>
 
@@ -194,7 +195,7 @@ export default function Login() {
                 '0 2px 16px rgba(168, 134, 58, 0.25)';
             }}
           >
-            Sign In
+            {t('login_submitBtn')}
           </button>
         </motion.div>
       </div>
@@ -211,7 +212,7 @@ export default function Login() {
           {/* Mobile logo */}
           <div className="lg:hidden flex flex-col items-center mb-8">
             <img
-              src="/assets/images/logo.png"
+              src={getLogoSrc(i18n.language, false)}
               alt="diAry"
               className="h-16 w-auto mb-3"
             />
@@ -220,7 +221,7 @@ export default function Login() {
               className="font-serif italic text-sm"
               style={{ color: '#8B7355' }}
             >
-              "I'll never tell..."
+              {t('login_tagline')}
             </p>
 
             {/* Mobile download link */}
@@ -239,7 +240,7 @@ export default function Login() {
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
               }}
             >
-              Download App
+              {t('login_downloadApp')}
             </a>
           </div>
 
@@ -249,18 +250,18 @@ export default function Login() {
               className="text-xs tracking-[0.2em] uppercase font-medium mb-2"
               style={{ color: '#A8863A' }}
             >
-              Welcome Back
+              {t('login_welcomeBack')}
             </p>
 
             <h1
               className="font-serif text-3xl font-light"
               style={{ color: '#3D2B1F' }}
             >
-              Sign In
+              {t('login_title')}
             </h1>
 
             <p className="mt-2 text-sm" style={{ color: '#8B7355' }}>
-              Your private space awaits
+              {t('login_subtitle')}
             </p>
           </div>
 
@@ -273,14 +274,14 @@ export default function Login() {
                 className="block text-xs font-medium tracking-wider uppercase mb-2"
                 style={{ color: '#5C3D2A' }}
               >
-                Email
+                {t('login_email')}
               </label>
 
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
+                placeholder={t('login_emailPlaceholder')}
                 autoComplete="email"
                 className="w-full px-4 py-3 rounded-lg border text-sm focus:outline-none transition-all"
                 style={{
@@ -298,7 +299,7 @@ export default function Login() {
                   className="text-xs font-medium tracking-wider uppercase"
                   style={{ color: '#5C3D2A' }}
                 >
-                  Password
+                  {t('login_password')}
                 </label>
 
                 <Link
@@ -306,7 +307,7 @@ export default function Login() {
                   className="text-xs font-medium hover:underline"
                   style={{ color: '#A8863A' }}
                 >
-                  Forgot?
+                  {t('login_forgot')}
                 </Link>
               </div>
 
@@ -315,7 +316,7 @@ export default function Login() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder={t('login_passwordPlaceholder')}
                   autoComplete="current-password"
                   className="w-full px-4 py-3 pr-11 rounded-lg border text-sm focus:outline-none transition-all"
                   style={{
@@ -353,7 +354,7 @@ export default function Login() {
                 className="text-sm"
                 style={{ color: '#6B5744' }}
               >
-                Remember me
+                {t('login_rememberMe')}
               </span>
             </label>
 
@@ -374,7 +375,7 @@ export default function Login() {
                 <Loader2 size={16} className="animate-spin" />
               ) : null}
 
-              {isSubmitting ? 'Signing In...' : 'Sign In'}
+              {isSubmitting ? t('login_submitting') : t('login_submitBtn')}
             </button>
           </form>
 
@@ -383,13 +384,13 @@ export default function Login() {
             className="mt-8 text-center text-sm"
             style={{ color: '#8B7355' }}
           >
-            Don't have an account?{' '}
+            {t('login_noAccount')}{' '}
             <Link
               href="/register"
               className="font-medium hover:underline"
               style={{ color: '#A8863A' }}
             >
-              Create Account
+              {t('login_createAccount')}
             </Link>
           </p>
         </motion.div>

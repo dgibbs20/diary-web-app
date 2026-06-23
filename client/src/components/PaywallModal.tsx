@@ -6,6 +6,7 @@
  * Action: Directs user to /subscription page to choose a plan.
  */
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { Crown, X, ArrowRight, Brain, FileText, Shield, Sparkles } from 'lucide-react';
 import { useLocation } from 'wouter';
 
@@ -49,8 +50,10 @@ const FEATURE_INFO: Record<string, { icon: React.ReactNode; title: string; descr
 };
 
 export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalProps) {
+  const { t } = useTranslation();
   const [, navigate] = useLocation();
   const info = FEATURE_INFO[feature] || FEATURE_INFO.general;
+  const featureKey = feature.replace(/_([a-z])/g, (_: string, c: string) => c.toUpperCase());
 
   const handleUpgrade = () => {
     onClose();
@@ -124,7 +127,7 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
                     className="text-xs font-bold tracking-widest"
                     style={{ color: '#C9A84C' }}
                   >
-                    ELITE FEATURE
+                    {t('paywall_eliteFeature')}
                   </span>
                 </div>
 
@@ -133,7 +136,7 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
                   className="text-2xl font-bold mb-3"
                   style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#FFFFFF' }}
                 >
-                  {info.title}
+                  {t(`paywall_${featureKey}_title`)}
                 </h2>
 
                 {/* Description */}
@@ -141,7 +144,7 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
                   className="text-sm leading-relaxed mb-8"
                   style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: 'rgba(255,255,255,0.7)' }}
                 >
-                  {info.description}
+                  {t(`paywall_${featureKey}_desc`)}
                 </p>
 
                 {/* Upgrade button */}
@@ -157,7 +160,7 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
                     boxShadow: '0 4px 20px rgba(201, 168, 76, 0.4)',
                   }}
                 >
-                  View Plans
+                  {t('paywall_viewPlans')}
                   <ArrowRight size={18} />
                 </button>
 
@@ -172,7 +175,7 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
                   onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
                   onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}
                 >
-                  Maybe later
+                  {t('paywall_maybeLater')}
                 </button>
               </div>
             </motion.div>

@@ -11,6 +11,7 @@ import {
   ChevronDown, Palette, Highlighter, Type,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 
@@ -41,6 +42,7 @@ const HIGHLIGHT_COLORS = [
 ];
 
 export default function EditorToolbar({ editor }: EditorToolbarProps) {
+  const { t } = useTranslation();
   const [showFontMenu, setShowFontMenu] = useState(false);
   const [showSizeMenu, setShowSizeMenu] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -95,10 +97,10 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       }}
     >
       {/* Undo / Redo */}
-      <button onClick={() => run(c => c.undo())} disabled={!editor.can().undo()} className={`${btnClass(false)} disabled:opacity-30`} title="Undo (Ctrl+Z)">
+      <button onClick={() => run(c => c.undo())} disabled={!editor.can().undo()} className={`${btnClass(false)} disabled:opacity-30`} title={t('editorToolbar_undo')}>
         <Undo2 size={15} />
       </button>
-      <button onClick={() => run(c => c.redo())} disabled={!editor.can().redo()} className={`${btnClass(false)} disabled:opacity-30`} title="Redo (Ctrl+Y)">
+      <button onClick={() => run(c => c.redo())} disabled={!editor.can().redo()} className={`${btnClass(false)} disabled:opacity-30`} title={t('editorToolbar_redo')}>
         <Redo2 size={15} />
       </button>
 
@@ -169,16 +171,16 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       {divider}
 
       {/* Bold, Italic, Underline, Strikethrough */}
-      <button onClick={() => run(c => c.toggleBold())} className={btnClass(editor.isActive('bold'))} style={activeBtnBg(editor.isActive('bold'))} title="Bold (Ctrl+B)">
+      <button onClick={() => run(c => c.toggleBold())} className={btnClass(editor.isActive('bold'))} style={activeBtnBg(editor.isActive('bold'))} title={t('editorToolbar_bold')}>
         <Bold size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleItalic())} className={btnClass(editor.isActive('italic'))} style={activeBtnBg(editor.isActive('italic'))} title="Italic (Ctrl+I)">
+      <button onClick={() => run(c => c.toggleItalic())} className={btnClass(editor.isActive('italic'))} style={activeBtnBg(editor.isActive('italic'))} title={t('editorToolbar_italic')}>
         <Italic size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleUnderline())} className={btnClass(editor.isActive('underline'))} style={activeBtnBg(editor.isActive('underline'))} title="Underline (Ctrl+U)">
+      <button onClick={() => run(c => c.toggleUnderline())} className={btnClass(editor.isActive('underline'))} style={activeBtnBg(editor.isActive('underline'))} title={t('editorToolbar_underline')}>
         <Underline size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleStrike())} className={btnClass(editor.isActive('strike'))} style={activeBtnBg(editor.isActive('strike'))} title="Strikethrough">
+      <button onClick={() => run(c => c.toggleStrike())} className={btnClass(editor.isActive('strike'))} style={activeBtnBg(editor.isActive('strike'))} title={t('editorToolbar_strikethrough')}>
         <Strikethrough size={15} />
       </button>
 
@@ -189,7 +191,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         <button
           onClick={() => { setShowColorPicker(!showColorPicker); setShowFontMenu(false); setShowSizeMenu(false); setShowHighlightPicker(false); }}
           className={btnClass(false)}
-          title="Text Color"
+          title={t('editorToolbar_textColor')}
         >
           <Palette size={15} />
         </button>
@@ -218,7 +220,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           onClick={() => { setShowHighlightPicker(!showHighlightPicker); setShowFontMenu(false); setShowSizeMenu(false); setShowColorPicker(false); }}
           className={btnClass(editor.isActive('highlight'))}
           style={activeBtnBg(editor.isActive('highlight'))}
-          title="Highlight"
+          title={t('editorToolbar_highlight')}
         >
           <Highlighter size={15} />
         </button>
@@ -253,52 +255,52 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       {divider}
 
       {/* Headings */}
-      <button onClick={() => run(c => c.toggleHeading({ level: 1 }))} className={btnClass(editor.isActive('heading', { level: 1 }))} style={activeBtnBg(editor.isActive('heading', { level: 1 }))} title="Heading 1">
+      <button onClick={() => run(c => c.toggleHeading({ level: 1 }))} className={btnClass(editor.isActive('heading', { level: 1 }))} style={activeBtnBg(editor.isActive('heading', { level: 1 }))} title={t('editorToolbar_h1')}>
         <Heading1 size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleHeading({ level: 2 }))} className={btnClass(editor.isActive('heading', { level: 2 }))} style={activeBtnBg(editor.isActive('heading', { level: 2 }))} title="Heading 2">
+      <button onClick={() => run(c => c.toggleHeading({ level: 2 }))} className={btnClass(editor.isActive('heading', { level: 2 }))} style={activeBtnBg(editor.isActive('heading', { level: 2 }))} title={t('editorToolbar_h2')}>
         <Heading2 size={15} />
       </button>
-      <button onClick={() => run(c => c.toggleHeading({ level: 3 }))} className={btnClass(editor.isActive('heading', { level: 3 }))} style={activeBtnBg(editor.isActive('heading', { level: 3 }))} title="Heading 3">
+      <button onClick={() => run(c => c.toggleHeading({ level: 3 }))} className={btnClass(editor.isActive('heading', { level: 3 }))} style={activeBtnBg(editor.isActive('heading', { level: 3 }))} title={t('editorToolbar_h3')}>
         <Heading3 size={15} />
       </button>
 
       {divider}
 
       {/* Alignment */}
-      <button onClick={() => run(c => c.setTextAlign('left'))} className={btnClass(editor.isActive({ textAlign: 'left' }))} style={activeBtnBg(editor.isActive({ textAlign: 'left' }))} title="Align Left">
+      <button onClick={() => run(c => c.setTextAlign('left'))} className={btnClass(editor.isActive({ textAlign: 'left' }))} style={activeBtnBg(editor.isActive({ textAlign: 'left' }))} title={t('editorToolbar_alignLeft')}>
         <AlignLeft size={15} />
       </button>
-      <button onClick={() => run(c => c.setTextAlign('center'))} className={btnClass(editor.isActive({ textAlign: 'center' }))} style={activeBtnBg(editor.isActive({ textAlign: 'center' }))} title="Align Center">
+      <button onClick={() => run(c => c.setTextAlign('center'))} className={btnClass(editor.isActive({ textAlign: 'center' }))} style={activeBtnBg(editor.isActive({ textAlign: 'center' }))} title={t('editorToolbar_alignCenter')}>
         <AlignCenter size={15} />
       </button>
-      <button onClick={() => run(c => c.setTextAlign('right'))} className={btnClass(editor.isActive({ textAlign: 'right' }))} style={activeBtnBg(editor.isActive({ textAlign: 'right' }))} title="Align Right">
+      <button onClick={() => run(c => c.setTextAlign('right'))} className={btnClass(editor.isActive({ textAlign: 'right' }))} style={activeBtnBg(editor.isActive({ textAlign: 'right' }))} title={t('editorToolbar_alignRight')}>
         <AlignRight size={15} />
       </button>
-      <button onClick={() => run(c => c.setTextAlign('justify'))} className={btnClass(editor.isActive({ textAlign: 'justify' }))} style={activeBtnBg(editor.isActive({ textAlign: 'justify' }))} title="Justify">
+      <button onClick={() => run(c => c.setTextAlign('justify'))} className={btnClass(editor.isActive({ textAlign: 'justify' }))} style={activeBtnBg(editor.isActive({ textAlign: 'justify' }))} title={t('editorToolbar_justify')}>
         <AlignJustify size={15} />
       </button>
 
       {divider}
 
       {/* Lists */}
-      <button onClick={() => (editor.chain().focus() as any).toggleBulletList().run()} className={btnClass(editor.isActive('bulletList'))} style={activeBtnBg(editor.isActive('bulletList'))} title="Bullet List">
+      <button onClick={() => (editor.chain().focus() as any).toggleBulletList().run()} className={btnClass(editor.isActive('bulletList'))} style={activeBtnBg(editor.isActive('bulletList'))} title={t('editorToolbar_bulletList')}>
         <List size={15} />
       </button>
-      <button onClick={() => (editor.chain().focus() as any).toggleOrderedList().run()} className={btnClass(editor.isActive('orderedList'))} style={activeBtnBg(editor.isActive('orderedList'))} title="Numbered List">
+      <button onClick={() => (editor.chain().focus() as any).toggleOrderedList().run()} className={btnClass(editor.isActive('orderedList'))} style={activeBtnBg(editor.isActive('orderedList'))} title={t('editorToolbar_numberedList')}>
         <ListOrdered size={15} />
       </button>
 
       {divider}
 
       {/* Blockquote, Code, Horizontal Rule */}
-      <button onClick={() => (editor.chain().focus() as any).toggleBlockquote().run()} className={btnClass(editor.isActive('blockquote'))} style={activeBtnBg(editor.isActive('blockquote'))} title="Blockquote">
+      <button onClick={() => (editor.chain().focus() as any).toggleBlockquote().run()} className={btnClass(editor.isActive('blockquote'))} style={activeBtnBg(editor.isActive('blockquote'))} title={t('editorToolbar_blockquote')}>
         <Quote size={15} />
       </button>
-      <button onClick={() => (editor.chain().focus() as any).toggleCodeBlock().run()} className={btnClass(editor.isActive('codeBlock'))} style={activeBtnBg(editor.isActive('codeBlock'))} title="Code Block">
+      <button onClick={() => (editor.chain().focus() as any).toggleCodeBlock().run()} className={btnClass(editor.isActive('codeBlock'))} style={activeBtnBg(editor.isActive('codeBlock'))} title={t('editorToolbar_codeBlock')}>
         <Code size={15} />
       </button>
-      <button onClick={() => (editor.chain().focus() as any).setHorizontalRule().run()} className={btnClass(false)} title="Horizontal Rule">
+      <button onClick={() => (editor.chain().focus() as any).setHorizontalRule().run()} className={btnClass(false)} title={t('editorToolbar_horizontalRule')}>
         <Minus size={15} />
       </button>
     </div>

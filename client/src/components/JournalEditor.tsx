@@ -22,6 +22,7 @@ import BurnSwitch from './BurnSwitch';
 import BurnTimePicker from './BurnTimePicker';
 import BurnCountdown from './BurnCountdown';
 import { journalApi, exportApi } from '@/lib/api';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import ExportDialog from './ExportDialog';
 import PaywallModal from './PaywallModal';
@@ -43,6 +44,7 @@ interface JournalEditorProps {
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export default function JournalEditor({ entry, pendingMood, onSave, onDelete, onBack, onToggleAi }: JournalEditorProps) {
+  const { t } = useTranslation();
   const { isElite, user } = useAuth();
   const [showExportPaywall, setShowExportPaywall] = useState(false);
   const [showExportDialog, setShowExportDialog] = useState(false);
@@ -76,7 +78,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({
-        placeholder: 'Begin writing your thoughts...',
+        placeholder: t('journalEditor_bodyPlaceholder'),
         emptyEditorClass: 'is-editor-empty',
       }),
       TextStyle,
@@ -126,7 +128,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     // See text_journal_screen.dart line ~248: blocks save when burnMode && burnEndTime == null.
     if (burnMode && !burnDate) {
       setSaveStatus('idle');
-      toast.error('Set a burn time before saving, or turn off Burn Mode.');
+      toast.error(t('journalEditor_setBurnFirst'));
       setShowBurnPicker(true);
       return;
     }
@@ -282,16 +284,16 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     switch (saveStatus) {
       case 'saving': return <Clock size={14} className="animate-pulse" />;
       case 'saved': return <Check size={14} />;
-      case 'error': return <span className="text-destructive text-xs" style={{ fontFamily: FONT }}>Error</span>;
+      case 'error': return <span className="text-destructive text-xs" style={{ fontFamily: FONT }}>{t('common_error')}</span>;
       default: return null;
     }
   };
 
   const saveStatusText = () => {
     switch (saveStatus) {
-      case 'saving': return 'Saving...';
-      case 'saved': return 'Saved';
-      case 'error': return 'Save failed';
+      case 'saving': return t('journalEditor_savingStatus');
+      case 'saved': return t('journalEditor_savedStatus');
+      case 'error': return t('journalEditor_saveError');
       default: return '';
     }
   };
@@ -342,7 +344,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             className="text-xs tabular-nums px-2"
             style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600, letterSpacing: '0.05em' }}
           >
-            {wordCount} words
+            {t('journalEditor_wordCount', { count: wordCount })}
           </span>
 
           {/* Burn Mode pill — visible on both new and existing entries.
@@ -358,7 +360,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             onClick={handleManualSave}
             className="p-2 rounded-lg hover:bg-accent transition-colors"
             style={{ color: 'var(--muted-foreground)' }}
-            title="Save now (Ctrl+S)"
+            title={t('journalEditor_saveNow')}
           >
             <Save size={16} />
           </button>
@@ -376,7 +378,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
               disabled={isExporting}
               className="p-2 rounded-lg transition-colors relative"
               style={{ color: 'var(--muted-foreground)' }}
-              title={isElite ? 'Export as PDF' : 'Export (Elite)'}
+              title={isElite ? t('journalEditor_exportPdf') : t('journalEditor_exportElite')}
             >
               <FileDown size={16} />
               {!isElite && (
@@ -389,7 +391,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             onClick={onToggleAi}
             className="p-2 rounded-lg transition-colors"
             style={{ color: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.06)' }}
-            title="AI Companion"
+            title={t('journalEditor_aiCompanion')}
           >
             <Bot size={16} />
           </button>
@@ -399,7 +401,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
               onClick={() => setShowDeleteConfirm(true)}
               className="p-2 rounded-lg hover:bg-destructive/10 transition-colors"
               style={{ color: 'var(--muted-foreground)' }}
-              title="Delete entry"
+              title={t('journalEditor_deleteEntry')}
             >
               <Trash2 size={16} />
             </button>
@@ -423,7 +425,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             type="text"
             value={title}
             onChange={(e) => handleTitleChange(e.target.value)}
-            placeholder="Title your entry..."
+            placeholder={t('journalEditor_titlePlaceholder')}
             className="w-full text-2xl lg:text-3xl font-light bg-transparent border-none outline-none placeholder:opacity-30 mb-4"
             style={{ color: 'var(--foreground)', fontFamily: FONT }}
           />
@@ -457,7 +459,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           }}
         >
           <Flame size={12} />
-          <span>Burn Mode</span>
+          <span>{t('journalEditor_burnMode')}</span>
           {burnDate ? (
             <>
               <span style={{ opacity: 0.55 }}>·</span>
@@ -471,9 +473,9 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
                   fontFamily: FONT,
                   letterSpacing: '0.1em',
                 }}
-                title="Change burn time"
+                title={t('journalEditor_changeTab')}
               >
-                Edit
+                {t('journalEditor_editBurnTime')}
               </button>
             </>
           ) : (
@@ -487,7 +489,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
                 letterSpacing: '0.1em',
               }}
             >
-              Set burn time
+              {t('journalEditor_setBurnTime')}
             </button>
           )}
         </div>
@@ -518,13 +520,13 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
               className="text-lg mb-2 font-medium"
               style={{ fontFamily: FONT, color: 'var(--foreground)' }}
             >
-              Delete this entry?
+              {t('journalEditor_deleteTitle')}
             </h3>
             <p
               className="text-sm mb-6"
               style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
             >
-              This action cannot be undone. Your words will be lost forever.
+              {t('journalEditor_deleteBody')}
             </p>
             <div className="flex gap-3">
               <button
@@ -532,14 +534,14 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
                 className="flex-1 py-2.5 rounded-lg border text-sm font-semibold tracking-wide"
                 style={{ borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
               >
-                Cancel
+                {t('common_cancel')}
               </button>
               <button
                 onClick={handleDelete}
                 className="flex-1 py-2.5 rounded-lg text-sm font-semibold tracking-wide bg-destructive text-destructive-foreground"
                 style={{ fontFamily: FONT }}
               >
-                Delete
+                {t('common_delete')}
               </button>
             </div>
           </motion.div>
@@ -558,8 +560,8 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             if (res.success) {
               toast.success(
                 delivery === 'email'
-                  ? 'Export sent to your email'
-                  : 'PDF downloaded successfully'
+                  ? t('journalEditor_exportSentEmail')
+                  : t('journalEditor_exportDownloaded')
               );
             } else {
               toast.error('Export failed');

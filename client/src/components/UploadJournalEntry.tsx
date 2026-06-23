@@ -7,6 +7,7 @@
  */
 import { useState, useRef, useCallback, DragEvent, ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { mediaApi, journalApi, exportApi } from '@/lib/api';
 import { toast } from 'sonner';
@@ -56,7 +57,8 @@ interface Props {
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleAi, pendingMood }: Props) {
-  const { isElite } = useAuth();
+  const { t } = useTranslation();
+  const { isElite, user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const zipInputRef = useRef<HTMLInputElement>(null);
 
@@ -83,16 +85,12 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
-  // suppress unused warning
-  void exportApi;
-  void isExporting;
-
   // TipTap editor
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       Placeholder.configure({
-        placeholder: 'Transcription will appear here — you can edit it freely...',
+        placeholder: t('upload_transcriptionLabel'),
         emptyEditorClass: 'is-editor-empty',
       }),
       Typography,
@@ -372,9 +370,9 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
   };
   const saveStatusText = () => {
     switch (saveStatus) {
-      case 'saving': return 'Saving...';
-      case 'saved': return 'Saved';
-      case 'error': return 'Save failed';
+      case 'saving': return t('upload_savingStatus');
+      case 'saved': return t('upload_savedStatus');
+      case 'error': return t('upload_saveError');
       default: return '';
     }
   };
@@ -399,7 +397,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             <ArrowLeft size={18} />
           </button>
           <h1 className="text-base font-semibold tracking-wide" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
-            Scan / Upload
+            {t('upload_title')}
           </h1>
           {saveStatus !== 'idle' && (
             <div
@@ -430,7 +428,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
               onClick={() => { if (!isElite) { setShowExportPaywall(true); return; } setShowExportDialog(true); }}
               className="p-2 rounded-lg transition-colors relative"
               style={{ color: 'var(--muted-foreground)' }}
-              title={isElite ? 'Export as PDF' : 'Export (Elite)'}
+              title={isElite ? t('journalEditor_exportPdf') : t('journalEditor_exportElite')}
             >
               <FileDown size={16} />
               {!isElite && <Crown size={8} className="absolute -top-0.5 -right-0.5" style={{ color: GOLD }} />}
@@ -441,7 +439,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             onClick={onToggleAi}
             className="p-2 rounded-lg transition-colors"
             style={{ color: GOLD, backgroundColor: 'rgba(201,168,76,0.06)' }}
-            title="AI Companion"
+            title={t('journalEditor_aiCompanion')}
           >
             <Bot size={16} />
           </button>
@@ -451,7 +449,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
               onClick={() => setShowDeleteConfirm(true)}
               className="p-2 rounded-lg hover:bg-destructive/10 transition-colors"
               style={{ color: 'var(--muted-foreground)' }}
-              title="Delete entry"
+              title={t('journalEditor_deleteEntry')}
             >
               <Trash2 size={16} />
             </button>
@@ -462,7 +460,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
       {/* Burn countdown */}
       {burnMode && burnDate && (
         <div className="px-6 pt-3 flex-shrink-0">
-          <BurnCountdown burnDate={burnDate} />
+          <BurnCountdown target={burnDate} />
         </div>
       )}
 
@@ -475,7 +473,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             type="text"
             value={title}
             onChange={e => setTitle(e.target.value)}
-            placeholder="Entry title"
+            placeholder={t('upload_titlePlaceholder')}
             className="w-full bg-transparent border-0 border-b text-2xl font-semibold outline-none pb-2 transition-colors"
             style={{ borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
             onFocus={e => { e.currentTarget.style.borderColor = GOLD; }}
@@ -503,7 +501,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                   fontFamily: FONT,
                 }}
               >
-                {m === 'single' ? 'Single File' : `Multi File ${!isElite ? '🔒' : ''}`}
+                {m === 'single' ? t('upload_modeSingle') : `${t('upload_modeMulti')} ${!isElite ? '🔒' : ''}`}
               </button>
             ))}
           </div>
@@ -522,10 +520,10 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
           >
             <Upload size={26} style={{ color: isDragging ? GOLD : 'var(--muted-foreground)' }} />
             <p className="mt-2.5 text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
-              Drop files here or click to browse
+              {t('upload_dropZoneTitle')}
             </p>
             <p className="mt-1 text-xs" style={{ color: 'var(--muted-foreground)' }}>
-              JPG, PNG, WEBP, PDF, TXT, DOCX{mode === 'multi' ? ` · up to ${MAX_FILES} files` : ''}
+              {mode === 'multi' ? t('upload_dropZoneMultiNote', { max: MAX_FILES }) : t('upload_dropZoneNote')}
             </p>
             <div
               className="mt-3 flex items-center gap-2 px-3 py-1.5 rounded-lg"
@@ -533,7 +531,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             >
               <Printer size={12} style={{ color: GOLD }} />
               <span className="text-xs" style={{ color: GOLD, fontFamily: FONT }}>
-                Using a scanner? Scan to file, then upload here
+                {t('upload_scannerHint')}
               </span>
             </div>
           </div>
@@ -557,7 +555,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; }}
             >
               <FileArchive size={13} style={{ color: GOLD }} />
-              Upload ZIP (batch)
+              {t('upload_zipUpload')}
             </button>
           )}
           <input ref={zipInputRef} type="file" accept=".zip" onChange={handleZipChange} className="hidden" />
@@ -613,7 +611,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                     style={{ color: GOLD, fontFamily: FONT, borderTop: '1px solid var(--border)' }}
                   >
                     <Plus size={13} />
-                    Add More Files ({files.length}/{MAX_FILES})
+                    {t('upload_addMore', { current: files.length, max: MAX_FILES })}
                   </button>
                 )}
               </motion.div>
@@ -638,11 +636,11 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                 <>
                   <Loader2 size={14} className="animate-spin" />
                   {transcribeProgress.total > 1
-                    ? `Reading page ${transcribeProgress.current} of ${transcribeProgress.total}...`
-                    : 'Transcribing...'}
+                    ? t('upload_readingPage', { current: transcribeProgress.current, total: transcribeProgress.total })
+                    : t('upload_transcribing')}
                 </>
               ) : (
-                mode === 'multi' && files.length > 1 ? 'Transcribe All' : 'Transcribe'
+                mode === 'multi' && files.length > 1 ? t('upload_transcribeAll') : t('upload_transcribe')
               )}
             </button>
           )}
@@ -662,7 +660,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                   style={{ borderColor: 'var(--border)', background: 'var(--card)' }}
                 >
                   <span className="text-xs tracking-widest uppercase" style={{ color: 'var(--muted-foreground)' }}>
-                    AI Transcription — edit freely
+                    {t('upload_transcriptionLabel')}
                   </span>
                 </div>
                 <EditorToolbar editor={editor} />
@@ -670,7 +668,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                   {isTranscribing && !isDone ? (
                     <div className="flex items-center gap-2 py-4" style={{ color: 'var(--muted-foreground)' }}>
                       <Loader2 size={14} className="animate-spin" />
-                      <span className="text-sm" style={{ fontFamily: FONT }}>Reading your handwriting...</span>
+                      <span className="text-sm" style={{ fontFamily: FONT }}>{t('upload_readingHandwriting')}</span>
                     </div>
                   ) : (
                     <EditorContent editor={editor} />
@@ -687,7 +685,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                 className="flex items-center gap-3"
               >
                 <label className="text-xs tracking-widest uppercase" style={{ color: 'var(--muted-foreground)' }}>
-                  Entry Date
+                  {t('upload_entryDateLabel')}
                 </label>
                 <input
                   type="date"
@@ -712,7 +710,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                 style={{ borderColor: '#ef444440', background: '#ef444408' }}
               >
                 <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#ef4444' }}>
-                  Files Not Processed
+                  {t('upload_failedFiles')}
                 </p>
                 {rejectedFiles.map((r, i) => (
                   <div key={i} className="flex items-start gap-2">
@@ -741,29 +739,51 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
               }}
             >
               {saveStatus === 'saving'
-                ? <><Loader2 size={14} className="animate-spin" />Saving...</>
-                : <><CheckCircle2 size={14} />Save Entry</>}
+                ? <><Loader2 size={14} className="animate-spin" />{t('upload_savingEntry')}</>
+                : <><CheckCircle2 size={14} />{t('upload_saveEntry')}</>}
             </button>
           )}
         </div>
       </div>
 
       {/* Burn time picker */}
-      <AnimatePresence>
-        {showBurnPicker && (
-          <BurnTimePicker onConfirm={handleBurnTimeConfirm} onCancel={handleBurnPickerCancel} />
-        )}
-      </AnimatePresence>
+      <BurnTimePicker
+        open={showBurnPicker}
+        onConfirm={handleBurnTimeConfirm}
+        onCancel={handleBurnPickerCancel}
+      />
 
       {/* Export dialog */}
-      {showExportDialog && savedEntryId && (
-        <ExportDialog entryId={savedEntryId} onClose={() => setShowExportDialog(false)} onExporting={setIsExporting} />
-      )}
+      <ExportDialog
+        isOpen={showExportDialog}
+        onClose={() => setShowExportDialog(false)}
+        onConfirm={async (delivery) => {
+          if (!savedEntryId) return;
+          setIsExporting(true);
+          try {
+            const res = await exportApi.exportEntry(savedEntryId, delivery);
+            if (res.success) {
+              toast.success(delivery === 'email' ? t('journalEditor_exportSentEmail') : t('journalEditor_exportDownloaded'));
+            } else {
+              toast.error('Export failed');
+            }
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Export failed');
+          }
+          setIsExporting(false);
+          setShowExportDialog(false);
+        }}
+        isExporting={isExporting}
+        userEmail={user?.email ?? ''}
+        mode="entry"
+      />
 
       {/* Export paywall */}
-      {showExportPaywall && (
-        <PaywallModal feature="Export" onClose={() => setShowExportPaywall(false)} />
-      )}
+      <PaywallModal
+        isOpen={showExportPaywall}
+        onClose={() => setShowExportPaywall(false)}
+        feature="export"
+      />
 
       {/* Delete confirm */}
       <AnimatePresence>
@@ -785,10 +805,10 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
               style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
             >
               <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
-                Delete this entry?
+                {t('upload_deleteTitle')}
               </h3>
               <p className="text-sm mb-5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
-                This action cannot be undone. Your words will be lost forever.
+                {t('upload_deleteBody')}
               </p>
               <div className="flex gap-3">
                 <button
@@ -796,14 +816,14 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                   className="flex-1 py-2 rounded-lg border text-sm font-semibold"
                   style={{ borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
                 >
-                  Cancel
+                  {t('common_cancel')}
                 </button>
                 <button
                   onClick={handleDelete}
                   className="flex-1 py-2 rounded-lg text-sm font-semibold"
                   style={{ background: '#ef4444', color: '#fff', fontFamily: FONT }}
                 >
-                  Delete
+                  {t('common_delete')}
                 </button>
               </div>
             </motion.div>

@@ -4,6 +4,7 @@
  */
 import { motion } from 'framer-motion';
 import { Search, Plus, Flame, Ghost, BookOpen, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { JournalEntry } from '@/pages/Dashboard';
 import type { User } from '@/contexts/AuthContext';
 import { MOOD_CONFIG } from '@/lib/constants';
@@ -40,11 +41,11 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: d.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
 }
 
-function getGreeting() {
+function getGreetingKey() {
   const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 17) return 'Good afternoon';
-  return 'Good evening';
+  if (h < 12) return 'journalList_goodMorning';
+  if (h < 17) return 'journalList_goodAfternoon';
+  return 'journalList_goodEvening';
 }
 
 export default function JournalList({
@@ -52,6 +53,7 @@ export default function JournalList({
   filterType, onFilterChange, onEntrySelect, onNewEntry,
   user, todayMood, onMoodClick, ghostModeEnabled,
 }: JournalListProps) {
+  const { t } = useTranslation();
   const stats = user?.stats;
 
   return (
@@ -69,7 +71,7 @@ export default function JournalList({
                 className="text-2xl font-light"
                 style={{ fontFamily: FONT, color: 'var(--foreground)' }}
               >
-                {getGreeting()},{' '}
+                {t(getGreetingKey())},{' '}
                 <span style={{ color: '#C9A84C', fontWeight: 500 }}>
                   {user?.first_name || 'there'}
                 </span>
@@ -79,9 +81,9 @@ export default function JournalList({
                 style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
               >
                 {stats?.current_streak
-                  ? `${stats.current_streak} day streak`
-                  : 'Start your journey today'}
-                {stats?.total_entries ? ` · ${stats.total_entries} entries` : ''}
+                  ? t('journalList_dayStreak', { count: stats.current_streak })
+                  : t('journalList_startJourney')}
+                {stats?.total_entries ? ' · ' + t('journalList_entries', { count: stats.total_entries }) : ''}
               </p>
             </div>
 
@@ -111,7 +113,7 @@ export default function JournalList({
                     border: '1px solid rgba(201,168,76,0.15)',
                   }}
                 >
-                  How are you?
+                  {t('journalList_howAreYou')}
                 </span>
               )}
             </button>
@@ -125,7 +127,7 @@ export default function JournalList({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search entries..."
+                placeholder={t('journalList_searchPlaceholder')}
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm focus:outline-none transition-all"
                 style={{
                   borderColor: 'var(--border)',
@@ -148,9 +150,9 @@ export default function JournalList({
                 fontSize: '0.9rem',
               }}
             >
-              <option value="all">All Entries</option>
-              <option value="text">Text</option>
-              <option value="voice">Voice</option>
+              <option value="all">{t('journalList_filterAll')}</option>
+              <option value="text">{t('journalList_filterText')}</option>
+              <option value="voice">{t('journalList_filterVoice')}</option>
             </select>
           </div>
         </div>
@@ -181,13 +183,13 @@ export default function JournalList({
                 className="text-xl mb-2 font-light"
                 style={{ fontFamily: FONT, color: 'var(--foreground)' }}
               >
-                {searchQuery ? 'No entries found' : 'Your story begins here'}
+                {searchQuery ? t('journalList_noEntries') : t('journalList_emptyTitle')}
               </h3>
               <p
                 className="text-sm mb-8"
                 style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
               >
-                {searchQuery ? 'Try a different search term' : 'Every great story starts with a single word'}
+                {searchQuery ? t('journalList_tryDifferent') : t('journalList_emptyBody')}
               </p>
               {!searchQuery && (
                 <button
@@ -201,7 +203,7 @@ export default function JournalList({
                     boxShadow: '0 4px 16px rgba(168,134,58,0.25)',
                   }}
                 >
-                  <Plus size={16} /> Write Your First Entry
+                  <Plus size={16} /> {t('journalList_writeFirst')}
                 </button>
               )}
             </motion.div>
@@ -240,7 +242,7 @@ export default function JournalList({
                           className="text-base font-medium truncate"
                           style={{ fontFamily: FONT, color: 'var(--foreground)' }}
                         >
-                          {entry.title || 'Untitled Entry'}
+                          {entry.title || t('journalList_untitledEntry')}
                         </h3>
                         {entry.burn_mode && (
                           entry.burn_date ? (
@@ -280,14 +282,14 @@ export default function JournalList({
                           style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontStyle: 'italic' }}
                         >
                           <Ghost size={12} style={{ opacity: 0.5 }} />
-                          Content hidden — Ghost Mode active
+                          {t('journalList_ghostHidden')}
                         </p>
                       ) : (
                         <p
                           className="text-sm truncate mb-1.5"
                           style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
                         >
-                          {entry.preview || 'No content'}
+                          {entry.preview || t('journalList_noContent')}
                         </p>
                       )}
                       <div
@@ -296,12 +298,12 @@ export default function JournalList({
                       >
                         <span>{formatDate(entry.created_at)}</span>
                         <span style={{ opacity: 0.4 }}>·</span>
-                        {!ghostModeEnabled && <span>{entry.word_count} words</span>}
+                        {!ghostModeEnabled && <span>{t('journalList_wordCount', { count: entry.word_count })}</span>}
                         {entry.ai_response && (
                           <>
                             <span style={{ opacity: 0.4 }}>·</span>
                             <span className="flex items-center gap-1" style={{ color: '#C9A84C' }}>
-                              <Sparkles size={11} /> AI insight
+                              <Sparkles size={11} /> {t('journalList_aiInsight')}
                             </span>
                           </>
                         )}

@@ -18,6 +18,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, BookOpen, MessageCircle, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { MOOD_CONFIG } from '@/lib/constants';
 import { moodApi } from '@/lib/api';
 
@@ -39,6 +40,7 @@ export default function LoginOnboardingFlow({
   onChat,
   onDismiss,
 }: LoginOnboardingFlowProps) {
+  const { t } = useTranslation();
   const [step, setStep] = useState<Step>('mood');
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [savedMood, setSavedMood] = useState<string>('');
@@ -64,13 +66,15 @@ export default function LoginOnboardingFlow({
   const handleJournal = () => onJournal(savedMood);
   const handleChat = () => onChat(savedMood);
 
-  // Filter moods by search query
-  const moods = Object.entries(MOOD_CONFIG).filter(([, config]) =>
-    !query.trim() || config.label.toLowerCase().includes(query.toLowerCase())
-  );
+  // Filter moods by search query (searches both English config label and translated label)
+  const moods = Object.entries(MOOD_CONFIG).filter(([key, config]) => {
+    if (!query.trim()) return true;
+    const q = query.toLowerCase();
+    return config.label.toLowerCase().includes(q) || t(`mood_${key}`).toLowerCase().includes(q);
+  });
 
   const moodLabel = savedMood && MOOD_CONFIG[savedMood as keyof typeof MOOD_CONFIG]
-    ? MOOD_CONFIG[savedMood as keyof typeof MOOD_CONFIG].label
+    ? t(`mood_${savedMood}`)
     : '';
   const moodEmoji = savedMood && MOOD_CONFIG[savedMood as keyof typeof MOOD_CONFIG]
     ? MOOD_CONFIG[savedMood as keyof typeof MOOD_CONFIG].emoji
@@ -117,7 +121,7 @@ export default function LoginOnboardingFlow({
                   marginBottom: '6px',
                   fontWeight: 600,
                 }}>
-                  Welcome back
+                  {t('loginOnboarding_welcomeBack')}
                 </p>
                 <h2 style={{
                   fontFamily: FONT,
@@ -127,7 +131,7 @@ export default function LoginOnboardingFlow({
                   color: 'var(--foreground)',
                   lineHeight: 1.2,
                 }}>
-                  How are you feeling today?
+                  {t('loginOnboarding_moodTitle')}
                 </h2>
                 <p style={{
                   fontFamily: FONT,
@@ -137,7 +141,7 @@ export default function LoginOnboardingFlow({
                   fontStyle: 'italic',
                   letterSpacing: '0.04em',
                 }}>
-                  Your mood helps your AI companion understand you better
+                  {t('loginOnboarding_moodSubtitle')}
                 </p>
               </div>
               <button
@@ -154,7 +158,7 @@ export default function LoginOnboardingFlow({
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search emotions..."
+                  placeholder={t('loginOnboarding_searchEmotions')}
                   value={query}
                   onChange={(e) => { setQuery(e.target.value); setSelectedMood(null); }}
                   style={{
@@ -219,7 +223,7 @@ export default function LoginOnboardingFlow({
                         lineHeight: 1.2,
                         transition: 'color 0.2s',
                       }}>
-                        {config.label}
+                        {t(`mood_${key}`)}
                       </span>
                     </motion.button>
                   );
@@ -254,7 +258,7 @@ export default function LoginOnboardingFlow({
                   transition: 'background 0.25s, color 0.25s',
                 }}
               >
-                Continue
+                {t('common_continue')}
               </motion.button>
               <button
                 onClick={handleSkipMood}
@@ -269,7 +273,7 @@ export default function LoginOnboardingFlow({
                   padding: '4px 8px',
                 }}
               >
-                Skip for now
+                {t('loginOnboarding_skipForNow')}
               </button>
             </div>
           </motion.div>
@@ -309,7 +313,7 @@ export default function LoginOnboardingFlow({
                     gap: '6px',
                   }}>
                     <span>{moodEmoji}</span>
-                    <span>Feeling {moodLabel}</span>
+                    <span>{t('loginOnboarding_feelingLabel', { mood: moodLabel })}</span>
                   </p>
                 )}
                 <h2 style={{
@@ -320,7 +324,7 @@ export default function LoginOnboardingFlow({
                   color: 'var(--foreground)',
                   lineHeight: 1.25,
                 }}>
-                  What would you like to do?
+                  {t('loginOnboarding_intentTitle')}
                 </h2>
                 <p style={{
                   fontFamily: FONT,
@@ -330,7 +334,7 @@ export default function LoginOnboardingFlow({
                   fontStyle: 'italic',
                   letterSpacing: '0.03em',
                 }}>
-                  Your space, your choice
+                  {t('loginOnboarding_intentSubtitle')}
                 </p>
               </div>
               <button
@@ -394,7 +398,7 @@ export default function LoginOnboardingFlow({
                     letterSpacing: '0.03em',
                     marginBottom: '3px',
                   }}>
-                    Write in my journal
+                    {t('loginOnboarding_journalTitle')}
                   </p>
                   <p style={{
                     fontFamily: FONT,
@@ -403,7 +407,7 @@ export default function LoginOnboardingFlow({
                     fontStyle: 'italic',
                     letterSpacing: '0.02em',
                   }}>
-                    Capture your thoughts, memories, and reflections
+                    {t('loginOnboarding_journalBody')}
                   </p>
                 </div>
               </motion.button>
@@ -456,7 +460,7 @@ export default function LoginOnboardingFlow({
                     letterSpacing: '0.03em',
                     marginBottom: '3px',
                   }}>
-                    Chat with my AI companion
+                    {t('loginOnboarding_chatTitle')}
                   </p>
                   <p style={{
                     fontFamily: FONT,
@@ -465,7 +469,7 @@ export default function LoginOnboardingFlow({
                     fontStyle: 'italic',
                     letterSpacing: '0.02em',
                   }}>
-                    Talk through what's on your mind
+                    {t('loginOnboarding_chatBody')}
                   </p>
                 </div>
               </motion.button>
@@ -491,7 +495,7 @@ export default function LoginOnboardingFlow({
                 }}
               >
                 <Sparkles size={12} />
-                Just browsing for now
+                {t('loginOnboarding_justBrowsing')}
               </button>
             </div>
           </motion.div>

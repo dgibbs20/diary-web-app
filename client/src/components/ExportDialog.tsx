@@ -3,6 +3,7 @@
  * Cormorant Garamond, gold #C9A84C, framer-motion — matches MoodPicker style
  */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileDown, Mail } from 'lucide-react';
 
@@ -26,12 +27,10 @@ export default function ExportDialog({
   userEmail,
   mode,
 }: ExportDialogProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<'download' | 'email' | null>(null);
 
-  const subtitle =
-    mode === 'entry'
-      ? 'Choose how you\u2019d like to receive this entry'
-      : 'Choose how you\u2019d like to receive your journal';
+  const subtitle = mode === 'entry' ? t('exportDialog_subtitleEntry') : t('exportDialog_subtitleAll');
 
   const handleConfirm = () => {
     if (selected && !isExporting) onConfirm(selected);
@@ -76,7 +75,7 @@ export default function ExportDialog({
                     lineHeight: 1.2,
                   }}
                 >
-                  Export as PDF
+                  {t('exportDialog_title')}
                 </h2>
                 <p
                   style={{
@@ -146,7 +145,7 @@ export default function ExportDialog({
                       transition: 'color 0.2s',
                     }}
                   >
-                    Download PDF
+                    {t('exportDialog_downloadTitle')}
                   </div>
                   <div
                     style={{
@@ -158,7 +157,7 @@ export default function ExportDialog({
                       letterSpacing: '0.03em',
                     }}
                   >
-                    Save directly to your device
+                    {t('exportDialog_downloadNote')}
                   </div>
                 </div>
               </motion.button>
@@ -207,7 +206,7 @@ export default function ExportDialog({
                       transition: 'color 0.2s',
                     }}
                   >
-                    Send to Email
+                    {t('exportDialog_emailTitle')}
                   </div>
                   <div
                     style={{
@@ -254,7 +253,7 @@ export default function ExportDialog({
                   transition: 'background 0.25s, color 0.25s',
                 }}
               >
-                {isExporting ? 'Exporting\u2026' : 'Continue'}
+                {isExporting ? t('exportDialog_exporting') : t('exportDialog_continue')}
               </motion.button>
               <button
                 onClick={onClose}
@@ -269,7 +268,7 @@ export default function ExportDialog({
                   padding: '4px 8px',
                 }}
               >
-                Cancel
+                {t('common_cancel')}
               </button>
             </div>
           </motion.div>

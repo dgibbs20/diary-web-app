@@ -7,10 +7,13 @@ import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 export default function Splash() {
   const [, navigate] = useLocation();
   const { isAuthenticated, isLoading, isElite } = useAuth();
+  const { t, i18n } = useTranslation();
   const [showSplash, setShowSplash] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -42,7 +45,7 @@ export default function Splash() {
     }
   }, [isLoading, showSplash, isAuthenticated, navigate]);
 
-  const logoUrl = isElite ? '/assets/images/logo_elite.png' : '/assets/images/logo.png';
+  const logoUrl = getLogoSrc(i18n.language, isElite);
 
   return (
     <AnimatePresence>
@@ -89,7 +92,7 @@ export default function Splash() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
           >
-            "I'll never tell."
+            {t('splash_tagline')}
           </motion.p>
           
           {/* Subtitle — NOW GOES RIGHT AFTER THE TAGLINE */}
@@ -106,7 +109,7 @@ export default function Splash() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: 'easeOut', delay: 0.8 }}
           >
-            Your private safe space awaits
+            {t('splash_subtitle')}
           </motion.p>
           
           {/* Enter prompt — NOW GOES AFTER THE SUBTITLE */}
@@ -127,7 +130,7 @@ export default function Splash() {
                 : { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }
             }
           >
-            — Tap Anywhere to Enter —
+            {t('splash_tapAnywhere')}
           </motion.p>
 
         </motion.div>
