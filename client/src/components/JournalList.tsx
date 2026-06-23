@@ -43,9 +43,9 @@ function formatDate(dateStr: string) {
 
 function getGreetingKey() {
   const h = new Date().getHours();
-  if (h < 12) return 'journalList_goodMorning';
-  if (h < 17) return 'journalList_goodAfternoon';
-  return 'journalList_goodEvening';
+  if (h < 12) return 'journalList_greeting_morning';
+  if (h < 17) return 'journalList_greeting_afternoon';
+  return 'journalList_greeting_evening';
 }
 
 export default function JournalList({
@@ -150,9 +150,9 @@ export default function JournalList({
                 fontSize: '0.9rem',
               }}
             >
-              <option value="all">{t('journalList_filterAll')}</option>
-              <option value="text">{t('journalList_filterText')}</option>
-              <option value="voice">{t('journalList_filterVoice')}</option>
+              <option value="all">{t('journalList_allEntries')}</option>
+              <option value="text">{t('journalList_text')}</option>
+              <option value="voice">{t('journalList_voice')}</option>
             </select>
           </div>
         </div>
