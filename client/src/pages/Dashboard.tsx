@@ -18,7 +18,8 @@ import MoodPicker from '@/components/MoodPicker';
 import LoginOnboardingFlow from '@/components/LoginOnboardingFlow';
 import AnalyticsPanel from '@/components/AnalyticsPanel';
 import UploadJournalEntry from '@/components/UploadJournalEntry';
-import { journalApi, moodApi, subscriptionApi } from '@/lib/api';
+import { journalApi, moodApi, subscriptionApi, userApi } from '@/lib/api';
+import { analyzeRegisterProfile } from '@/utils/registerProfileService';
 import { toast } from 'sonner';
 
 export interface JournalEntry {
@@ -80,7 +81,15 @@ export default function Dashboard() {
     try {
       const res = await journalApi.getEntries();
       if (res.success) {
-        setEntries(res.entries || []);
+        const fetched: JournalEntry[] = res.entries || [];
+        setEntries(fetched);
+        if (fetched.length >= 3) {
+          const texts = fetched.map((e: JournalEntry) => e.content || '').filter(Boolean);
+          const profile = analyzeRegisterProfile(texts);
+          if (profile && profile !== user?.preferences?.register_profile) {
+            userApi.updatePreferences({ register_profile: profile }).catch(() => {});
+          }
+        }
       }
     } catch {
       toast.error('Failed to load entries');
