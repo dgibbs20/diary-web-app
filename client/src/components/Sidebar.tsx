@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import {
-  BookOpen, PenLine, Settings, BarChart3, Bot,
+  BookOpen, PenLine, Settings, BarChart3, Sparkles,
   LogOut, ChevronRight, ScanLine
 } from 'lucide-react';
 import type { ViewMode } from '@/pages/Dashboard';
@@ -152,7 +152,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
             fontFamily: "'Cormorant Garamond', Georgia, serif",
           }}
         >
-          <Bot size={18} className="flex-shrink-0" />
+          <Sparkles size={18} className="flex-shrink-0" />
           <motion.span
             className="text-sm font-semibold tracking-wide whitespace-nowrap overflow-hidden"
             animate={{ opacity: expanded ? 1 : 0, width: expanded ? 'auto' : 0 }}

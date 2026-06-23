@@ -9,6 +9,7 @@ import type { JournalEntry } from '@/pages/Dashboard';
 import type { User } from '@/contexts/AuthContext';
 import { MOOD_CONFIG } from '@/lib/constants';
 import BurnCountdown from './BurnCountdown';
+import { getLogoSrc } from '@/utils/logoHelper';
 
 interface JournalListProps {
   entries: JournalEntry[];
@@ -53,7 +54,7 @@ export default function JournalList({
   filterType, onFilterChange, onEntrySelect, onNewEntry,
   user, todayMood, onMoodClick, ghostModeEnabled,
 }: JournalListProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const stats = user?.stats;
 
   return (
@@ -174,7 +175,7 @@ export default function JournalList({
               animate={{ opacity: 1, y: 0 }}
             >
               <img
-                src="/assets/images/logo.png"
+                src={getLogoSrc(i18n.language, user?.subscription_tier === 'diary_elite')}
                 alt=""
                 className="w-32 mx-auto mb-6"
                 style={{ opacity: 0.5, filter: 'grayscale(20%)' }}

@@ -18,13 +18,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  X, Send, Loader2, Bot, Sparkles, Crown, Lock,
+  X, Send, Loader2, Sparkles, Crown, Lock,
   Save, Download, Flame, Trash2, Check, ChevronDown, Mail, FileText, Clock,
 } from 'lucide-react';
 import { aiApi, journalApi, exportApi } from '@/lib/api';
 import { AI_MODES } from '@/lib/constants';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
+import { getLogoSrc } from '@/utils/logoHelper';
 import { Streamdown } from 'streamdown';
 import { toast } from 'sonner';
 import PaywallModal from './PaywallModal';
@@ -71,7 +72,7 @@ function downloadTextFile(filename: string, content: string) {
 }
 
 export default function AiCompanion({ entryContext, userName, onClose, onQuickChatSaved }: AiCompanionProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isElite } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -340,7 +341,11 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
               className="w-9 h-9 rounded-full flex items-center justify-center"
               style={{ background: `rgba(201,168,76,0.1)` }}
             >
-              <Bot size={16} style={{ color: GOLD_DARK }} />
+              <img
+                src={getLogoSrc(i18n.language, isElite)}
+                alt="diAry"
+                style={{ height: '28px', width: 'auto' }}
+              />
             </div>
             <div>
               <h3
