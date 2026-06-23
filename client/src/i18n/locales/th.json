@@ -15,11 +15,10 @@
   "common_today": "วันนี้",
   "common_yesterday": "เมื่อวาน",
   "common_words": "คำ",
-
+  "common_elite": "อีลีท",
   "header_download": "ดาวน์โหลด",
   "header_signIn": "เข้าสู่ระบบ",
   "header_signOut": "ออกจากระบบ",
-
   "footer_tagline": "\"ฉันจะไม่บอกเลย...\"",
   "footer_copyright": "© 2026 GMX Quantum LLC. สงวนลิขสิทธิ์ทุกประการ บริษัทในเครือ GMCG Holdings Inc.",
   "footer_features": "คุณสมบัติ",
@@ -31,7 +30,6 @@
   "footer_faq": "คำถามที่พบบ่อย",
   "footer_privacy": "นโยบายความเป็นส่วนตัว",
   "footer_contact": "ติดต่อ",
-
   "sidebar_newEntry": "บันทึกใหม่",
   "sidebar_scanUpload": "สแกน / อัปโหลด",
   "sidebar_journal": "ไดอารี่",
@@ -39,7 +37,6 @@
   "sidebar_settings": "การตั้งค่า",
   "sidebar_aiCompanion": "เพื่อน AI",
   "sidebar_signOut": "ออกจากระบบ",
-
   "aiCompanion_title": "เพื่อน AI",
   "aiCompanion_mode": "โหมด",
   "aiCompanion_unlimited": "ไม่จำกัด",
@@ -66,7 +63,6 @@
   "aiCompanion_chatCleared": "ล้างการสนทนาแล้ว",
   "aiCompanion_exportedTxt": "ส่งออกเป็นไฟล์ข้อความแล้ว",
   "aiCompanion_savedEntry": "บันทึกแล้ว: \"{{title}}\"",
-
   "analytics_title": "การวิเคราะห์",
   "analytics_subtitle": "ภาพรวมการเขียนไดอารี่ของคุณ",
   "analytics_totalEntries": "บันทึกทั้งหมด",
@@ -84,12 +80,9 @@
   "analytics_errorMsg": "กำลังแสดงข้อมูลแคชจากโปรไฟล์ของคุณ",
   "analytics_unableConnect": "ไม่สามารถเชื่อมต่อกับบริการวิเคราะห์",
   "analytics_failedLoad": "โหลดการวิเคราะห์ไม่สำเร็จ",
-
   "burnCountdown_burningNow": "กำลังเผาอยู่…",
   "burnCountdown_burnsIn": "จะเผาใน {{time}}",
-
   "burnSwitch_label": "โหมดเผา",
-
   "burnTimePicker_title": "ตั้งเวลาเผา",
   "burnTimePicker_description": "เลือกเวลาที่บันทึกนี้จะถูกทำลายอย่างถาวร หลังจากเวลานี้ผ่านไป บันทึกจะถูกลบจากเซิร์ฟเวอร์และไม่สามารถกู้คืนได้",
   "burnTimePicker_dateLabel": "วันที่",
@@ -105,7 +98,6 @@
   "burnTimePicker_errorPickDate": "กรุณาเลือกวันที่และเวลาที่ถูกต้อง",
   "burnTimePicker_errorFuture": "เวลาเผาต้องเป็นเวลาในอนาคต",
   "burnTimePicker_confirm": "ตั้งเวลาเผา",
-
   "editorToolbar_undo": "เลิกทำ (Ctrl+Z)",
   "editorToolbar_redo": "ทำซ้ำ (Ctrl+Y)",
   "editorToolbar_bold": "ตัวหนา (Ctrl+B)",
@@ -126,7 +118,6 @@
   "editorToolbar_blockquote": "คำพูดอ้างอิง",
   "editorToolbar_codeBlock": "บล็อกโค้ด",
   "editorToolbar_horizontalRule": "เส้นแนวนอน",
-
   "exportDialog_title": "ส่งออกเป็น PDF",
   "exportDialog_subtitleEntry": "เลือกวิธีที่ต้องการรับบันทึกนี้",
   "exportDialog_subtitleAll": "เลือกวิธีที่ต้องการรับไดอารี่ของคุณ",
@@ -135,12 +126,11 @@
   "exportDialog_emailTitle": "ส่งทางอีเมล",
   "exportDialog_continue": "ดำเนินการต่อ",
   "exportDialog_exporting": "กำลังส่งออก…",
-
   "journalEditor_back": "กลับ",
   "journalEditor_wordCount": "{{count}} คำ",
   "journalEditor_saveNow": "บันทึกทันที (Ctrl+S)",
   "journalEditor_exportPdf": "ส่งออกเป็น PDF",
-  "journalEditor_exportElite": "ส่งออก (Elite)",
+  "journalEditor_exportElite": "ส่งออก (อีลีท)",
   "journalEditor_aiCompanion": "เพื่อน AI",
   "journalEditor_deleteEntry": "ลบบันทึก",
   "journalEditor_titlePlaceholder": "ตั้งชื่อบันทึก...",
@@ -157,7 +147,6 @@
   "journalEditor_exportDownloaded": "ดาวน์โหลด PDF สำเร็จ",
   "journalEditor_setBurnFirst": "กรุณาตั้งเวลาเผาก่อนบันทึก หรือปิดโหมดเผา",
   "journalEditor_changeTab": "เปลี่ยนเวลาเผา",
-
   "journalList_greeting_morning": "อรุณสวัสดิ์",
   "journalList_greeting_afternoon": "สวัสดีตอนบ่าย",
   "journalList_greeting_evening": "สวัสดีตอนเย็น",
@@ -178,7 +167,6 @@
   "journalList_noContent": "ไม่มีเนื้อหา",
   "journalList_aiInsight": "ข้อมูลเชิงลึก AI",
   "journalList_ghostHidden": "เนื้อหาถูกซ่อน — โหมดผีกำลังทำงาน",
-
   "loginOnboarding_welcomeBack": "ยินดีต้อนรับกลับ",
   "loginOnboarding_moodTitle": "วันนี้คุณรู้สึกอย่างไร?",
   "loginOnboarding_moodSubtitle": "อารมณ์ของคุณช่วยให้เพื่อน AI เข้าใจคุณได้ดีขึ้น",
@@ -192,13 +180,11 @@
   "loginOnboarding_chatTitle": "คุยกับเพื่อน AI ของฉัน",
   "loginOnboarding_chatBody": "พูดคุยเกี่ยวกับสิ่งที่อยู่ในใจของคุณ",
   "loginOnboarding_justBrowsing": "แค่ดูก่อนตอนนี้",
-
   "moodPicker_title": "คุณรู้สึกอย่างไร?",
   "moodPicker_subtitle": "อารมณ์ของคุณช่วยให้เพื่อน AI เข้าใจคุณได้ดีขึ้น",
   "moodPicker_searchPlaceholder": "ค้นหาอารมณ์...",
   "moodPicker_noResults": "ไม่มีอารมณ์ที่ตรงกับ \"{{query}}\"",
   "moodPicker_skip": "ข้าม",
-
   "mood_happy": "มีความสุข",
   "mood_grateful": "รู้สึกขอบคุณ",
   "mood_excited": "ตื่นเต้น",
@@ -231,7 +217,6 @@
   "mood_restless": "กระวนกระวาย",
   "mood_reflective": "ใคร่ครวญ",
   "mood_serene": "สงบนิ่ง",
-
   "aiMode_auto_label": "อัตโนมัติ",
   "aiMode_auto_description": "AI เลือกโหมดที่ดีที่สุดตามบันทึกของคุณ",
   "aiMode_vault_label": "ห้องนิรภัย",
@@ -242,8 +227,7 @@
   "aiMode_mirror_description": "การสะท้อนความคิดของคุณอย่างตรงไปตรงมา",
   "aiMode_insight_label": "ข้อมูลเชิงลึก",
   "aiMode_insight_description": "รูปแบบการวิเคราะห์และการเติบโต",
-
-  "paywall_eliteFeature": "คุณสมบัติ ELITE",
+  "paywall_eliteFeature": "คุณสมบัติ อีลีท",
   "paywall_viewPlans": "ดูแผน",
   "paywall_maybeLater": "อาจจะภายหลัง",
   "paywall_aiModes_title": "ปลดล็อกโหมด AI ทั้งหมด",
@@ -251,14 +235,13 @@
   "paywall_aiLimit_title": "ถึงขีดจำกัดการตอบกลับ AI แล้ว",
   "paywall_aiLimit_desc": "คุณใช้การตอบกลับ AI ฟรีทั้ง 5 ครั้งสำหรับวันนี้แล้ว อัปเกรดเป็น diAry Elite เพื่อสนทนากับเพื่อน AI ได้ไม่จำกัด",
   "paywall_export_title": "ส่งออกไดอารี่ของคุณ",
-  "paywall_export_desc": "การส่งออก PDF เป็นคุณสมบัติ Elite อัปเกรดเพื่อดาวน์โหลดสำเนาไดอารี่ที่จัดรูปแบบสวยงาม",
+  "paywall_export_desc": "การส่งออก PDF เป็นคุณสมบัติ อีลีท อัปเกรดเพื่อดาวน์โหลดสำเนาไดอารี่ที่จัดรูปแบบสวยงาม",
   "paywall_ghostMode_title": "เปิดใช้งานโหมดผี",
-  "paywall_ghostMode_desc": "โหมดผีเป็นคุณสมบัติความเป็นส่วนตัว Elite อัปเกรดเพื่อเปิดใช้การป้องกันความเป็นส่วนตัวขั้นสูงสำหรับบันทึกของคุณ",
+  "paywall_ghostMode_desc": "โหมดผีเป็นคุณสมบัติความเป็นส่วนตัว อีลีท อัปเกรดเพื่อเปิดใช้การป้องกันความเป็นส่วนตัวขั้นสูงสำหรับบันทึกของคุณ",
   "paywall_analytics_title": "การวิเคราะห์ขั้นสูง",
-  "paywall_analytics_desc": "แนวโน้มอารมณ์ การตรวจจับรูปแบบ และข้อมูลเชิงลึกเชิงพฤติกรรมเป็นคุณสมบัติ Elite อัปเกรดเพื่อปลดล็อกเครื่องมือสะท้อนตนเองเชิงลึก",
-  "paywall_general_title": "อัปเกรดเป็น Elite",
+  "paywall_analytics_desc": "แนวโน้มอารมณ์ การตรวจจับรูปแบบ และข้อมูลเชิงลึกเชิงพฤติกรรมเป็นคุณสมบัติ อีลีท อัปเกรดเพื่อปลดล็อกเครื่องมือสะท้อนตนเองเชิงลึก",
+  "paywall_general_title": "อัปเกรดเป็น อีลีท",
   "paywall_general_desc": "ปลดล็อกการตอบกลับ AI ไม่จำกัด โหมด AI ทั้งหมด การส่งออกไดอารี่ โหมดผี การวิเคราะห์ขั้นสูง และอื่นๆ อีกมาก",
-
   "settings_title": "การตั้งค่า",
   "settings_tabProfile": "โปรไฟล์",
   "settings_tabPreferences": "การตั้งค่า",
@@ -272,7 +255,7 @@
   "settings_profile_saveChanges": "บันทึกการเปลี่ยนแปลง",
   "settings_profile_saving": "กำลังบันทึก...",
   "settings_profile_manageSubscription": "จัดการการสมัครสมาชิก",
-  "settings_profile_upgradeElite": "อัปเกรดเป็น Elite",
+  "settings_profile_upgradeElite": "อัปเกรดเป็น อีลีท",
   "settings_profile_manageDesc": "ดูรายละเอียดแผนและการเรียกเก็บเงิน",
   "settings_profile_upgradeDesc": "ปลดล็อก AI ไม่จำกัด ส่งออก โหมดผี และอื่นๆ",
   "settings_profile_entries": "บันทึก",
@@ -300,11 +283,10 @@
   "settings_security_changingPw": "กำลังเปลี่ยน...",
   "settings_export_title": "ส่งออกไดอารี่ของคุณ",
   "settings_export_desc": "ดาวน์โหลดบันทึกทั้งหมดของคุณเป็น PDF ที่จัดรูปแบบสวยงาม",
-  "settings_export_eliteFeature": "คุณสมบัติ Elite",
+  "settings_export_eliteFeature": "คุณสมบัติ อีลีท",
   "settings_export_exportBtn": "ส่งออกเป็น PDF",
   "settings_export_upgradeBtn": "อัปเกรดเพื่อส่งออก",
   "settings_export_exporting": "กำลังส่งออก...",
-
   "upload_title": "สแกน / อัปโหลด",
   "upload_modeSingle": "ไฟล์เดียว",
   "upload_modeMulti": "หลายไฟล์",
@@ -330,10 +312,8 @@
   "upload_saveError": "บันทึกไม่สำเร็จ",
   "upload_deleteTitle": "ลบบันทึกนี้?",
   "upload_deleteBody": "การกระทำนี้ไม่สามารถยกเลิกได้ คำพูดของคุณจะสูญหายไปตลอดกาล",
-
   "dashboard_loadingSpace": "กำลังโหลดพื้นที่ของคุณ...",
   "dashboard_tagline": "\"ฉันจะไม่บอกเลย...\"",
-
   "login_welcomeBack": "ยินดีต้อนรับกลับ",
   "login_title": "เข้าสู่ระบบ",
   "login_subtitle": "พื้นที่ส่วนตัวของคุณรออยู่",
@@ -350,7 +330,6 @@
   "login_downloadApp": "ดาวน์โหลดแอป",
   "login_tagline": "\"ฉันจะไม่บอกเลย...\"",
   "login_heroDesc": "ความคิดของคุณสมควรได้รับพื้นที่ที่เข้าใจอย่างแท้จริง เขียน พูด วาด — diAry ฟังด้วยความอบอุ่นและเก็บความลับของคุณตลอดไป",
-
   "register_getStarted": "เริ่มต้น",
   "register_title": "สร้างพื้นที่ของคุณ",
   "register_subtitle": "คำพูดของคุณ โลกของคุณ ไดอารี่ของคุณ",
@@ -368,7 +347,6 @@
   "register_signIn": "เข้าสู่ระบบ",
   "register_heroTagline": "\"เริ่มต้นการเดินทางเพื่อรู้จักตัวเอง — ทีละหน้า\"",
   "register_heroDesc": "เข้าร่วมกับผู้ใช้นับพันที่ไว้วางใจ diAry กับความคิดที่เป็นส่วนตัวที่สุด การเข้ารหัสระดับทหาร สถาปัตยกรรมความรู้เป็นศูนย์",
-
   "forgotPassword_title": "รีเซ็ตรหัสผ่าน",
   "forgotPassword_category": "การกู้คืนบัญชี",
   "forgotPassword_subtitle": "ใส่อีเมลของคุณ แล้วเราจะส่งลิงก์รีเซ็ตให้",
@@ -381,7 +359,6 @@
   "forgotPassword_successCategory": "สำเร็จ",
   "forgotPassword_successMsg": "หากมีบัญชีสำหรับ {{email}} คุณจะได้รับลิงก์รีเซ็ตรหัสผ่านในไม่ช้า",
   "forgotPassword_backBtn": "กลับสู่หน้าเข้าสู่ระบบ",
-
   "verifyEmail_category": "การยืนยัน",
   "verifyEmail_title": "ยืนยันอีเมลของคุณ",
   "verifyEmail_subtitle": "เราส่งรหัส 6 หลักไปที่",
@@ -391,18 +368,15 @@
   "verifyEmail_resend": "ส่งอีกครั้ง",
   "verifyEmail_resendIn": "ส่งอีกครั้งใน {{seconds}} วินาที",
   "verifyEmail_backToSignIn": "กลับสู่หน้าเข้าสู่ระบบ",
-
   "notFound_title": "ไม่พบหน้า",
   "notFound_body": "หน้าที่คุณกำลังมองหาไม่มีอยู่ อาจถูกย้ายหรือลบแล้ว",
   "notFound_returnHome": "กลับหน้าแรก",
-
   "splash_tagline": "\"ฉันจะไม่บอกเลย\"",
   "splash_subtitle": "พื้นที่ส่วนตัวที่ปลอดภัยของคุณรออยู่",
   "splash_tapAnywhere": "— แตะที่ใดก็ได้เพื่อเข้า —",
-
   "subscription_title": "เลือกแผนของคุณ",
   "subscription_subtitle": "ปลดล็อกพลังงานเต็มรูปแบบของเพื่อนไดอารี่ส่วนตัวของคุณ",
-  "subscription_subtitleElite": "ปลดล็อกพลังงานเต็มรูปแบบของเพื่อนไดอารี่ส่วนตัวของคุณ คุณอยู่ในแผน Elite",
+  "subscription_subtitleElite": "ปลดล็อกพลังงานเต็มรูปแบบของเพื่อนไดอารี่ส่วนตัวของคุณ คุณอยู่ในแผน อีลีท",
   "subscription_monthly": "รายเดือน",
   "subscription_annual": "รายปี",
   "subscription_save": "ประหยัด {{percent}}%",
@@ -412,7 +386,7 @@
   "subscription_billedMonthly": "เรียกเก็บรายเดือน ยกเลิกได้ทุกเมื่อ",
   "subscription_currentPlan": "แผนปัจจุบัน",
   "subscription_mostPopular": "ยอดนิยมที่สุด",
-  "subscription_upgradeBtn": "อัปเกรดเป็น Elite",
+  "subscription_upgradeBtn": "อัปเกรดเป็น อีลีท",
   "subscription_yourPlan": "แผนปัจจุบันของคุณ",
   "subscription_freeTagline": "เพื่อนไดอารี่ส่วนตัวของคุณ",
   "subscription_eliteTagline": "ปลดล็อกทุกคุณสมบัติ ไม่มีข้อจำกัด",

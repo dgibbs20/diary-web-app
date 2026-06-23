@@ -425,7 +425,7 @@ function SecuritySection() {
                       className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
                       style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
                     >
-                      <Crown size={10} className="inline mr-1" />Elite
+                      <Crown size={10} className="inline mr-1" />{t('common_elite')}
                     </span>
                   )}
                 </p>

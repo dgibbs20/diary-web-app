@@ -15,11 +15,10 @@
   "common_today": "Bugün",
   "common_yesterday": "Dün",
   "common_words": "kelime",
-
+  "common_elite": "Elit",
   "header_download": "İndir",
   "header_signIn": "Giriş Yap",
   "header_signOut": "Çıkış Yap",
-
   "footer_tagline": "\"Asla söylemeyeceğim...\"",
   "footer_copyright": "© 2026 GMX Quantum LLC. Tüm hakları saklıdır. Bir GMCG Holdings Inc. şirketi.",
   "footer_features": "Özellikler",
@@ -31,7 +30,6 @@
   "footer_faq": "SSS",
   "footer_privacy": "Gizlilik Politikası",
   "footer_contact": "İletişim",
-
   "sidebar_newEntry": "YENİ GİRİŞ",
   "sidebar_scanUpload": "TARA / YÜKLE",
   "sidebar_journal": "Günlük",
@@ -39,7 +37,6 @@
   "sidebar_settings": "Ayarlar",
   "sidebar_aiCompanion": "AI Arkadaş",
   "sidebar_signOut": "Çıkış Yap",
-
   "aiCompanion_title": "AI Arkadaş",
   "aiCompanion_mode": "Mod",
   "aiCompanion_unlimited": "Sınırsız",
@@ -66,7 +63,6 @@
   "aiCompanion_chatCleared": "Sohbet temizlendi",
   "aiCompanion_exportedTxt": "Metin dosyası olarak dışa aktarıldı",
   "aiCompanion_savedEntry": "Kaydedildi: \"{{title}}\"",
-
   "analytics_title": "Analiz",
   "analytics_subtitle": "Günlük yolculuğunuza bir bakış",
   "analytics_totalEntries": "Toplam Girdi",
@@ -84,12 +80,9 @@
   "analytics_errorMsg": "Profilinizdeki önbellek verileri gösteriliyor",
   "analytics_unableConnect": "Analiz servisine bağlanılamıyor",
   "analytics_failedLoad": "Analiz yüklenemedi",
-
   "burnCountdown_burningNow": "Şu an yakılıyor…",
   "burnCountdown_burnsIn": "{{time}} içinde yakılacak",
-
   "burnSwitch_label": "Yakma Modu",
-
   "burnTimePicker_title": "Yakma Zamanını Ayarla",
   "burnTimePicker_description": "Bu girdinin kalıcı olarak imha edileceği zamanı seçin. Bu an geçtikten sonra girdi sunucu tarafında silinir ve kurtarılamaz.",
   "burnTimePicker_dateLabel": "Tarih",
@@ -105,7 +98,6 @@
   "burnTimePicker_errorPickDate": "Geçerli bir tarih ve saat seçin.",
   "burnTimePicker_errorFuture": "Yakma zamanı gelecekte olmalıdır.",
   "burnTimePicker_confirm": "Yakma Zamanını Ayarla",
-
   "editorToolbar_undo": "Geri Al (Ctrl+Z)",
   "editorToolbar_redo": "Yeniden Yap (Ctrl+Y)",
   "editorToolbar_bold": "Kalın (Ctrl+B)",
@@ -126,7 +118,6 @@
   "editorToolbar_blockquote": "Alıntı Bloğu",
   "editorToolbar_codeBlock": "Kod Bloğu",
   "editorToolbar_horizontalRule": "Yatay Çizgi",
-
   "exportDialog_title": "PDF Olarak Dışa Aktar",
   "exportDialog_subtitleEntry": "Bu girdiyi nasıl almak istediğinizi seçin",
   "exportDialog_subtitleAll": "Günlüğünüzü nasıl almak istediğinizi seçin",
@@ -135,12 +126,11 @@
   "exportDialog_emailTitle": "E-postaya Gönder",
   "exportDialog_continue": "Devam Et",
   "exportDialog_exporting": "Dışa aktarılıyor…",
-
   "journalEditor_back": "Geri",
   "journalEditor_wordCount": "{{count}} kelime",
   "journalEditor_saveNow": "Şimdi Kaydet (Ctrl+S)",
   "journalEditor_exportPdf": "PDF Olarak Dışa Aktar",
-  "journalEditor_exportElite": "Dışa Aktar (Elite)",
+  "journalEditor_exportElite": "Dışa Aktar (Elit)",
   "journalEditor_aiCompanion": "AI Arkadaş",
   "journalEditor_deleteEntry": "Girdiyi Sil",
   "journalEditor_titlePlaceholder": "Girdiye başlık ver...",
@@ -157,7 +147,6 @@
   "journalEditor_exportDownloaded": "PDF başarıyla indirildi",
   "journalEditor_setBurnFirst": "Kaydetmeden önce bir yakma zamanı belirleyin veya Yakma Modunu kapatın.",
   "journalEditor_changeTab": "Yakma zamanını değiştir",
-
   "journalList_greeting_morning": "Günaydın",
   "journalList_greeting_afternoon": "İyi öğlenler",
   "journalList_greeting_evening": "İyi akşamlar",
@@ -178,7 +167,6 @@
   "journalList_noContent": "İçerik yok",
   "journalList_aiInsight": "AI içgörüsü",
   "journalList_ghostHidden": "İçerik gizlendi — Hayalet Modu aktif",
-
   "loginOnboarding_welcomeBack": "Tekrar hoş geldiniz",
   "loginOnboarding_moodTitle": "Bugün nasıl hissediyorsunuz?",
   "loginOnboarding_moodSubtitle": "Ruh haliniz AI arkadaşınızın sizi daha iyi anlamasına yardımcı olur",
@@ -192,13 +180,11 @@
   "loginOnboarding_chatTitle": "AI arkadaşımla sohbet et",
   "loginOnboarding_chatBody": "Aklınızdakileri konuşun",
   "loginOnboarding_justBrowsing": "Şimdilik sadece göz atıyorum",
-
   "moodPicker_title": "Nasıl hissediyorsunuz?",
   "moodPicker_subtitle": "Ruh haliniz AI arkadaşınızın sizi daha iyi anlamasına yardımcı olur",
   "moodPicker_searchPlaceholder": "Duygular ara...",
   "moodPicker_noResults": "\"{{query}}\" ile eşleşen duygu yok",
   "moodPicker_skip": "Atla",
-
   "mood_happy": "Mutlu",
   "mood_grateful": "Minnettar",
   "mood_excited": "Heyecanlı",
@@ -231,7 +217,6 @@
   "mood_restless": "Huzursuz",
   "mood_reflective": "Düşünceli",
   "mood_serene": "Sakin",
-
   "aiMode_auto_label": "Otomatik",
   "aiMode_auto_description": "AI, girdine göre en iyi modu seçer",
   "aiMode_vault_label": "Kasa",
@@ -242,8 +227,7 @@
   "aiMode_mirror_description": "Düşüncelerinin dürüst yansıması",
   "aiMode_insight_label": "İçgörü",
   "aiMode_insight_description": "Analitik örüntüler ve büyüme",
-
-  "paywall_eliteFeature": "ELITE ÖZELLİĞİ",
+  "paywall_eliteFeature": "ELİT ÖZELLİĞİ",
   "paywall_viewPlans": "Planları Görüntüle",
   "paywall_maybeLater": "Belki daha sonra",
   "paywall_aiModes_title": "Tüm AI Modlarını Aç",
@@ -251,14 +235,13 @@
   "paywall_aiLimit_title": "AI Yanıt Limitine Ulaşıldı",
   "paywall_aiLimit_desc": "Bugün için 5 ücretsiz AI yanıtını kullandınız. Sınırsız AI arkadaş sohbeti için diAry Elite'e yükseltin.",
   "paywall_export_title": "Günlüğünüzü Dışa Aktarın",
-  "paywall_export_desc": "PDF dışa aktarma bir Elite özelliğidir. Günlük girdilerinizin güzel biçimlendirilmiş kopyalarını indirmek için yükseltin.",
+  "paywall_export_desc": "PDF dışa aktarma bir Elit özelliğidir. Günlük girdilerinizin güzel biçimlendirilmiş kopyalarını indirmek için yükseltin.",
   "paywall_ghostMode_title": "Hayalet Modunu Etkinleştir",
-  "paywall_ghostMode_desc": "Hayalet Modu bir Elite gizlilik özelliğidir. Girdileriniz için gelişmiş gizlilik korumasını etkinleştirmek için yükseltin.",
+  "paywall_ghostMode_desc": "Hayalet Modu bir Elit gizlilik özelliğidir. Girdileriniz için gelişmiş gizlilik korumasını etkinleştirmek için yükseltin.",
   "paywall_analytics_title": "Gelişmiş Analiz",
-  "paywall_analytics_desc": "Duygu trendleri, örüntü tespiti ve davranışsal içgörüler Elite özelliklerdir. Derin öz-yansıma araçlarını açmak için yükseltin.",
-  "paywall_general_title": "Elite'e Yükselt",
+  "paywall_analytics_desc": "Duygu trendleri, örüntü tespiti ve davranışsal içgörüler Elit özelliklerdir. Derin öz-yansıma araçlarını açmak için yükseltin.",
+  "paywall_general_title": "Elit'e Yükselt",
   "paywall_general_desc": "Sınırsız AI yanıtları, tüm AI modları, günlük dışa aktarma, hayalet modu, gelişmiş analiz ve daha fazlasının kilidini açın.",
-
   "settings_title": "Ayarlar",
   "settings_tabProfile": "Profil",
   "settings_tabPreferences": "Tercihler",
@@ -272,7 +255,7 @@
   "settings_profile_saveChanges": "Değişiklikleri Kaydet",
   "settings_profile_saving": "Kaydediliyor...",
   "settings_profile_manageSubscription": "Aboneliği Yönet",
-  "settings_profile_upgradeElite": "Elite'e Yükselt",
+  "settings_profile_upgradeElite": "Elit'e Yükselt",
   "settings_profile_manageDesc": "Plan detaylarınızı ve faturalandırmayı görüntüleyin",
   "settings_profile_upgradeDesc": "Sınırsız AI, dışa aktarma, hayalet modu ve daha fazlasının kilidini açın",
   "settings_profile_entries": "Girdi",
@@ -300,11 +283,10 @@
   "settings_security_changingPw": "Değiştiriliyor...",
   "settings_export_title": "Günlüğünüzü Dışa Aktarın",
   "settings_export_desc": "Tüm girdilerinizi güzel biçimlendirilmiş bir PDF olarak indirin",
-  "settings_export_eliteFeature": "Elite Özelliği",
+  "settings_export_eliteFeature": "Elit Özelliği",
   "settings_export_exportBtn": "PDF Olarak Dışa Aktar",
   "settings_export_upgradeBtn": "Dışa Aktarma için Yükselt",
   "settings_export_exporting": "Dışa aktarılıyor...",
-
   "upload_title": "Tara / Yükle",
   "upload_modeSingle": "Tek Dosya",
   "upload_modeMulti": "Çoklu Dosya",
@@ -330,10 +312,8 @@
   "upload_saveError": "Kaydetme başarısız",
   "upload_deleteTitle": "Bu girdiyi silmek istiyor musunuz?",
   "upload_deleteBody": "Bu işlem geri alınamaz. Kelimeleriniz sonsuza kadar kaybolacak.",
-
   "dashboard_loadingSpace": "Alanınız yükleniyor...",
   "dashboard_tagline": "\"Asla söylemeyeceğim...\"",
-
   "login_welcomeBack": "Tekrar Hoş Geldiniz",
   "login_title": "Giriş Yap",
   "login_subtitle": "Özel alanınız sizi bekliyor",
@@ -350,7 +330,6 @@
   "login_downloadApp": "Uygulamayı İndir",
   "login_tagline": "\"Asla söylemeyeceğim...\"",
   "login_heroDesc": "Düşünceleriniz onları gerçekten anlayan bir alanı hak ediyor. Yazın, konuşun, çizin — diAry sizi sıcaklıkla dinler ve sırlarınızı sonsuza kadar saklar.",
-
   "register_getStarted": "Başlayın",
   "register_title": "Alanınızı Oluşturun",
   "register_subtitle": "Kelimeleriniz, dünyanız, günlüğünüz",
@@ -368,7 +347,6 @@
   "register_signIn": "Giriş Yap",
   "register_heroTagline": "\"Kendinizi tanıma yolculuğuna başlayın — bir sayfa bir seferde.\"",
   "register_heroDesc": "En özel düşüncelerini diAry'ye güvenen binlerce kişiye katılın. Askeri düzeyde şifreleme. Sıfır bilgi mimarisi.",
-
   "forgotPassword_title": "Şifre Sıfırla",
   "forgotPassword_category": "Hesap Kurtarma",
   "forgotPassword_subtitle": "E-postanızı girin, size sıfırlama bağlantısı göndereceğiz",
@@ -381,7 +359,6 @@
   "forgotPassword_successCategory": "Başarılı",
   "forgotPassword_successMsg": "{{email}} için bir hesap mevcutsa, kısa süre içinde şifre sıfırlama bağlantısı alacaksınız.",
   "forgotPassword_backBtn": "Girişe Geri Dön",
-
   "verifyEmail_category": "Doğrulama",
   "verifyEmail_title": "E-postanızı Doğrulayın",
   "verifyEmail_subtitle": "6 haneli kodu şu adrese gönderdik:",
@@ -391,18 +368,15 @@
   "verifyEmail_resend": "Tekrar Gönder",
   "verifyEmail_resendIn": "{{seconds}} saniye sonra tekrar gönder",
   "verifyEmail_backToSignIn": "Girişe geri dön",
-
   "notFound_title": "Sayfa Bulunamadı",
   "notFound_body": "Aradığınız sayfa mevcut değil. Taşınmış veya silinmiş olabilir.",
   "notFound_returnHome": "Ana Sayfaya Dön",
-
   "splash_tagline": "\"Asla söylemeyeceğim.\"",
   "splash_subtitle": "Özel güvenli alanınız sizi bekliyor",
   "splash_tapAnywhere": "— Girmek İçin Herhangi Bir Yere Dokunun —",
-
   "subscription_title": "Planınızı Seçin",
   "subscription_subtitle": "Özel günlük arkadaşınızın tam gücünü açın.",
-  "subscription_subtitleElite": "Özel günlük arkadaşınızın tam gücünü açın. Şu anda Elite planındasınız.",
+  "subscription_subtitleElite": "Özel günlük arkadaşınızın tam gücünü açın. Şu anda Elit planındasınız.",
   "subscription_monthly": "Aylık",
   "subscription_annual": "Yıllık",
   "subscription_save": "%{{percent}} TASARRUF EDİN",
@@ -412,7 +386,7 @@
   "subscription_billedMonthly": "Aylık faturalandırılır, istediğiniz zaman iptal edin",
   "subscription_currentPlan": "Mevcut Plan",
   "subscription_mostPopular": "EN POPÜLER",
-  "subscription_upgradeBtn": "Elite'e Yükselt",
+  "subscription_upgradeBtn": "Elit'e Yükselt",
   "subscription_yourPlan": "Mevcut Planınız",
   "subscription_freeTagline": "Özel günlük arkadaşınız",
   "subscription_eliteTagline": "Her özelliği açın, sınır yok",

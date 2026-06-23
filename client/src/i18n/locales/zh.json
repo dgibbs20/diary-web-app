@@ -15,11 +15,10 @@
   "common_today": "今天",
   "common_yesterday": "昨天",
   "common_words": "字",
-
+  "common_elite": "精英",
   "header_download": "下载",
   "header_signIn": "登录",
   "header_signOut": "退出登录",
-
   "footer_tagline": "「我永远不会说...」",
   "footer_copyright": "© 2026 GMX Quantum LLC。保留所有权利。GMCG Holdings Inc. 旗下公司。",
   "footer_features": "功能",
@@ -31,7 +30,6 @@
   "footer_faq": "常见问题",
   "footer_privacy": "隐私政策",
   "footer_contact": "联系我们",
-
   "sidebar_newEntry": "新建日记",
   "sidebar_scanUpload": "扫描 / 上传",
   "sidebar_journal": "日记",
@@ -39,7 +37,6 @@
   "sidebar_settings": "设置",
   "sidebar_aiCompanion": "AI 伴侣",
   "sidebar_signOut": "退出登录",
-
   "aiCompanion_title": "AI 伴侣",
   "aiCompanion_mode": "模式",
   "aiCompanion_unlimited": "无限制",
@@ -66,7 +63,6 @@
   "aiCompanion_chatCleared": "对话已清除",
   "aiCompanion_exportedTxt": "已导出为文本文件",
   "aiCompanion_savedEntry": "已保存：「{{title}}」",
-
   "analytics_title": "分析",
   "analytics_subtitle": "一览你的写作旅程",
   "analytics_totalEntries": "总条目数",
@@ -84,12 +80,9 @@
   "analytics_errorMsg": "显示来自你个人资料的缓存数据",
   "analytics_unableConnect": "无法连接到分析服务",
   "analytics_failedLoad": "分析加载失败",
-
   "burnCountdown_burningNow": "正在销毁…",
   "burnCountdown_burnsIn": "将在 {{time}} 后销毁",
-
   "burnSwitch_label": "销毁模式",
-
   "burnTimePicker_title": "设置销毁时间",
   "burnTimePicker_description": "选择此条目永久销毁的时间。时间过后，条目将从服务器端删除，无法恢复。",
   "burnTimePicker_dateLabel": "日期",
@@ -105,7 +98,6 @@
   "burnTimePicker_errorPickDate": "请选择有效的日期和时间。",
   "burnTimePicker_errorFuture": "销毁时间必须是未来的时间。",
   "burnTimePicker_confirm": "设置销毁时间",
-
   "editorToolbar_undo": "撤销 (Ctrl+Z)",
   "editorToolbar_redo": "重做 (Ctrl+Y)",
   "editorToolbar_bold": "加粗 (Ctrl+B)",
@@ -126,7 +118,6 @@
   "editorToolbar_blockquote": "引用块",
   "editorToolbar_codeBlock": "代码块",
   "editorToolbar_horizontalRule": "水平分割线",
-
   "exportDialog_title": "导出为 PDF",
   "exportDialog_subtitleEntry": "选择接收此条目的方式",
   "exportDialog_subtitleAll": "选择接收日记的方式",
@@ -135,12 +126,11 @@
   "exportDialog_emailTitle": "发送到邮箱",
   "exportDialog_continue": "继续",
   "exportDialog_exporting": "导出中…",
-
   "journalEditor_back": "返回",
   "journalEditor_wordCount": "{{count}} 字",
   "journalEditor_saveNow": "立即保存 (Ctrl+S)",
   "journalEditor_exportPdf": "导出为 PDF",
-  "journalEditor_exportElite": "导出（Elite）",
+  "journalEditor_exportElite": "导出（精英）",
   "journalEditor_aiCompanion": "AI 伴侣",
   "journalEditor_deleteEntry": "删除条目",
   "journalEditor_titlePlaceholder": "为条目添加标题...",
@@ -157,7 +147,6 @@
   "journalEditor_exportDownloaded": "PDF 下载成功",
   "journalEditor_setBurnFirst": "请在保存前设置销毁时间，或关闭销毁模式。",
   "journalEditor_changeTab": "更改销毁时间",
-
   "journalList_greeting_morning": "早上好",
   "journalList_greeting_afternoon": "下午好",
   "journalList_greeting_evening": "晚上好",
@@ -178,7 +167,6 @@
   "journalList_noContent": "无内容",
   "journalList_aiInsight": "AI 洞察",
   "journalList_ghostHidden": "内容已隐藏 — 幽灵模式已启用",
-
   "loginOnboarding_welcomeBack": "欢迎回来",
   "loginOnboarding_moodTitle": "今天感觉怎么样？",
   "loginOnboarding_moodSubtitle": "你的心情帮助 AI 伴侣更好地了解你",
@@ -192,13 +180,11 @@
   "loginOnboarding_chatTitle": "和我的 AI 伴侣聊天",
   "loginOnboarding_chatBody": "聊聊你心里在想什么",
   "loginOnboarding_justBrowsing": "先随便看看",
-
   "moodPicker_title": "你感觉怎么样？",
   "moodPicker_subtitle": "你的心情帮助 AI 伴侣更好地了解你",
   "moodPicker_searchPlaceholder": "搜索情绪...",
   "moodPicker_noResults": "没有与「{{query}}」匹配的情绪",
   "moodPicker_skip": "跳过",
-
   "mood_happy": "开心",
   "mood_grateful": "感恩",
   "mood_excited": "兴奋",
@@ -231,7 +217,6 @@
   "mood_restless": "坐立不安",
   "mood_reflective": "沉思",
   "mood_serene": "宁静",
-
   "aiMode_auto_label": "自动",
   "aiMode_auto_description": "AI 根据你的条目选择最佳模式",
   "aiMode_vault_label": "保险箱",
@@ -242,8 +227,7 @@
   "aiMode_mirror_description": "对你想法的诚实反映",
   "aiMode_insight_label": "洞察",
   "aiMode_insight_description": "分析模式与成长",
-
-  "paywall_eliteFeature": "ELITE 专属功能",
+  "paywall_eliteFeature": "精英 专属功能",
   "paywall_viewPlans": "查看方案",
   "paywall_maybeLater": "也许以后",
   "paywall_aiModes_title": "解锁所有 AI 模式",
@@ -251,14 +235,13 @@
   "paywall_aiLimit_title": "已达 AI 回复上限",
   "paywall_aiLimit_desc": "你今天的 5 次免费 AI 回复已用完。升级到 diAry Elite，享受无限 AI 伴侣对话。",
   "paywall_export_title": "导出你的日记",
-  "paywall_export_desc": "PDF 导出是 Elite 专属功能。升级后可下载精美格式的日记条目副本。",
+  "paywall_export_desc": "PDF 导出是 精英 专属功能。升级后可下载精美格式的日记条目副本。",
   "paywall_ghostMode_title": "启用幽灵模式",
-  "paywall_ghostMode_desc": "幽灵模式是 Elite 隐私功能。升级以为你的条目启用增强隐私保护。",
+  "paywall_ghostMode_desc": "幽灵模式是 精英 隐私功能。升级以为你的条目启用增强隐私保护。",
   "paywall_analytics_title": "高级分析",
-  "paywall_analytics_desc": "情绪趋势、模式检测和行为洞察是 Elite 专属功能。升级以解锁深度自我反思工具。",
-  "paywall_general_title": "升级到 Elite",
+  "paywall_analytics_desc": "情绪趋势、模式检测和行为洞察是 精英 专属功能。升级以解锁深度自我反思工具。",
+  "paywall_general_title": "升级到 精英",
   "paywall_general_desc": "解锁无限 AI 回复、所有 AI 模式、日记导出、幽灵模式、高级分析等更多功能。",
-
   "settings_title": "设置",
   "settings_tabProfile": "个人资料",
   "settings_tabPreferences": "偏好设置",
@@ -272,7 +255,7 @@
   "settings_profile_saveChanges": "保存更改",
   "settings_profile_saving": "保存中...",
   "settings_profile_manageSubscription": "管理订阅",
-  "settings_profile_upgradeElite": "升级到 Elite",
+  "settings_profile_upgradeElite": "升级到 精英",
   "settings_profile_manageDesc": "查看你的方案详情和账单",
   "settings_profile_upgradeDesc": "解锁无限 AI、导出、幽灵模式等更多功能",
   "settings_profile_entries": "条目",
@@ -300,11 +283,10 @@
   "settings_security_changingPw": "修改中...",
   "settings_export_title": "导出你的日记",
   "settings_export_desc": "将所有条目下载为精美排版的 PDF",
-  "settings_export_eliteFeature": "Elite 功能",
+  "settings_export_eliteFeature": "精英 功能",
   "settings_export_exportBtn": "导出为 PDF",
   "settings_export_upgradeBtn": "升级以导出",
   "settings_export_exporting": "导出中...",
-
   "upload_title": "扫描 / 上传",
   "upload_modeSingle": "单个文件",
   "upload_modeMulti": "多个文件",
@@ -330,10 +312,8 @@
   "upload_saveError": "保存失败",
   "upload_deleteTitle": "删除此条目？",
   "upload_deleteBody": "此操作无法撤销。你的文字将永远消失。",
-
   "dashboard_loadingSpace": "加载你的空间中...",
   "dashboard_tagline": "「我永远不会说...」",
-
   "login_welcomeBack": "欢迎回来",
   "login_title": "登录",
   "login_subtitle": "你的私人空间在等你",
@@ -350,7 +330,6 @@
   "login_downloadApp": "下载应用",
   "login_tagline": "「我永远不会说...」",
   "login_heroDesc": "你的思想值得拥有一个真正理解它们的空间。写下来、说出来、画出来 — diAry 以温情倾听，永远守护你的秘密。",
-
   "register_getStarted": "开始吧",
   "register_title": "创建你的空间",
   "register_subtitle": "你的文字，你的世界，你的日记",
@@ -368,7 +347,6 @@
   "register_signIn": "登录",
   "register_heroTagline": "「开始了解自己的旅程 — 一页一页地。」",
   "register_heroDesc": "加入数千名将最私密想法托付给 diAry 的用户。军事级加密。零知识架构。",
-
   "forgotPassword_title": "重置密码",
   "forgotPassword_category": "账号恢复",
   "forgotPassword_subtitle": "输入你的邮箱，我们将发送重置链接",
@@ -381,7 +359,6 @@
   "forgotPassword_successCategory": "成功",
   "forgotPassword_successMsg": "如果 {{email}} 存在账号，你将很快收到密码重置链接。",
   "forgotPassword_backBtn": "返回登录",
-
   "verifyEmail_category": "验证",
   "verifyEmail_title": "验证你的邮箱",
   "verifyEmail_subtitle": "我们已将 6 位验证码发送至",
@@ -391,18 +368,15 @@
   "verifyEmail_resend": "重新发送",
   "verifyEmail_resendIn": "{{seconds}} 秒后重新发送",
   "verifyEmail_backToSignIn": "返回登录",
-
   "notFound_title": "页面未找到",
   "notFound_body": "你访问的页面不存在。它可能已被移动或删除。",
   "notFound_returnHome": "返回首页",
-
   "splash_tagline": "「我永远不会说。」",
   "splash_subtitle": "你的私人安全空间在等你",
   "splash_tapAnywhere": "— 点击任意位置进入 —",
-
   "subscription_title": "选择你的方案",
   "subscription_subtitle": "解锁你私人日记伴侣的全部功能。",
-  "subscription_subtitleElite": "解锁你私人日记伴侣的全部功能。你当前使用的是 Elite 方案。",
+  "subscription_subtitleElite": "解锁你私人日记伴侣的全部功能。你当前使用的是 精英 方案。",
   "subscription_monthly": "按月",
   "subscription_annual": "按年",
   "subscription_save": "节省 {{percent}}%",
@@ -412,7 +386,7 @@
   "subscription_billedMonthly": "按月计费，随时取消",
   "subscription_currentPlan": "当前方案",
   "subscription_mostPopular": "最受欢迎",
-  "subscription_upgradeBtn": "升级到 Elite",
+  "subscription_upgradeBtn": "升级到 精英",
   "subscription_yourPlan": "你的当前方案",
   "subscription_freeTagline": "你的私人日记伴侣",
   "subscription_eliteTagline": "解锁每项功能，无限制",

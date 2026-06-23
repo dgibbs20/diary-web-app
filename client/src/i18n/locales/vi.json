@@ -15,11 +15,10 @@
   "common_today": "Hôm nay",
   "common_yesterday": "Hôm qua",
   "common_words": "từ",
-
+  "common_elite": "Ưu tú",
   "header_download": "Tải xuống",
   "header_signIn": "Đăng nhập",
   "header_signOut": "Đăng xuất",
-
   "footer_tagline": "\"Tôi sẽ không bao giờ nói...\"",
   "footer_copyright": "© 2026 GMX Quantum LLC. Bảo lưu mọi quyền. Một công ty của GMCG Holdings Inc.",
   "footer_features": "Tính năng",
@@ -31,7 +30,6 @@
   "footer_faq": "Câu hỏi thường gặp",
   "footer_privacy": "Chính sách quyền riêng tư",
   "footer_contact": "Liên hệ",
-
   "sidebar_newEntry": "BÀI VIẾT MỚI",
   "sidebar_scanUpload": "QUÉT / TẢI LÊN",
   "sidebar_journal": "Nhật ký",
@@ -39,7 +37,6 @@
   "sidebar_settings": "Cài đặt",
   "sidebar_aiCompanion": "Người bạn AI",
   "sidebar_signOut": "Đăng xuất",
-
   "aiCompanion_title": "Người bạn AI",
   "aiCompanion_mode": "Chế độ",
   "aiCompanion_unlimited": "Không giới hạn",
@@ -66,7 +63,6 @@
   "aiCompanion_chatCleared": "Đã xóa cuộc trò chuyện",
   "aiCompanion_exportedTxt": "Đã xuất dưới dạng tệp văn bản",
   "aiCompanion_savedEntry": "Đã lưu: \"{{title}}\"",
-
   "analytics_title": "Phân tích",
   "analytics_subtitle": "Hành trình viết nhật ký của bạn nhìn tổng thể",
   "analytics_totalEntries": "Tổng bài viết",
@@ -84,12 +80,9 @@
   "analytics_errorMsg": "Đang hiển thị dữ liệu đã lưu từ hồ sơ của bạn",
   "analytics_unableConnect": "Không thể kết nối với dịch vụ phân tích",
   "analytics_failedLoad": "Không tải được phân tích",
-
   "burnCountdown_burningNow": "Đang đốt…",
   "burnCountdown_burnsIn": "Đốt trong {{time}}",
-
   "burnSwitch_label": "Chế độ đốt",
-
   "burnTimePicker_title": "Đặt thời gian đốt",
   "burnTimePicker_description": "Chọn khi nào bài viết này sẽ bị tiêu hủy vĩnh viễn. Sau thời điểm này, bài viết sẽ bị xóa khỏi máy chủ và không thể khôi phục.",
   "burnTimePicker_dateLabel": "Ngày",
@@ -105,7 +98,6 @@
   "burnTimePicker_errorPickDate": "Chọn ngày và giờ hợp lệ.",
   "burnTimePicker_errorFuture": "Thời gian đốt phải là thời điểm trong tương lai.",
   "burnTimePicker_confirm": "Đặt thời gian đốt",
-
   "editorToolbar_undo": "Hoàn tác (Ctrl+Z)",
   "editorToolbar_redo": "Làm lại (Ctrl+Y)",
   "editorToolbar_bold": "In đậm (Ctrl+B)",
@@ -126,7 +118,6 @@
   "editorToolbar_blockquote": "Trích dẫn khối",
   "editorToolbar_codeBlock": "Khối mã",
   "editorToolbar_horizontalRule": "Đường ngang",
-
   "exportDialog_title": "Xuất dưới dạng PDF",
   "exportDialog_subtitleEntry": "Chọn cách bạn muốn nhận bài viết này",
   "exportDialog_subtitleAll": "Chọn cách bạn muốn nhận nhật ký của bạn",
@@ -135,12 +126,11 @@
   "exportDialog_emailTitle": "Gửi qua email",
   "exportDialog_continue": "Tiếp tục",
   "exportDialog_exporting": "Đang xuất…",
-
   "journalEditor_back": "Quay lại",
   "journalEditor_wordCount": "{{count}} từ",
   "journalEditor_saveNow": "Lưu ngay (Ctrl+S)",
   "journalEditor_exportPdf": "Xuất dưới dạng PDF",
-  "journalEditor_exportElite": "Xuất (Elite)",
+  "journalEditor_exportElite": "Xuất (Ưu tú)",
   "journalEditor_aiCompanion": "Người bạn AI",
   "journalEditor_deleteEntry": "Xóa bài viết",
   "journalEditor_titlePlaceholder": "Đặt tiêu đề bài viết...",
@@ -157,7 +147,6 @@
   "journalEditor_exportDownloaded": "Đã tải PDF thành công",
   "journalEditor_setBurnFirst": "Đặt thời gian đốt trước khi lưu hoặc tắt Chế độ đốt.",
   "journalEditor_changeTab": "Thay đổi thời gian đốt",
-
   "journalList_greeting_morning": "Chào buổi sáng",
   "journalList_greeting_afternoon": "Chào buổi chiều",
   "journalList_greeting_evening": "Chào buổi tối",
@@ -178,7 +167,6 @@
   "journalList_noContent": "Không có nội dung",
   "journalList_aiInsight": "Hiểu biết AI",
   "journalList_ghostHidden": "Nội dung bị ẩn — Chế độ bóng ma đang hoạt động",
-
   "loginOnboarding_welcomeBack": "Chào mừng trở lại",
   "loginOnboarding_moodTitle": "Hôm nay bạn cảm thấy thế nào?",
   "loginOnboarding_moodSubtitle": "Tâm trạng của bạn giúp người bạn AI hiểu bạn tốt hơn",
@@ -192,13 +180,11 @@
   "loginOnboarding_chatTitle": "Trò chuyện với người bạn AI của tôi",
   "loginOnboarding_chatBody": "Nói về những gì đang trong đầu bạn",
   "loginOnboarding_justBrowsing": "Chỉ duyệt thôi",
-
   "moodPicker_title": "Bạn cảm thấy thế nào?",
   "moodPicker_subtitle": "Tâm trạng của bạn giúp người bạn AI hiểu bạn tốt hơn",
   "moodPicker_searchPlaceholder": "Tìm kiếm cảm xúc...",
   "moodPicker_noResults": "Không có cảm xúc nào khớp với \"{{query}}\"",
   "moodPicker_skip": "Bỏ qua",
-
   "mood_happy": "Vui vẻ",
   "mood_grateful": "Biết ơn",
   "mood_excited": "Phấn khích",
@@ -231,7 +217,6 @@
   "mood_restless": "Bồn chồn",
   "mood_reflective": "Suy ngẫm",
   "mood_serene": "Thư thái",
-
   "aiMode_auto_label": "Tự động",
   "aiMode_auto_description": "AI chọn chế độ tốt nhất dựa trên bài viết của bạn",
   "aiMode_vault_label": "Kho bảo mật",
@@ -242,8 +227,7 @@
   "aiMode_mirror_description": "Phản chiếu trung thực suy nghĩ của bạn",
   "aiMode_insight_label": "Hiểu biết",
   "aiMode_insight_description": "Các mẫu phân tích và sự tăng trưởng",
-
-  "paywall_eliteFeature": "TÍNH NĂNG ELITE",
+  "paywall_eliteFeature": "TÍNH NĂNG ƯU TÚ",
   "paywall_viewPlans": "Xem các gói",
   "paywall_maybeLater": "Có thể sau",
   "paywall_aiModes_title": "Mở khóa tất cả chế độ AI",
@@ -251,14 +235,13 @@
   "paywall_aiLimit_title": "Đã đạt giới hạn phản hồi AI",
   "paywall_aiLimit_desc": "Bạn đã sử dụng hết 5 phản hồi AI miễn phí cho hôm nay. Nâng cấp lên diAry Elite để có cuộc trò chuyện không giới hạn với người bạn AI.",
   "paywall_export_title": "Xuất nhật ký của bạn",
-  "paywall_export_desc": "Xuất PDF là tính năng Elite. Nâng cấp để tải xuống các bản sao được định dạng đẹp của các bài nhật ký.",
+  "paywall_export_desc": "Xuất PDF là tính năng Ưu tú. Nâng cấp để tải xuống các bản sao được định dạng đẹp của các bài nhật ký.",
   "paywall_ghostMode_title": "Bật chế độ bóng ma",
-  "paywall_ghostMode_desc": "Chế độ bóng ma là tính năng quyền riêng tư Elite. Nâng cấp để bật bảo vệ quyền riêng tư nâng cao cho các bài viết của bạn.",
+  "paywall_ghostMode_desc": "Chế độ bóng ma là tính năng quyền riêng tư Ưu tú. Nâng cấp để bật bảo vệ quyền riêng tư nâng cao cho các bài viết của bạn.",
   "paywall_analytics_title": "Phân tích nâng cao",
-  "paywall_analytics_desc": "Xu hướng tâm trạng, phát hiện mẫu và hiểu biết hành vi là các tính năng Elite. Nâng cấp để mở khóa các công cụ tự phản chiếu sâu sắc.",
-  "paywall_general_title": "Nâng cấp lên Elite",
+  "paywall_analytics_desc": "Xu hướng tâm trạng, phát hiện mẫu và hiểu biết hành vi là các tính năng Ưu tú. Nâng cấp để mở khóa các công cụ tự phản chiếu sâu sắc.",
+  "paywall_general_title": "Nâng cấp lên Ưu tú",
   "paywall_general_desc": "Mở khóa phản hồi AI không giới hạn, tất cả chế độ AI, xuất nhật ký, chế độ bóng ma, phân tích nâng cao và nhiều hơn nữa.",
-
   "settings_title": "Cài đặt",
   "settings_tabProfile": "Hồ sơ",
   "settings_tabPreferences": "Tùy chọn",
@@ -272,7 +255,7 @@
   "settings_profile_saveChanges": "Lưu thay đổi",
   "settings_profile_saving": "Đang lưu...",
   "settings_profile_manageSubscription": "Quản lý đăng ký",
-  "settings_profile_upgradeElite": "Nâng cấp lên Elite",
+  "settings_profile_upgradeElite": "Nâng cấp lên Ưu tú",
   "settings_profile_manageDesc": "Xem chi tiết gói và thanh toán",
   "settings_profile_upgradeDesc": "Mở khóa AI không giới hạn, xuất, chế độ bóng ma và nhiều hơn nữa",
   "settings_profile_entries": "Bài viết",
@@ -300,11 +283,10 @@
   "settings_security_changingPw": "Đang thay đổi...",
   "settings_export_title": "Xuất nhật ký của bạn",
   "settings_export_desc": "Tải xuống tất cả bài viết của bạn dưới dạng PDF được định dạng đẹp",
-  "settings_export_eliteFeature": "Tính năng Elite",
+  "settings_export_eliteFeature": "Tính năng Ưu tú",
   "settings_export_exportBtn": "Xuất dưới dạng PDF",
   "settings_export_upgradeBtn": "Nâng cấp để xuất",
   "settings_export_exporting": "Đang xuất...",
-
   "upload_title": "Quét / Tải lên",
   "upload_modeSingle": "Tệp đơn",
   "upload_modeMulti": "Nhiều tệp",
@@ -330,10 +312,8 @@
   "upload_saveError": "Lưu không thành công",
   "upload_deleteTitle": "Xóa bài viết này?",
   "upload_deleteBody": "Hành động này không thể hoàn tác. Những từ của bạn sẽ mãi mãi biến mất.",
-
   "dashboard_loadingSpace": "Đang tải không gian của bạn...",
   "dashboard_tagline": "\"Tôi sẽ không bao giờ nói...\"",
-
   "login_welcomeBack": "Chào mừng trở lại",
   "login_title": "Đăng nhập",
   "login_subtitle": "Không gian riêng tư của bạn đang chờ",
@@ -350,7 +330,6 @@
   "login_downloadApp": "Tải ứng dụng",
   "login_tagline": "\"Tôi sẽ không bao giờ nói...\"",
   "login_heroDesc": "Suy nghĩ của bạn xứng đáng có một không gian thực sự hiểu chúng. Viết, nói, vẽ — diAry lắng nghe với sự ấm áp và giữ bí mật của bạn mãi mãi.",
-
   "register_getStarted": "Bắt đầu",
   "register_title": "Tạo không gian của bạn",
   "register_subtitle": "Từ ngữ của bạn, thế giới của bạn, nhật ký của bạn",
@@ -368,7 +347,6 @@
   "register_signIn": "Đăng nhập",
   "register_heroTagline": "\"Bắt đầu hành trình tìm hiểu bản thân — từng trang một.\"",
   "register_heroDesc": "Tham gia cùng hàng nghìn người tin tưởng diAry với những suy nghĩ riêng tư nhất. Mã hóa cấp độ quân sự. Kiến trúc không kiến thức.",
-
   "forgotPassword_title": "Đặt lại mật khẩu",
   "forgotPassword_category": "Khôi phục tài khoản",
   "forgotPassword_subtitle": "Nhập email của bạn và chúng tôi sẽ gửi cho bạn liên kết đặt lại",
@@ -381,7 +359,6 @@
   "forgotPassword_successCategory": "Thành công",
   "forgotPassword_successMsg": "Nếu tồn tại tài khoản cho {{email}}, bạn sẽ nhận được liên kết đặt lại mật khẩu trong thời gian ngắn.",
   "forgotPassword_backBtn": "Quay lại đăng nhập",
-
   "verifyEmail_category": "Xác minh",
   "verifyEmail_title": "Xác minh email của bạn",
   "verifyEmail_subtitle": "Chúng tôi đã gửi mã 6 chữ số đến",
@@ -391,18 +368,15 @@
   "verifyEmail_resend": "Gửi lại",
   "verifyEmail_resendIn": "Gửi lại sau {{seconds}} giây",
   "verifyEmail_backToSignIn": "Quay lại đăng nhập",
-
   "notFound_title": "Không tìm thấy trang",
   "notFound_body": "Trang bạn đang tìm không tồn tại. Nó có thể đã được di chuyển hoặc xóa.",
   "notFound_returnHome": "Về trang chủ",
-
   "splash_tagline": "\"Tôi sẽ không bao giờ nói.\"",
   "splash_subtitle": "Không gian an toàn riêng tư của bạn đang chờ",
   "splash_tapAnywhere": "— Nhấn bất kỳ đâu để vào —",
-
   "subscription_title": "Chọn gói của bạn",
   "subscription_subtitle": "Mở khóa sức mạnh đầy đủ của người bạn nhật ký riêng tư.",
-  "subscription_subtitleElite": "Mở khóa sức mạnh đầy đủ của người bạn nhật ký riêng tư. Bạn đang dùng gói Elite.",
+  "subscription_subtitleElite": "Mở khóa sức mạnh đầy đủ của người bạn nhật ký riêng tư. Bạn đang dùng gói Ưu tú.",
   "subscription_monthly": "Hàng tháng",
   "subscription_annual": "Hàng năm",
   "subscription_save": "TIẾT KIỆM {{percent}}%",
@@ -412,7 +386,7 @@
   "subscription_billedMonthly": "Thanh toán hàng tháng, hủy bất cứ lúc nào",
   "subscription_currentPlan": "Gói hiện tại",
   "subscription_mostPopular": "PHỔ BIẾN NHẤT",
-  "subscription_upgradeBtn": "Nâng cấp lên Elite",
+  "subscription_upgradeBtn": "Nâng cấp lên Ưu tú",
   "subscription_yourPlan": "Gói hiện tại của bạn",
   "subscription_freeTagline": "Người bạn nhật ký riêng tư của bạn",
   "subscription_eliteTagline": "Mở khóa mọi tính năng, không giới hạn",
