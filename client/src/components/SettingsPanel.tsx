@@ -293,6 +293,7 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
           onChange={(e) => {
             i18n.changeLanguage(e.target.value);
             localStorage.setItem('diary_language', e.target.value);
+            userApi.updatePreferences({ preferred_language: e.target.value });
           }}
           style={{
             fontFamily: FONT,
