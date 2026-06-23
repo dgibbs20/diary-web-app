@@ -158,7 +158,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
     const history = messages.map(m => ({ role: m.role, content: m.content }));
 
     try {
-      const res = await aiApi.sendMessage(msg, mode, entryContext, history, userName);
+      const res = await aiApi.sendMessage(msg, mode, entryContext, history, userName, undefined, i18n.language);
       if (res.success && res.response) {
         const aiMsg: ChatMessage = {
           id: (Date.now() + 1).toString(),

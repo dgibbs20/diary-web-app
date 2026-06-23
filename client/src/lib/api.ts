@@ -223,7 +223,8 @@ export const aiApi = {
     entryContext?: string,
     history: Array<{ role: string; content: string }> = [],
     userName?: string,
-    userStyle?: string
+    userStyle?: string,
+    language?: string
   ) {
     const res = await authFetch('/api/ai/companion', {
       method: 'POST',
@@ -234,6 +235,7 @@ export const aiApi = {
         history,
         user_name: userName || '',
         user_style: userStyle || '',
+        language: language || 'en',
       }),
     });
     const json = await res.json();
