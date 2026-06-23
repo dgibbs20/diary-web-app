@@ -18,7 +18,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  X, Send, Loader2, Sparkles, Crown, Lock,
+  X, Send, Loader2, Crown, Lock,
   Save, Download, Flame, Trash2, Check, ChevronDown, Mail, FileText, Clock,
 } from 'lucide-react';
 import { aiApi, journalApi, exportApi } from '@/lib/api';
@@ -684,12 +684,11 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
         <div className="flex-1 overflow-y-auto diary-scrollbar px-4 py-4 space-y-4">
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center px-4">
-              <div
-                className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                style={{ background: 'rgba(201,168,76,0.06)' }}
-              >
-                <Sparkles size={24} style={{ color: GOLD }} />
-              </div>
+              <img
+                src={getLogoSrc(i18n.language, isElite)}
+                alt="diAry"
+                style={{ height: '64px', width: 'auto', opacity: 0.9, marginBottom: '16px' }}
+              />
               <h4
                 className="text-lg mb-2 font-semibold"
                 style={{ fontFamily: FONT, color: 'var(--foreground)' }}
