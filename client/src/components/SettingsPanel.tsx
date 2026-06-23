@@ -291,9 +291,10 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
         <select
           value={i18n.language}
           onChange={(e) => {
-            i18n.changeLanguage(e.target.value);
-            localStorage.setItem('diary_language', e.target.value);
-            userApi.updatePreferences({ preferred_language: e.target.value });
+            const newLang = e.target.value;
+            i18n.changeLanguage(newLang);
+            localStorage.setItem('diary_language', newLang);
+            userApi.updatePreferences({ preferred_language: newLang }).catch(() => {});
           }}
           style={{
             fontFamily: FONT,
