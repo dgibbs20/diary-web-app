@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Xuất dưới dạng PDF",
   "journalEditor_exportElite": "Xuất (Ưu tú)",
   "journalEditor_aiCompanion": "Người bạn AI",
+  "journalEditor_sendToAi": "Gửi đến Người bạn AI",
   "journalEditor_deleteEntry": "Xóa bài viết",
   "journalEditor_titlePlaceholder": "Đặt tiêu đề bài viết...",
   "journalEditor_bodyPlaceholder": "Bắt đầu viết suy nghĩ của bạn...",

@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Ekspor sebagai PDF",
   "journalEditor_exportElite": "Ekspor (Elite)",
   "journalEditor_aiCompanion": "Teman AI",
+  "journalEditor_sendToAi": "Kirim ke Teman AI",
   "journalEditor_deleteEntry": "Hapus entri",
   "journalEditor_titlePlaceholder": "Judul entri kamu...",
   "journalEditor_bodyPlaceholder": "Mulai menulis pikiranmu...",

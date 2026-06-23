@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Eksporter som PDF",
   "journalEditor_exportElite": "Eksporter (Elite)",
   "journalEditor_aiCompanion": "AI-assistent",
+  "journalEditor_sendToAi": "Send til AI-assistent",
   "journalEditor_deleteEntry": "Slett innlegg",
   "journalEditor_titlePlaceholder": "Gi innlegget ditt en tittel...",
   "journalEditor_bodyPlaceholder": "Begynn å skrive tankene dine...",

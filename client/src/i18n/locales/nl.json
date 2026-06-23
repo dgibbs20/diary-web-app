@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Exporteren als PDF",
   "journalEditor_exportElite": "Exporteren (Elite)",
   "journalEditor_aiCompanion": "AI-metgezel",
+  "journalEditor_sendToAi": "Stuur naar AI-metgezel",
   "journalEditor_deleteEntry": "Invoer verwijderen",
   "journalEditor_titlePlaceholder": "Geef je invoer een titel...",
   "journalEditor_bodyPlaceholder": "Begin met schrijven...",

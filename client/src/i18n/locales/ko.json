@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "PDF로 내보내기",
   "journalEditor_exportElite": "내보내기 (엘리트)",
   "journalEditor_aiCompanion": "AI 동반자",
+  "journalEditor_sendToAi": "AI 동반자에게 보내기",
   "journalEditor_deleteEntry": "항목 삭제",
   "journalEditor_titlePlaceholder": "제목을 입력하세요...",
   "journalEditor_bodyPlaceholder": "생각을 쓰기 시작하세요...",

@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Экспорт в PDF",
   "journalEditor_exportElite": "Экспорт (Элита)",
   "journalEditor_aiCompanion": "ИИ-компаньон",
+  "journalEditor_sendToAi": "Отправить ИИ-компаньону",
   "journalEditor_deleteEntry": "Удалить запись",
   "journalEditor_titlePlaceholder": "Дайте название записи...",
   "journalEditor_bodyPlaceholder": "Начните писать свои мысли...",

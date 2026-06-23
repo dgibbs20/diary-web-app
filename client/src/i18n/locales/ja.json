@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "PDFとしてエクスポート",
   "journalEditor_exportElite": "エクスポート (エリート)",
   "journalEditor_aiCompanion": "AI コンパニオン",
+  "journalEditor_sendToAi": "AI コンパニオンに送る",
   "journalEditor_deleteEntry": "記録を削除",
   "journalEditor_titlePlaceholder": "タイトルを入力...",
   "journalEditor_bodyPlaceholder": "思いを書き始めましょう...",

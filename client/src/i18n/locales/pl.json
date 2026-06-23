@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Eksportuj jako PDF",
   "journalEditor_exportElite": "Eksportuj (Elita)",
   "journalEditor_aiCompanion": "Towarzysz AI",
+  "journalEditor_sendToAi": "Wyślij do Towarzysza AI",
   "journalEditor_deleteEntry": "Usuń wpis",
   "journalEditor_titlePlaceholder": "Nadaj tytuł wpisowi...",
   "journalEditor_bodyPlaceholder": "Zacznij pisać swoje myśli...",

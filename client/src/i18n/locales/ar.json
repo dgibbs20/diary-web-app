@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "تصدير كـ PDF",
   "journalEditor_exportElite": "تصدير (النخبة)",
   "journalEditor_aiCompanion": "مرافق الذكاء الاصطناعي",
+  "journalEditor_sendToAi": "إرسال إلى مرافق الذكاء الاصطناعي",
   "journalEditor_deleteEntry": "حذف الإدخال",
   "journalEditor_titlePlaceholder": "عنوان إدخالك...",
   "journalEditor_bodyPlaceholder": "ابدأ كتابة أفكارك...",

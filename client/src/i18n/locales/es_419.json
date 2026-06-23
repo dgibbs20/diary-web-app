@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Exportar como PDF",
   "journalEditor_exportElite": "Exportar (Élite)",
   "journalEditor_aiCompanion": "Compañero IA",
+  "journalEditor_sendToAi": "Enviar al Compañero IA",
   "journalEditor_deleteEntry": "Eliminar entrada",
   "journalEditor_titlePlaceholder": "Título de tu entrada...",
   "journalEditor_bodyPlaceholder": "Comienza a escribir tus pensamientos...",

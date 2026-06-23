@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "ייצא כ-PDF",
   "journalEditor_exportElite": "ייצוא (עלית)",
   "journalEditor_aiCompanion": "מלווה AI",
+  "journalEditor_sendToAi": "שלח למרחב ה-AI",
   "journalEditor_deleteEntry": "מחק רשומה",
   "journalEditor_titlePlaceholder": "כותרת הרשומה שלך...",
   "journalEditor_bodyPlaceholder": "התחל לכתוב את מחשבותיך...",

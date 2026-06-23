@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Exportovat jako PDF",
   "journalEditor_exportElite": "Export (Elita)",
   "journalEditor_aiCompanion": "AI Průvodce",
+  "journalEditor_sendToAi": "Odeslat AI společníkovi",
   "journalEditor_deleteEntry": "Smazat záznam",
   "journalEditor_titlePlaceholder": "Nadpis záznamu...",
   "journalEditor_bodyPlaceholder": "Začněte psát své myšlenky...",

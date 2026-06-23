@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Vie PDF:nä",
   "journalEditor_exportElite": "Vie (Elite)",
   "journalEditor_aiCompanion": "AI Kumppani",
+  "journalEditor_sendToAi": "Lähetä AI-kumppanil­le",
   "journalEditor_deleteEntry": "Poista merkintä",
   "journalEditor_titlePlaceholder": "Otsikoi merkintäsi...",
   "journalEditor_bodyPlaceholder": "Aloita kirjoittaminen...",

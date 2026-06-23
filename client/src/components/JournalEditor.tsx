@@ -6,7 +6,7 @@
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Bot, Trash2, Flame, Save, Clock, Check, FileDown, Crown } from 'lucide-react';
+import { ArrowLeft, Trash2, Flame, Save, Clock, Check, FileDown, Crown, Sparkles } from 'lucide-react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Underline } from '@tiptap/extension-underline';
@@ -389,11 +389,25 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
 
           <button
             onClick={onToggleAi}
-            className="p-2 rounded-lg transition-colors"
-            style={{ color: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.06)' }}
-            title={t('journalEditor_aiCompanion')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium text-sm tracking-wide"
+            style={{
+              color: '#C9A84C',
+              backgroundColor: 'rgba(201,168,76,0.1)',
+              border: '1px solid rgba(201,168,76,0.3)',
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              letterSpacing: '0.05em',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.18)';
+              e.currentTarget.style.borderColor = 'rgba(201,168,76,0.6)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.1)';
+              e.currentTarget.style.borderColor = 'rgba(201,168,76,0.3)';
+            }}
           >
-            <Bot size={16} />
+            <Sparkles size={15} />
+            <span>{t('journalEditor_sendToAi')}</span>
           </button>
 
           {entryId && (

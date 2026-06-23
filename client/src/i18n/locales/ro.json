@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Exportă ca PDF",
   "journalEditor_exportElite": "Exportă (Elită)",
   "journalEditor_aiCompanion": "Însoțitor IA",
+  "journalEditor_sendToAi": "Trimite la Însoțitor IA",
   "journalEditor_deleteEntry": "Șterge intrarea",
   "journalEditor_titlePlaceholder": "Titlul intrării...",
   "journalEditor_bodyPlaceholder": "Începe să îți scrii gândurile...",

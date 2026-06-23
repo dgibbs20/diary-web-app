@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "PDF के रूप में निर्यात करें",
   "journalEditor_exportElite": "निर्यात (एलीट)",
   "journalEditor_aiCompanion": "AI साथी",
+  "journalEditor_sendToAi": "AI साथी को भेजें",
   "journalEditor_deleteEntry": "प्रविष्टि हटाएं",
   "journalEditor_titlePlaceholder": "अपनी प्रविष्टि का शीर्षक...",
   "journalEditor_bodyPlaceholder": "अपने विचार लिखना शुरू करें...",

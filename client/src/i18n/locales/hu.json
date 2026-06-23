@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Exportálás PDF-ként",
   "journalEditor_exportElite": "Export (Elit)",
   "journalEditor_aiCompanion": "AI Társ",
+  "journalEditor_sendToAi": "Küldés az AI-társnak",
   "journalEditor_deleteEntry": "Bejegyzés törlése",
   "journalEditor_titlePlaceholder": "A bejegyzés címe...",
   "journalEditor_bodyPlaceholder": "Kezdje el írni gondolatait...",

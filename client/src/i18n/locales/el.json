@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Εξαγωγή ως PDF",
   "journalEditor_exportElite": "Εξαγωγή (Ελίτ)",
   "journalEditor_aiCompanion": "AI Σύντροφος",
+  "journalEditor_sendToAi": "Αποστολή στον AI Σύντροφο",
   "journalEditor_deleteEntry": "Διαγραφή εγγραφής",
   "journalEditor_titlePlaceholder": "Τίτλος εγγραφής...",
   "journalEditor_bodyPlaceholder": "Αρχίστε να γράφετε τις σκέψεις σας...",

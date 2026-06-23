@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "匯出為 PDF",
   "journalEditor_exportElite": "匯出（精英）",
   "journalEditor_aiCompanion": "AI 夥伴",
+  "journalEditor_sendToAi": "傳送給 AI 伴侶",
   "journalEditor_deleteEntry": "刪除條目",
   "journalEditor_titlePlaceholder": "為條目新增標題...",
   "journalEditor_bodyPlaceholder": "開始寫下你的想法...",

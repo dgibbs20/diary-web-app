@@ -144,6 +144,7 @@
   "journalEditor_exportPdf": "Export as PDF",
   "journalEditor_exportElite": "Export (Elite)",
   "journalEditor_aiCompanion": "AI Companion",
+  "journalEditor_sendToAi": "Send to AI Companion",
   "journalEditor_deleteEntry": "Delete entry",
   "journalEditor_titlePlaceholder": "Title your entry...",
   "journalEditor_bodyPlaceholder": "Begin writing your thoughts...",

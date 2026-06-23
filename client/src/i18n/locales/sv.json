@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "Exportera som PDF",
   "journalEditor_exportElite": "Exportera (Elite)",
   "journalEditor_aiCompanion": "AI-sällskap",
+  "journalEditor_sendToAi": "Skicka till AI-sällskap",
   "journalEditor_deleteEntry": "Radera anteckning",
   "journalEditor_titlePlaceholder": "Ge anteckningen en titel...",
   "journalEditor_bodyPlaceholder": "Börja skriva dina tankar...",

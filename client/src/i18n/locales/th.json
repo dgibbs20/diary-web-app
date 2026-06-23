@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "ส่งออกเป็น PDF",
   "journalEditor_exportElite": "ส่งออก (อีลีท)",
   "journalEditor_aiCompanion": "เพื่อน AI",
+  "journalEditor_sendToAi": "ส่งไปยังเพื่อน AI",
   "journalEditor_deleteEntry": "ลบบันทึก",
   "journalEditor_titlePlaceholder": "ตั้งชื่อบันทึก...",
   "journalEditor_bodyPlaceholder": "เริ่มเขียนความคิดของคุณ...",

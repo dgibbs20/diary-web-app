@@ -133,6 +133,7 @@
   "journalEditor_exportPdf": "PDF Olarak Dışa Aktar",
   "journalEditor_exportElite": "Dışa Aktar (Elit)",
   "journalEditor_aiCompanion": "AI Arkadaş",
+  "journalEditor_sendToAi": "AI Asistanına Gönder",
   "journalEditor_deleteEntry": "Girdiyi Sil",
   "journalEditor_titlePlaceholder": "Girdiye başlık ver...",
   "journalEditor_bodyPlaceholder": "Düşüncelerini yazmaya başla...",
