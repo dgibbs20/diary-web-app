@@ -69,7 +69,14 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
   const [transcribeProgress, setTranscribeProgress] = useState({ current: 0, total: 0 });
   const [rejectedFiles, setRejectedFiles] = useState<{ name: string; reason: string }[]>([]);
   const [title, setTitle] = useState('');
-  const [entryDate, setEntryDate] = useState(new Date().toISOString().split('T')[0]);
+  const today = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
+  const [selectedDay, setSelectedDay] = useState(today.getDate());
+  const [selectedYear, setSelectedYear] = useState(today.getFullYear());
+  const [dateSource, setDateSource] = useState<'manual' | 'content' | 'filename' | 'fallback'>('manual');
+  const entryDate = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+  const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate();
+  const isTodayDate = entryDate === new Date().toISOString().split('T')[0];
   const [sortByOriginalDate, setSortByOriginalDate] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [savedEntryId, setSavedEntryId] = useState<number | null>(null);
@@ -178,12 +185,89 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
     editor?.commands.setContent(`<p>${text.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>`);
   };
 
+  const parseDateFromText = (text: string): { year: number; month: number; day: number } | null => {
+    const patterns = [
+      /\b(\d{4})-(\d{2})-(\d{2})\b/,
+      /\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/,
+      /\b(\d{1,2})-(\d{1,2})-(\d{2})\b/,
+      /\b(\d{1,2})-(\d{1,2})-(\d{4})\b/,
+      /\b(\d{1,2})\.(\d{1,2})\.(\d{2,4})\b/,
+      /\b(\d{1,2})\/(\d{1,2})\/(\d{2})\b/,
+    ];
+
+    for (const pattern of patterns) {
+      const m = text.match(pattern);
+      if (m) {
+        let year = parseInt(m[1]);
+        let month = parseInt(m[2]);
+        let day = parseInt(m[3]);
+
+        if (m[1].length === 4) {
+          // ISO: year-month-day — already correct
+        } else {
+          // month-day-year format
+          year = parseInt(m[3]);
+          month = parseInt(m[1]);
+          day = parseInt(m[2]);
+          if (year < 100) year += 2000;
+        }
+
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900 && year <= 2100) {
+          return { year, month, day };
+        }
+      }
+    }
+
+    const monthNames: Record<string, number> = {
+      jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6,
+      jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12,
+    };
+    const abbr = text.match(
+      /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b/i
+    );
+    if (abbr) {
+      const month = monthNames[abbr[1].toLowerCase().slice(0, 3)];
+      const day = parseInt(abbr[2]);
+      const year = parseInt(abbr[3]);
+      if (month && day >= 1 && day <= 31) {
+        return { year, month, day };
+      }
+    }
+
+    const fullMonths: Record<string, number> = {
+      january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+      july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
+    };
+    const full = text.match(
+      /\b(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b/i
+    );
+    if (full) {
+      const month = fullMonths[full[1].toLowerCase()];
+      const day = parseInt(full[2]);
+      const year = parseInt(full[3]);
+      if (month && day >= 1 && day <= 31) {
+        return { year, month, day };
+      }
+    }
+
+    return null;
+  };
+
   // Transcribe single
   const transcribeSingle = async (uf: UploadedFile) => {
     if (uf.ext === 'txt') {
       const text = await uf.file.text();
       setEditorText(text);
       setIsDone(true);
+      if (dateSource !== 'manual') {
+        const parsed = parseDateFromText(text);
+        if (parsed) {
+          setSelectedMonth(parsed.month);
+          setSelectedDay(parsed.day);
+          setSelectedYear(parsed.year);
+          setDateSource('content');
+        }
+      }
       return;
     }
     if (ACCEPTED_IMAGES.includes(uf.ext)) {
@@ -193,6 +277,15 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
       if (res.success) {
         setEditorText(res.text || '');
         setIsDone(true);
+        if (dateSource !== 'manual') {
+          const parsed = parseDateFromText(res.text || '');
+          if (parsed) {
+            setSelectedMonth(parsed.month);
+            setSelectedDay(parsed.day);
+            setSelectedYear(parsed.year);
+            setDateSource('content');
+          }
+        }
       } else {
         throw new Error(res.error?.message || 'OCR failed');
       }
@@ -206,6 +299,15 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
         const text = res.results.map((r: { text: string }) => r.text).join('\n\n---\n\n');
         setEditorText(text);
         setIsDone(true);
+        if (dateSource !== 'manual') {
+          const parsed = parseDateFromText(text);
+          if (parsed) {
+            setSelectedMonth(parsed.month);
+            setSelectedDay(parsed.day);
+            setSelectedYear(parsed.year);
+            setDateSource('content');
+          }
+        }
       } else {
         const reason = res.rejected?.[0]?.reason || res.error?.message || 'Extraction failed';
         throw new Error(reason);
@@ -217,6 +319,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
   const transcribeMulti = async (fileList: UploadedFile[]) => {
     const pageTexts: string[] = [];
     const rejected: { name: string; reason: string }[] = [];
+    let dateFound = false;
     setTranscribeProgress({ current: 0, total: fileList.length });
 
     for (let i = 0; i < fileList.length; i++) {
@@ -224,13 +327,34 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
       setTranscribeProgress({ current: i + 1, total: fileList.length });
       try {
         if (uf.ext === 'txt') {
-          pageTexts.push(`Page ${i + 1}\n\n${await uf.file.text()}`);
+          const pageText = await uf.file.text();
+          pageTexts.push(`Page ${i + 1}\n\n${pageText}`);
+          if (!dateFound && dateSource !== 'manual') {
+            const parsed = parseDateFromText(pageText);
+            if (parsed) {
+              setSelectedMonth(parsed.month);
+              setSelectedDay(parsed.day);
+              setSelectedYear(parsed.year);
+              setDateSource('content');
+              dateFound = true;
+            }
+          }
         } else if (ACCEPTED_IMAGES.includes(uf.ext)) {
           const fd = new FormData();
           fd.append('image', uf.file, uf.name);
           const res = await mediaApi.ocrImage(fd);
           if (res.success) {
             pageTexts.push(`Page ${i + 1}\n\n${res.text || '[No text found]'}`);
+            if (!dateFound && dateSource !== 'manual') {
+              const parsed = parseDateFromText(res.text || '');
+              if (parsed) {
+                setSelectedMonth(parsed.month);
+                setSelectedDay(parsed.day);
+                setSelectedYear(parsed.year);
+                setDateSource('content');
+                dateFound = true;
+              }
+            }
           } else {
             rejected.push({ name: uf.name, reason: res.error?.message || 'OCR failed' });
           }
@@ -240,6 +364,16 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
           const res = await mediaApi.batchImport(fd);
           if (res.success && res.results?.length) {
             pageTexts.push(`Page ${i + 1}\n\n${res.results[0].text || '[No text found]'}`);
+            if (!dateFound && dateSource !== 'manual') {
+              const parsed = parseDateFromText(res.results[0].text || '');
+              if (parsed) {
+                setSelectedMonth(parsed.month);
+                setSelectedDay(parsed.day);
+                setSelectedYear(parsed.year);
+                setDateSource('content');
+                dateFound = true;
+              }
+            }
           } else {
             const reason = res.rejected?.[0]?.reason || res.error?.message || 'Extraction failed';
             rejected.push({ name: uf.name, reason });
@@ -483,75 +617,136 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
           />
 
           {/* Entry date — always visible */}
-          {(() => {
-            const isTodayDate = (dateStr: string): boolean =>
-              dateStr === new Date().toISOString().split('T')[0];
-            return (
-              <>
-                <div className="flex items-center gap-3">
-                  <label className="text-xs tracking-widest uppercase flex-shrink-0"
-                         style={{ color: 'var(--muted-foreground)' }}>
-                    {t('upload_entryDateLabel')}
-                  </label>
-                  <input
-                    type="date"
-                    value={entryDate}
-                    onChange={e => setEntryDate(e.target.value)}
-                    className="px-3 py-1.5 rounded-lg border text-sm outline-none transition-colors"
-                    style={{ background: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
-                    onFocus={e => { e.currentTarget.style.borderColor = GOLD; }}
-                    onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; }}
-                  />
-                </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <label className="text-xs tracking-widest uppercase flex-shrink-0"
+                   style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+              {t('upload_entryDateLabel')}
+            </label>
 
-                {!isTodayDate(entryDate) && (
-                  <div className="p-3 rounded-xl border space-y-2"
-                       style={{ borderColor: 'var(--border)', background: 'var(--card)' }}>
-                    <p className="text-xs font-semibold"
-                       style={{ color: 'var(--foreground)', fontFamily: FONT }}>
-                      {t('upload_sortToggleTitle')}
-                    </p>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setSortByOriginalDate(true)}
-                        className="flex-1 p-2.5 rounded-lg border text-left transition-all text-xs"
-                        style={{
-                          borderColor: sortByOriginalDate ? GOLD : 'var(--border)',
-                          borderWidth: sortByOriginalDate ? 2 : 1,
-                          background: sortByOriginalDate ? 'rgba(201,168,76,0.06)' : 'var(--background)',
-                          fontFamily: FONT,
-                        }}
-                      >
-                        <p className="font-semibold mb-0.5" style={{ color: 'var(--foreground)' }}>
-                          {t('upload_sortByOriginal')}
-                        </p>
-                        <p style={{ color: 'var(--muted-foreground)' }}>
-                          {t('upload_sortByOriginalDesc')}
-                        </p>
-                      </button>
-                      <button
-                        onClick={() => setSortByOriginalDate(false)}
-                        className="flex-1 p-2.5 rounded-lg border text-left transition-all text-xs"
-                        style={{
-                          borderColor: !sortByOriginalDate ? GOLD : 'var(--border)',
-                          borderWidth: !sortByOriginalDate ? 2 : 1,
-                          background: !sortByOriginalDate ? 'rgba(201,168,76,0.06)' : 'var(--background)',
-                          fontFamily: FONT,
-                        }}
-                      >
-                        <p className="font-semibold mb-0.5" style={{ color: 'var(--foreground)' }}>
-                          {t('upload_sortByUpload')}
-                        </p>
-                        <p style={{ color: 'var(--muted-foreground)' }}>
-                          {t('upload_sortByUploadDesc')}
-                        </p>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </>
-            );
-          })()}
+            {/* Month */}
+            <select
+              value={selectedMonth}
+              onChange={e => {
+                setSelectedMonth(Number(e.target.value));
+                setDateSource('manual');
+              }}
+              style={{
+                background: 'var(--card)',
+                color: 'var(--foreground)',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                padding: '6px 10px',
+                fontFamily: FONT,
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+              }}
+            >
+              {['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December']
+                .map((name, i) => (
+                  <option key={i + 1} value={i + 1}>{name}</option>
+                ))}
+            </select>
+
+            {/* Day */}
+            <select
+              value={selectedDay}
+              onChange={e => {
+                setSelectedDay(Number(e.target.value));
+                setDateSource('manual');
+              }}
+              style={{
+                background: 'var(--card)',
+                color: 'var(--foreground)',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                padding: '6px 10px',
+                fontFamily: FONT,
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+              }}
+            >
+              {Array.from(
+                { length: getDaysInMonth(selectedYear, selectedMonth) },
+                (_, i) => (
+                  <option key={i + 1} value={i + 1}>{i + 1}</option>
+                )
+              )}
+            </select>
+
+            {/* Year */}
+            <select
+              value={selectedYear}
+              onChange={e => {
+                setSelectedYear(Number(e.target.value));
+                setDateSource('manual');
+              }}
+              style={{
+                background: 'var(--card)',
+                color: 'var(--foreground)',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                padding: '6px 10px',
+                fontFamily: FONT,
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+              }}
+            >
+              {Array.from(
+                { length: new Date().getFullYear() - 1900 + 1 },
+                (_, i) => {
+                  const yr = new Date().getFullYear() - i;
+                  return <option key={yr} value={yr}>{yr}</option>;
+                }
+              )}
+            </select>
+          </div>
+
+          {!isTodayDate && (
+            <div className="p-3 rounded-xl border space-y-2"
+                 style={{ borderColor: 'var(--border)', background: 'var(--card)' }}>
+              <p className="text-xs font-semibold"
+                 style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                {t('upload_sortToggleTitle')}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setSortByOriginalDate(true)}
+                  className="flex-1 p-2.5 rounded-lg border text-left transition-all text-xs"
+                  style={{
+                    borderColor: sortByOriginalDate ? GOLD : 'var(--border)',
+                    borderWidth: sortByOriginalDate ? 2 : 1,
+                    background: sortByOriginalDate ? 'rgba(201,168,76,0.06)' : 'var(--background)',
+                    fontFamily: FONT,
+                  }}
+                >
+                  <p className="font-semibold mb-0.5" style={{ color: 'var(--foreground)' }}>
+                    {t('upload_sortByOriginal')}
+                  </p>
+                  <p style={{ color: 'var(--muted-foreground)' }}>
+                    {t('upload_sortByOriginalDesc')}
+                  </p>
+                </button>
+                <button
+                  onClick={() => setSortByOriginalDate(false)}
+                  className="flex-1 p-2.5 rounded-lg border text-left transition-all text-xs"
+                  style={{
+                    borderColor: !sortByOriginalDate ? GOLD : 'var(--border)',
+                    borderWidth: !sortByOriginalDate ? 2 : 1,
+                    background: !sortByOriginalDate ? 'rgba(201,168,76,0.06)' : 'var(--background)',
+                    fontFamily: FONT,
+                  }}
+                >
+                  <p className="font-semibold mb-0.5" style={{ color: 'var(--foreground)' }}>
+                    {t('upload_sortByUpload')}
+                  </p>
+                  <p style={{ color: 'var(--muted-foreground)' }}>
+                    {t('upload_sortByUploadDesc')}
+                  </p>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Mode toggle */}
           <div className="flex items-center gap-3">
