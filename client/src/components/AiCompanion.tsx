@@ -88,7 +88,8 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
   const companionName = user?.preferences?.companion_name;
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   // Gates the auto-greet effect until an existing persisted thread (if any) has
-  // been fetched — prevents re-greeting a resumed conversation.
+  // been fetched — prevents re-greeting a resumed conversation. Mirrored by
+  // `isHydratingRef` below (see that ref's comment for why both exist).
   const [isHydratingThread, setIsHydratingThread] = useState(!!entryId);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState('auto');
@@ -112,6 +113,18 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
+  // Previous entryId across renders — a ref (not state) so comparing it doesn't
+  // itself trigger a re-render. 'unset' distinguishes "never run yet" from an
+  // actual null entryId.
+  const prevEntryIdRef = useRef<number | null | 'unset'>('unset');
+  // Mirrors `isHydratingThread` state but updates synchronously. Refs (unlike
+  // state) are visible immediately to any code that runs later in the same
+  // commit, so the auto-greet effect below reads this instead of the state
+  // value to avoid a race: when two entryId transition effects and the
+  // auto-greet effect all fire in the same commit, an effect declared later
+  // would otherwise see a stale pre-transition snapshot of `isHydratingThread`
+  // from its own closure and could fire prematurely.
+  const isHydratingRef = useRef(!!entryId);
 
   // Default title based on current date
   const defaultTitle = `Quick Chat — ${new Date().toLocaleDateString('en-US', {
@@ -141,18 +154,43 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
     }
   }, [editingTitle]);
 
-  // Hydrate this entry's persisted AI thread on mount, before the auto-greet
-  // effect below gets a chance to run — otherwise auto-greet could fire a
-  // duplicate greeting while the real thread is still in flight.
+  const setHydrating = (value: boolean) => {
+    isHydratingRef.current = value;
+    setIsHydratingThread(value);
+  };
+
+  // Resets everything scoped to "the current chat session" in the Quick Chat
+  // action bar — used whenever entryId switches to a different thread so a
+  // previous session's state (e.g. a stale savedEntryId) can't leak in.
+  const resetChatSessionState = () => {
+    setEntryTitle('');
+    setEditingTitle(false);
+    setIsSaving(false);
+    setShowBurnConfirm(false);
+    setSavedEntryId(null);
+    setBurnMode(false);
+    setBurnDate('');
+    setBurnTime('');
+    setShowBurnPicker(false);
+    setBurnCountdown('');
+  };
+
+  // Drives every entryId transition: initial mount, an ephemeral Quick Chat
+  // getting autosaved into a real entry, switching between two saved entries'
+  // threads while the drawer stays open, and a saved entry's thread going back
+  // to ephemeral. The component now stays mounted across all of these (no more
+  // `key`-based remount in Dashboard), since remounting used to destroy an
+  // in-progress ephemeral chat the instant autosave assigned it an entryId.
   useEffect(() => {
-    if (!entryId) {
-      setIsHydratingThread(false);
-      return;
-    }
+    const prevEntryId = prevEntryIdRef.current;
+    const isFirstRun = prevEntryId === 'unset';
+    prevEntryIdRef.current = entryId ?? null;
     let cancelled = false;
-    setIsHydratingThread(true);
-    aiMessagesApi.getMessages(entryId)
-      .then(res => {
+
+    const hydrateFromServer = async (id: number) => {
+      setHydrating(true);
+      try {
+        const res = await aiMessagesApi.getMessages(id);
         if (cancelled) return;
         if (res.success && Array.isArray(res.messages) && res.messages.length > 0) {
           setMessages(res.messages.map((m: AiMessageRecord) => ({
@@ -162,21 +200,62 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
             timestamp: new Date(m.created_at),
           })));
         }
-      })
-      .catch(err => {
-        console.error('[AiCompanion] Failed to load persisted AI thread', { entryId, error: err });
-      })
-      .finally(() => {
-        if (!cancelled) setIsHydratingThread(false);
-      });
+      } catch (err) {
+        console.error('[AiCompanion] Failed to load persisted AI thread', { entryId: id, error: err });
+      } finally {
+        if (!cancelled) setHydrating(false);
+      }
+    };
+
+    // Uploads whatever's currently in local `messages` (an in-progress
+    // ephemeral Quick Chat) to the newly-autosaved entry, one at a time and in
+    // order — the backend stamps created_at server-side at insert time, so
+    // parallel requests could land out of order.
+    const migrateEphemeralMessages = async (id: number) => {
+      if (messages.length === 0) return;
+      for (const m of messages) {
+        try {
+          await aiMessagesApi.saveMessage(id, m.role, m.content);
+        } catch (err) {
+          console.error('[AiCompanion] Failed to migrate ephemeral message to entry', { entryId: id, role: m.role, error: err });
+        }
+      }
+      if (!cancelled) toast.success(t('aiCompanion_threadAttached'));
+    };
+
+    if (isFirstRun) {
+      if (entryId) {
+        hydrateFromServer(entryId);
+      } else {
+        setHydrating(false);
+      }
+    } else if (prevEntryId == null && typeof entryId === 'number') {
+      // Ephemeral Quick Chat just got attached to a newly-autosaved entry.
+      // Local `messages` are left untouched (not cleared) — only uploaded.
+      migrateEphemeralMessages(entryId);
+    } else if (typeof prevEntryId === 'number' && typeof entryId === 'number' && prevEntryId !== entryId) {
+      // Switching between two different saved entries' threads.
+      resetChatSessionState();
+      setMessages([]);
+      hydrateFromServer(entryId);
+    } else if (typeof prevEntryId === 'number' && !entryId) {
+      // Back to a clean ephemeral Quick Chat.
+      resetChatSessionState();
+      setMessages([]);
+      setHydrating(false);
+    }
+
     return () => { cancelled = true; };
-  }, [entryId]);
+  }, [entryId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-greet when entry context is provided — fires once, shows only AI response.
   // Waits for thread hydration to finish first so a resumed conversation (non-empty
-  // `messages`) is never re-greeted.
+  // `messages`) is never re-greeted. Checks the ref (not the `isHydratingThread`
+  // state) — see isHydratingRef's declaration for why the ref is the one that's
+  // race-safe within a single commit; `isHydratingThread` is still a dependency
+  // here purely to force this effect to re-evaluate once hydration completes.
   useEffect(() => {
-    if (isHydratingThread) return;
+    if (isHydratingRef.current) return;
     if (!entryContext || messages.length > 0) return;
     const autoGreet = async () => {
       if (!isElite && dailyUsage >= FREE_DAILY_LIMIT) return;

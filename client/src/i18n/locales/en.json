@@ -67,6 +67,7 @@
   "aiCompanion_chatCleared": "Chat cleared",
   "aiCompanion_exportedTxt": "Exported as text file",
   "aiCompanion_savedEntry": "Saved: \"{{title}}\"",
+  "aiCompanion_threadAttached": "Chat attached to your journal entry",
 
   "analytics_title": "Analytics",
   "analytics_subtitle": "Your journaling journey at a glance",
