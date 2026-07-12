@@ -15,12 +15,14 @@
  *   onDismiss()  — user skipped / closed without choosing
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, BookOpen, MessageCircle, Sparkles } from 'lucide-react';
+import { X, BookOpen, MessageCircle, Sparkles, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Streamdown } from 'streamdown';
 import { MOOD_CONFIG } from '@/lib/constants';
-import { moodApi } from '@/lib/api';
+import { moodApi, aiApi } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -40,11 +42,17 @@ export default function LoginOnboardingFlow({
   onChat,
   onDismiss,
 }: LoginOnboardingFlowProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { user } = useAuth();
   const [step, setStep] = useState<Step>('mood');
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [savedMood, setSavedMood] = useState<string>('');
   const [query, setQuery] = useState('');
+  const [reflection, setReflection] = useState<string | null>(null);
+  const [isReflecting, setIsReflecting] = useState(false);
+  // Guards against duplicate /api/ai/companion calls if this effect's deps
+  // re-evaluate for unrelated reasons while the modal stays mounted.
+  const hasFetchedReflectionRef = useRef(false);
 
   // ── Step 1: mood selected → save to backend → advance to intent ──
   const handleMoodContinue = async () => {
@@ -61,6 +69,44 @@ export default function LoginOnboardingFlow({
     setSavedMood('');
     setStep('intent');
   };
+
+  // ── Step 2 enter: fetch a one-off AI reflection on the mood just picked ──
+  // Fires only when a mood was actually saved (skip leaves Step 2 untouched).
+  // Does not block the mood→intent transition — it loads in above the
+  // existing Journal/Chat cards once the AI responds.
+  useEffect(() => {
+    if (step !== 'intent' || !savedMood) return;
+    if (hasFetchedReflectionRef.current) return;
+    hasFetchedReflectionRef.current = true;
+
+    const fetchReflection = async () => {
+      setIsReflecting(true);
+      try {
+        const moodLabel = t(`mood_${savedMood}`);
+        const registerProfile = user?.preferences?.register_profile || 'general';
+        const userName = user?.fullname || user?.username;
+        const res = await aiApi.sendMessage(
+          `I'm feeling ${moodLabel.toLowerCase()} right now.`,
+          'auto',
+          '',
+          [],
+          userName,
+          registerProfile,
+          i18n.language
+        );
+        if (res.success && res.response) {
+          setReflection(res.response);
+        } else {
+          console.error('[LoginOnboardingFlow] AI reflection request unsuccessful', { mood: savedMood, res });
+        }
+      } catch (err) {
+        console.error('[LoginOnboardingFlow] Failed to fetch AI reflection', { mood: savedMood, error: err });
+      } finally {
+        setIsReflecting(false);
+      }
+    };
+    fetchReflection();
+  }, [step, savedMood]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Step 2: intent chosen ──
   const handleJournal = () => onJournal(savedMood);
@@ -345,6 +391,57 @@ export default function LoginOnboardingFlow({
                 <X size={18} />
               </button>
             </div>
+
+            {/* AI Reflection on the mood just picked — inert if mood was skipped */}
+            {savedMood && (isReflecting || reflection) && (
+              <div className="px-8 pt-6">
+                {isReflecting && !reflection && (
+                  <div className="flex items-center gap-2">
+                    <Loader2 size={13} className="animate-spin" style={{ color: GOLD }} />
+                    <span style={{
+                      fontFamily: FONT,
+                      fontSize: '0.8rem',
+                      fontStyle: 'italic',
+                      color: 'var(--muted-foreground)',
+                    }}>
+                      {t('loginOnboarding_reflecting')}
+                    </span>
+                  </div>
+                )}
+                {reflection && (
+                  <motion.div
+                    className="p-4 rounded-xl"
+                    style={{ border: '1px solid var(--border)', backgroundColor: 'var(--muted)' }}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <Sparkles size={14} style={{ color: GOLD }} />
+                      <span style={{
+                        fontFamily: FONT,
+                        fontSize: '0.78rem',
+                        fontWeight: 600,
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        color: GOLD,
+                      }}>
+                        {t('analytics_aiReflection')}
+                      </span>
+                    </div>
+                    <div style={{
+                      fontFamily: FONT,
+                      fontSize: '0.85rem',
+                      lineHeight: 1.5,
+                      color: 'var(--foreground)',
+                      opacity: 0.9,
+                    }}>
+                      <Streamdown>{reflection}</Streamdown>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            )}
 
             {/* Choice Cards */}
             <div className="p-8 flex flex-col gap-4">
