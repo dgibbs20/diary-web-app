@@ -21,7 +21,7 @@ import {
   X, Send, Loader2, Crown, Lock,
   Save, Download, Flame, Trash2, Check, ChevronDown, Mail, FileText, Clock,
 } from 'lucide-react';
-import { aiApi, journalApi, exportApi } from '@/lib/api';
+import { aiApi, aiMessagesApi, journalApi, exportApi } from '@/lib/api';
 import { AI_MODES } from '@/lib/constants';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
@@ -40,6 +40,7 @@ const FREE_DAILY_LIMIT = 5;
 interface AiCompanionProps {
   entryContext?: string;
   userName?: string;
+  entryId?: number | null;
   onClose: () => void;
   onQuickChatSaved?: () => void;
 }
@@ -49,6 +50,16 @@ interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+}
+
+interface AiMessageRecord {
+  id: number;
+  entry_id: number;
+  role: 'user' | 'assistant';
+  content: string;
+  created_at: string;
+  reaction: string | null;
+  ai_reaction: string | null;
 }
 
 // ── Utility: build transcript string from messages ──
@@ -71,11 +82,14 @@ function downloadTextFile(filename: string, content: string) {
   URL.revokeObjectURL(url);
 }
 
-export default function AiCompanion({ entryContext, userName, onClose, onQuickChatSaved }: AiCompanionProps) {
+export default function AiCompanion({ entryContext, userName, entryId, onClose, onQuickChatSaved }: AiCompanionProps) {
   const { t, i18n } = useTranslation();
   const { isElite, user } = useAuth();
   const companionName = user?.preferences?.companion_name;
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  // Gates the auto-greet effect until an existing persisted thread (if any) has
+  // been fetched — prevents re-greeting a resumed conversation.
+  const [isHydratingThread, setIsHydratingThread] = useState(!!entryId);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState('auto');
   const [isLoading, setIsLoading] = useState(false);
@@ -127,8 +141,42 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
     }
   }, [editingTitle]);
 
-  // Auto-greet when entry context is provided — fires once, shows only AI response
+  // Hydrate this entry's persisted AI thread on mount, before the auto-greet
+  // effect below gets a chance to run — otherwise auto-greet could fire a
+  // duplicate greeting while the real thread is still in flight.
   useEffect(() => {
+    if (!entryId) {
+      setIsHydratingThread(false);
+      return;
+    }
+    let cancelled = false;
+    setIsHydratingThread(true);
+    aiMessagesApi.getMessages(entryId)
+      .then(res => {
+        if (cancelled) return;
+        if (res.success && Array.isArray(res.messages) && res.messages.length > 0) {
+          setMessages(res.messages.map((m: AiMessageRecord) => ({
+            id: String(m.id),
+            role: m.role,
+            content: m.content,
+            timestamp: new Date(m.created_at),
+          })));
+        }
+      })
+      .catch(err => {
+        console.error('[AiCompanion] Failed to load persisted AI thread', { entryId, error: err });
+      })
+      .finally(() => {
+        if (!cancelled) setIsHydratingThread(false);
+      });
+    return () => { cancelled = true; };
+  }, [entryId]);
+
+  // Auto-greet when entry context is provided — fires once, shows only AI response.
+  // Waits for thread hydration to finish first so a resumed conversation (non-empty
+  // `messages`) is never re-greeted.
+  useEffect(() => {
+    if (isHydratingThread) return;
     if (!entryContext || messages.length > 0) return;
     const autoGreet = async () => {
       if (!isElite && dailyUsage >= FREE_DAILY_LIMIT) return;
@@ -152,6 +200,11 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
             timestamp: new Date(),
           }]);
           if (!isElite) setDailyUsage(prev => prev + 1);
+          if (entryId) {
+            aiMessagesApi.saveMessage(entryId, 'assistant', res.response).catch(err => {
+              console.error('[AiCompanion] Failed to persist auto-greet reply', { entryId, role: 'assistant', error: err });
+            });
+          }
         }
       } catch {
         // silent fail — user can still type manually
@@ -160,7 +213,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
       }
     };
     autoGreet();
-  }, [entryContext]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [entryContext, isHydratingThread]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleModeSelect = (modeId: string) => {
     if (!isElite && !FREE_MODES.includes(modeId)) {
@@ -191,6 +244,12 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
     setInput('');
     setIsLoading(true);
 
+    if (entryId) {
+      aiMessagesApi.saveMessage(entryId, 'user', msg).catch(err => {
+        console.error('[AiCompanion] Failed to persist user message', { entryId, role: 'user', error: err });
+      });
+    }
+
     const history = messages.map(m => ({ role: m.role, content: m.content }));
 
     try {
@@ -205,6 +264,11 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
         };
         setMessages(prev => [...prev, aiMsg]);
         if (!isElite) setDailyUsage(prev => prev + 1);
+        if (entryId) {
+          aiMessagesApi.saveMessage(entryId, 'assistant', res.response).catch(err => {
+            console.error('[AiCompanion] Failed to persist assistant message', { entryId, role: 'assistant', error: err });
+          });
+        }
       } else {
         const errorCode = res.error?.code;
         if (errorCode === 'AI_LIMIT_REACHED' || errorCode === 'DAILY_LIMIT_EXCEEDED') {
@@ -477,7 +541,7 @@ export default function AiCompanion({ entryContext, userName, onClose, onQuickCh
 
         {/* ── Quick Chat Action Bar (visible when messages exist) ── */}
         <AnimatePresence>
-          {hasMessages && (
+          {hasMessages && !entryId && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}

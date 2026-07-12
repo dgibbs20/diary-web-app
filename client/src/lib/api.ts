@@ -263,6 +263,23 @@ export const aiApi = {
   },
 };
 
+// ============ AI MESSAGES API (per-entry persisted chat threads) ============
+
+export const aiMessagesApi = {
+  async getMessages(entryId: number) {
+    const res = await authFetch(`/api/entries/${entryId}/ai-messages`);
+    return res.json();
+  },
+
+  async saveMessage(entryId: number, role: 'user' | 'assistant', content: string) {
+    const res = await authFetch(`/api/entries/${entryId}/ai-messages`, {
+      method: 'POST',
+      body: JSON.stringify({ role, content }),
+    });
+    return res.json();
+  },
+};
+
 // ============ MOOD API ============
 
 export const moodApi = {
