@@ -5,13 +5,16 @@
  */
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Calendar, BookOpen, PenLine, Flame, Award, Sparkles, BarChart3 } from 'lucide-react';
+import { TrendingUp, Calendar, BookOpen, PenLine, Flame, Award, Sparkles, BarChart3, FileText, Crown, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
-import { analyticsApi } from '@/lib/api';
+import { analyticsApi, exportApi } from '@/lib/api';
 import { MOOD_CONFIG } from '@/lib/constants';
 import { Streamdown } from 'streamdown';
 import { getLogoSrc } from '@/utils/logoHelper';
+import ExportDialog from './ExportDialog';
+import PaywallModal from './PaywallModal';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -32,10 +35,21 @@ interface BackendStats {
 
 export default function AnalyticsPanel() {
   const { t, i18n } = useTranslation();
-  const { user } = useAuth();
+  const { user, isElite } = useAuth();
   const [data, setData] = useState<BackendStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
+
+  const handleExport = () => {
+    if (!isElite) {
+      setShowPaywall(true);
+      return;
+    }
+    setShowExportDialog(true);
+  };
 
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -78,6 +92,7 @@ export default function AnalyticsPanel() {
   const maxMoodCount = moodEntries.length > 0 ? moodEntries[0][1] : 1;
 
   return (
+    <>
     <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
       <header className="px-6 lg:px-8 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-3">
@@ -239,6 +254,51 @@ export default function AnalyticsPanel() {
                 </motion.div>
               )}
 
+              {/* Wellness Report Export */}
+              <motion.div
+                className="p-6 rounded-xl"
+                style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText size={16} style={{ color: GOLD }} />
+                  <h3
+                    className="text-lg font-semibold"
+                    style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+                  >
+                    {t('analytics_exportTitle')}
+                  </h3>
+                </div>
+                <p
+                  className="text-sm leading-relaxed mb-4"
+                  style={{ color: 'var(--foreground)', fontFamily: FONT, opacity: 0.9 }}
+                >
+                  {t('analytics_exportDesc')}
+                </p>
+
+                {!isElite && (
+                  <div
+                    className="flex items-center gap-2 mb-4 text-xs font-semibold tracking-wider"
+                    style={{ color: GOLD, fontFamily: FONT }}
+                  >
+                    <Crown size={14} />
+                    <span>{t('analytics_exportEliteFeature')}</span>
+                  </div>
+                )}
+
+                <button
+                  onClick={handleExport}
+                  disabled={isExporting}
+                  className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
+                  style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+                >
+                  {isExporting ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />}
+                  {isExporting ? t('analytics_exporting') : isElite ? t('analytics_exportBtn') : t('analytics_exportUpgradeBtn')}
+                </button>
+              </motion.div>
+
               {/* Member since */}
               <div className="text-center py-4">
                 <p
@@ -253,6 +313,45 @@ export default function AnalyticsPanel() {
         </div>
       </div>
     </div>
+
+    <ExportDialog
+      isOpen={showExportDialog}
+      onClose={() => setShowExportDialog(false)}
+      onConfirm={async (delivery) => {
+        setIsExporting(true);
+        try {
+          const res = await exportApi.exportAnalytics(delivery);
+          if (res.success) {
+            toast.success(
+              delivery === 'email'
+                ? 'Export sent to your email'
+                : 'PDF downloaded successfully'
+            );
+          } else {
+            toast.error('Export failed');
+          }
+        } catch (err) {
+          const code = (err as (Error & { code?: string }) | undefined)?.code;
+          if (code === 'TRIAL_EXPIRED') {
+            setShowPaywall(true);
+          } else {
+            toast.error(err instanceof Error ? err.message : 'Export failed');
+          }
+        }
+        setIsExporting(false);
+        setShowExportDialog(false);
+      }}
+      isExporting={isExporting}
+      userEmail={user?.email ?? ''}
+      mode="analytics"
+    />
+
+    <PaywallModal
+      isOpen={showPaywall}
+      onClose={() => setShowPaywall(false)}
+      feature="export"
+    />
+    </>
   );
 }
 

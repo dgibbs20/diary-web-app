@@ -16,7 +16,7 @@ interface ExportDialogProps {
   onConfirm: (delivery: 'download' | 'email') => void;
   isExporting: boolean;
   userEmail: string;
-  mode: 'entry' | 'all';
+  mode: 'entry' | 'all' | 'analytics';
 }
 
 export default function ExportDialog({
@@ -30,7 +30,12 @@ export default function ExportDialog({
   const { t } = useTranslation();
   const [selected, setSelected] = useState<'download' | 'email' | null>(null);
 
-  const subtitle = mode === 'entry' ? t('exportDialog_subtitleEntry') : t('exportDialog_subtitleAll');
+  const subtitle =
+    mode === 'entry'
+      ? t('exportDialog_subtitleEntry')
+      : mode === 'analytics'
+        ? t('exportDialog_subtitleAnalytics')
+        : t('exportDialog_subtitleAll');
 
   const handleConfirm = () => {
     if (selected && !isExporting) onConfirm(selected);

@@ -390,6 +390,37 @@ export const exportApi = {
 
     return res.json();
   },
+
+  async exportAnalytics(
+    delivery: 'download' | 'email'
+  ): Promise<{ success: boolean; message?: string }> {
+    const res = await authFetch('/api/export/analytics', {
+      method: 'POST',
+      body: JSON.stringify({ delivery }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      const error = new Error(err.message || 'Export failed') as Error & { code?: string };
+      error.code = err.code;
+      throw error;
+    }
+
+    if (delivery === 'download') {
+      const blob = await res.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `diary-analytics-report-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(downloadUrl);
+      return { success: true };
+    }
+
+    return res.json();
+  },
 };
 
 // ============ SUBSCRIPTION API ============
