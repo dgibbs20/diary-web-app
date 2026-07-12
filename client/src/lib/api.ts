@@ -328,6 +328,31 @@ export const userApi = {
     });
     return res.json();
   },
+
+  async requestChangeEmail(currentPassword: string, newEmail: string) {
+    const res = await authFetch('/api/user/change-email/request', {
+      method: 'POST',
+      body: JSON.stringify({ current_password: currentPassword, new_email: newEmail }),
+    });
+    if (res.status === 429) return { success: false, rate_limited: true };
+    return res.json();
+  },
+
+  async verifyChangeEmail(otp: string) {
+    const res = await authFetch('/api/user/change-email/verify', {
+      method: 'POST',
+      body: JSON.stringify({ otp }),
+    });
+    return res.json();
+  },
+
+  async resendChangeEmailOtp() {
+    const res = await authFetch('/api/user/change-email/resend', {
+      method: 'POST',
+    });
+    if (res.status === 429) return { success: false, rate_limited: true };
+    return res.json();
+  },
 };
 
 // ============ ANALYTICS API ============

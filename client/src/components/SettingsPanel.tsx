@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { useLocation } from 'wouter';
 import PaywallModal from './PaywallModal';
 import ExportDialog from './ExportDialog';
+import ChangeEmailSection from './ChangeEmailSection';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -621,6 +622,9 @@ function SecuritySection() {
           {isSaving ? t('settings_security_changingPw') : t('settings_security_changePwBtn')}
         </button>
         </div>
+
+        {/* Change Email */}
+        <ChangeEmailSection />
       </motion.div>
 
       {/* PaywallModal for Ghost Mode */}
