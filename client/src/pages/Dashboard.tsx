@@ -424,8 +424,10 @@ export default function Dashboard() {
                 style={{ borderLeft: '1px solid var(--border)' }}
               >
                 <AiCompanion
+                  key={selectedEntry?.id ?? 'quick-chat'}
                   entryContext={currentEditorContent || selectedEntry?.content || ''}
                   userName={user?.fullname || user?.username}
+                  entryId={selectedEntry?.id ?? null}
                   onClose={() => setShowAiPanel(false)}
                   onQuickChatSaved={fetchEntries}
                 />
