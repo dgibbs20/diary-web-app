@@ -321,6 +321,15 @@ export const analyticsApi = {
     const res = await authFetch(`/api/analytics/stats${query}`);
     return res.json();
   },
+
+  async getMonthly(year?: number, month?: number) {
+    const params = new URLSearchParams();
+    if (year !== undefined) params.set('year', String(year));
+    if (month !== undefined) params.set('month', String(month));
+    const query = params.toString() ? `?${params.toString()}` : '';
+    const res = await authFetch(`/api/analytics/monthly${query}`);
+    return res.json();
+  },
 };
 
 // ============ EXPORT API ============
