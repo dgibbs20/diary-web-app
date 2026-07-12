@@ -92,6 +92,12 @@
   "analytics_exportUpgradeBtn": "Upgrade to Export",
   "analytics_exporting": "Preparing report…",
   "analytics_exportEliteFeature": "diAry Elite Feature",
+  "analytics_writingActivity": "Writing Activity",
+  "analytics_activityEmpty": "No entries yet this month — your writing activity will appear here.",
+  "analytics_activityLoading": "Loading writing activity…",
+  "analytics_activityFailedLoad": "Unable to load writing activity",
+  "analytics_activityEntryCount": "{{count}} entries",
+  "analytics_activityWordCount": "{{count}} words",
 
   "burnCountdown_burningNow": "Burning now…",
   "burnCountdown_burnsIn": "Burns in {{time}}",

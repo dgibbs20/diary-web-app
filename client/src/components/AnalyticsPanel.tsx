@@ -15,6 +15,7 @@ import { Streamdown } from 'streamdown';
 import { getLogoSrc } from '@/utils/logoHelper';
 import ExportDialog from './ExportDialog';
 import PaywallModal from './PaywallModal';
+import WritingActivityChart from './WritingActivityChart';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -42,6 +43,8 @@ export default function AnalyticsPanel() {
   const [isExporting, setIsExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showExportDialog, setShowExportDialog] = useState(false);
+  const [year, setYear] = useState(() => new Date().getFullYear());
+  const [month, setMonth] = useState(() => new Date().getMonth() + 1);
 
   const handleExport = () => {
     if (!isElite) {
@@ -203,6 +206,13 @@ export default function AnalyticsPanel() {
                   </div>
                 </motion.div>
               )}
+
+              {/* Writing Activity */}
+              <WritingActivityChart
+                year={year}
+                month={month}
+                onMonthChange={(y, m) => { setYear(y); setMonth(m); }}
+              />
 
               {/* Mood Distribution */}
               {moodEntries.length > 0 && (
