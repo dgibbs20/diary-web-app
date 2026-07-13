@@ -101,7 +101,7 @@ export default function Subscription() {
           </div>
           <p
             className="text-lg md:text-xl max-w-2xl mx-auto"
-            style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#6B5B4E' }}
+            style={{ color: '#6B5B4E' }}
           >
             {isElite ? t('subscription_subtitleElite') : t('subscription_subtitle')}
           </p>
@@ -119,7 +119,6 @@ export default function Subscription() {
               onClick={() => setBillingCycle('monthly')}
               className="px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300"
               style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
                 fontSize: '1rem',
                 backgroundColor: billingCycle === 'monthly' ? '#C9A84C' : 'transparent',
                 color: billingCycle === 'monthly' ? '#FFFFFF' : '#6B5B4E',
@@ -132,7 +131,6 @@ export default function Subscription() {
               onClick={() => setBillingCycle('annual')}
               className="px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 relative"
               style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
                 fontSize: '1rem',
                 backgroundColor: billingCycle === 'annual' ? '#C9A84C' : 'transparent',
                 color: billingCycle === 'annual' ? '#FFFFFF' : '#6B5B4E',
@@ -175,14 +173,14 @@ export default function Subscription() {
               />
               <p
                 className="text-sm mb-6"
-                style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#8B7B6E' }}
+                style={{ color: '#8B7B6E' }}
               >
                 {t('subscription_freeTagline')}
               </p>
               <div className="flex items-baseline gap-1">
                 <span
                   className="text-4xl md:text-5xl font-bold"
-                  style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#2C1A0E' }}
+                  style={{ color: '#2C1A0E' }}
                 >
                   {t('settings_profile_free')}
                 </span>
@@ -211,7 +209,6 @@ export default function Subscription() {
                     <span
                       className="text-sm"
                       style={{
-                        fontFamily: "'Cormorant Garamond', Georgia, serif",
                         color: available ? '#4A3B30' : '#B0A090',
                         textDecoration: available ? 'none' : 'line-through',
                       }}
@@ -233,7 +230,6 @@ export default function Subscription() {
                 <div
                   className="w-full py-3 rounded-xl text-center text-sm font-medium"
                   style={{
-                    fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: '1rem',
                     backgroundColor: '#F5F0E8',
                     color: '#6B5B4E',
@@ -281,7 +277,7 @@ export default function Subscription() {
               />
               <p
                 className="text-sm mb-6"
-                style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: 'rgba(201, 168, 76, 0.7)' }}
+                style={{ color: 'rgba(201, 168, 76, 0.7)' }}
               >
                 {t('subscription_eliteTagline')}
               </p>
@@ -298,7 +294,7 @@ export default function Subscription() {
                   <div className="flex items-baseline gap-1">
                     <span
                       className="text-4xl md:text-5xl font-bold"
-                      style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#FFFFFF' }}
+                      style={{ color: '#FFFFFF' }}
                     >
                       ${displayPrice}
                     </span>
@@ -325,7 +321,6 @@ export default function Subscription() {
                     <span
                       className="text-sm"
                       style={{
-                        fontFamily: "'Cormorant Garamond', Georgia, serif",
                         color: 'rgba(255, 255, 255, 0.9)',
                       }}
                     >
@@ -346,7 +341,6 @@ export default function Subscription() {
                 <div
                   className="w-full py-3 rounded-xl text-center text-sm font-medium flex items-center justify-center gap-2"
                   style={{
-                    fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: '1rem',
                     backgroundColor: 'rgba(201, 168, 76, 0.15)',
                     color: '#C9A84C',
@@ -359,9 +353,8 @@ export default function Subscription() {
               ) : (
                 <button
                   onClick={handleUpgrade}
-                  className="w-full py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full py-3.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] gold-cta-solid"
                   style={{
-                    fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: '1.05rem',
                     backgroundColor: '#C9A84C',
                     color: '#2C1A0E',
@@ -386,13 +379,13 @@ export default function Subscription() {
         >
           <p
             className="text-sm"
-            style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#8B7B6E' }}
+            style={{ color: '#8B7B6E' }}
           >
             {t('subscription_trustStripe')}
           </p>
           <p
             className="text-sm mt-2"
-            style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#8B7B6E' }}
+            style={{ color: '#8B7B6E' }}
           >
             {t('subscription_trustSync')}
           </p>

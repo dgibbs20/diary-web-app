@@ -517,7 +517,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
   const canSave = isDone && getEditorText().trim().length > 0;
 
   return (
-    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)', fontFamily: FONT }}>
+    <div className="h-full flex flex-col dashboard-view-canvas" style={{ backgroundColor: 'var(--background)' }}>
 
       {/* Action bar */}
       <header
@@ -532,13 +532,13 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
           >
             <ArrowLeft size={18} />
           </button>
-          <h1 className="text-base font-semibold tracking-wide" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+          <h1 className="text-base font-semibold tracking-wide" style={{ color: 'var(--foreground)' }}>
             {t('upload_title')}
           </h1>
           {saveStatus !== 'idle' && (
             <div
               className="flex items-center gap-1.5 text-xs"
-              style={{ color: saveStatus === 'saved' ? GOLD : 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600 }}
+              style={{ color: saveStatus === 'saved' ? GOLD : 'var(--muted-foreground)', fontWeight: 600 }}
             >
               {saveStatusIcon()}
               <span>{saveStatusText()}</span>
@@ -611,7 +611,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             onChange={e => setTitle(e.target.value)}
             placeholder={t('upload_titlePlaceholder')}
             className="w-full bg-transparent border-0 border-b text-2xl font-semibold outline-none pb-2 transition-colors"
-            style={{ borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
+            style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}
             onFocus={e => { e.currentTarget.style.borderColor = GOLD; }}
             onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; }}
           />
@@ -619,7 +619,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
           {/* Entry date — always visible */}
           <div className="flex items-center gap-3 flex-wrap">
             <label className="text-xs tracking-widest uppercase flex-shrink-0"
-                   style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+                   style={{ color: 'var(--muted-foreground)' }}>
               {t('upload_entryDateLabel')}
             </label>
 
@@ -636,7 +636,6 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                 border: '1px solid var(--border)',
                 borderRadius: 8,
                 padding: '6px 10px',
-                fontFamily: FONT,
                 fontSize: '0.875rem',
                 cursor: 'pointer',
               }}
@@ -661,7 +660,6 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                 border: '1px solid var(--border)',
                 borderRadius: 8,
                 padding: '6px 10px',
-                fontFamily: FONT,
                 fontSize: '0.875rem',
                 cursor: 'pointer',
               }}
@@ -687,7 +685,6 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                 border: '1px solid var(--border)',
                 borderRadius: 8,
                 padding: '6px 10px',
-                fontFamily: FONT,
                 fontSize: '0.875rem',
                 cursor: 'pointer',
               }}
@@ -706,7 +703,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             <div className="p-3 rounded-xl border space-y-2"
                  style={{ borderColor: 'var(--border)', background: 'var(--card)' }}>
               <p className="text-xs font-semibold"
-                 style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                 style={{ color: 'var(--foreground)' }}>
                 {t('upload_sortToggleTitle')}
               </p>
               <div className="flex gap-2">
@@ -717,7 +714,6 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                     borderColor: sortByOriginalDate ? GOLD : 'var(--border)',
                     borderWidth: sortByOriginalDate ? 2 : 1,
                     background: sortByOriginalDate ? 'rgba(201,168,76,0.06)' : 'var(--background)',
-                    fontFamily: FONT,
                   }}
                 >
                   <p className="font-semibold mb-0.5" style={{ color: 'var(--foreground)' }}>
@@ -734,7 +730,6 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                     borderColor: !sortByOriginalDate ? GOLD : 'var(--border)',
                     borderWidth: !sortByOriginalDate ? 2 : 1,
                     background: !sortByOriginalDate ? 'rgba(201,168,76,0.06)' : 'var(--background)',
-                    fontFamily: FONT,
                   }}
                 >
                   <p className="font-semibold mb-0.5" style={{ color: 'var(--foreground)' }}>
@@ -766,7 +761,6 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                   background: mode === m ? `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})` : 'transparent',
                   color: mode === m ? '#F5F0E8' : 'var(--foreground)',
                   borderColor: mode === m ? GOLD : 'var(--border)',
-                  fontFamily: FONT,
                 }}
               >
                 {m === 'single' ? t('upload_modeSingle') : `${t('upload_modeMulti')} ${!isElite ? '🔒' : ''}`}
@@ -787,7 +781,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             }}
           >
             <Upload size={26} style={{ color: isDragging ? GOLD : 'var(--muted-foreground)' }} />
-            <p className="mt-2.5 text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+            <p className="mt-2.5 text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
               {t('upload_dropZoneTitle')}
             </p>
             <p className="mt-1 text-xs" style={{ color: 'var(--muted-foreground)' }}>
@@ -798,7 +792,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
               style={{ background: `${GOLD}15`, border: `1px solid ${GOLD}30` }}
             >
               <Printer size={12} style={{ color: GOLD }} />
-              <span className="text-xs" style={{ color: GOLD, fontFamily: FONT }}>
+              <span className="text-xs" style={{ color: GOLD }}>
                 {t('upload_scannerHint')}
               </span>
             </div>
@@ -818,7 +812,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             <button
               onClick={() => zipInputRef.current?.click()}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all"
-              style={{ background: 'transparent', borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
+              style={{ background: 'transparent', borderColor: 'var(--border)', color: 'var(--foreground)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = GOLD; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; }}
             >
@@ -846,7 +840,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                   >
                     <div
                       className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                      style={{ background: `${GOLD}20`, color: GOLD, fontFamily: FONT }}
+                      style={{ background: `${GOLD}20`, color: GOLD }}
                     >
                       {i + 1}
                     </div>
@@ -858,7 +852,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                         </div>
                       )
                     }
-                    <span className="flex-1 text-sm truncate" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                    <span className="flex-1 text-sm truncate" style={{ color: 'var(--foreground)' }}>
                       {uf.name}
                     </span>
                     <button
@@ -876,7 +870,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     className="w-full flex items-center justify-center gap-2 py-2.5 text-xs transition-colors"
-                    style={{ color: GOLD, fontFamily: FONT, borderTop: '1px solid var(--border)' }}
+                    style={{ color: GOLD, borderTop: '1px solid var(--border)' }}
                   >
                     <Plus size={13} />
                     {t('upload_addMore', { current: files.length, max: MAX_FILES })}
@@ -891,12 +885,11 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             <button
               onClick={handleTranscribe}
               disabled={!canTranscribe}
-              className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2"
+              className="w-full py-2.5 rounded-full font-semibold text-sm transition-all flex items-center justify-center gap-2 gold-cta-gradient"
               style={{
                 background: canTranscribe ? `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})` : 'var(--muted)',
                 color: canTranscribe ? '#F5F0E8' : 'var(--muted-foreground)',
                 cursor: canTranscribe ? 'pointer' : 'not-allowed',
-                fontFamily: FONT,
                 letterSpacing: '0.08em',
               }}
             >
@@ -936,7 +929,7 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
                   {isTranscribing && !isDone ? (
                     <div className="flex items-center gap-2 py-4" style={{ color: 'var(--muted-foreground)' }}>
                       <Loader2 size={14} className="animate-spin" />
-                      <span className="text-sm" style={{ fontFamily: FONT }}>{t('upload_readingHandwriting')}</span>
+                      <span className="text-sm">{t('upload_readingHandwriting')}</span>
                     </div>
                   ) : (
                     <EditorContent editor={editor} />
@@ -975,12 +968,11 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
             <button
               onClick={handleSave}
               disabled={!canSave || saveStatus === 'saving'}
-              className="w-full py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 mb-8"
+              className="w-full py-3 rounded-full font-semibold text-sm transition-all flex items-center justify-center gap-2 mb-8 gold-cta-gradient"
               style={{
                 background: canSave ? `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})` : 'var(--muted)',
                 color: canSave ? '#F5F0E8' : 'var(--muted-foreground)',
                 cursor: canSave ? 'pointer' : 'not-allowed',
-                fontFamily: FONT,
                 letterSpacing: '0.08em',
               }}
             >
@@ -1050,24 +1042,23 @@ export default function UploadJournalEntry({ onSave, onDelete, onBack, onToggleA
               className="rounded-2xl p-6 max-w-sm w-full"
               style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
             >
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
                 {t('upload_deleteTitle')}
               </h3>
-              <p className="text-sm mb-5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+              <p className="text-sm mb-5" style={{ color: 'var(--muted-foreground)' }}>
                 {t('upload_deleteBody')}
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="flex-1 py-2 rounded-lg border text-sm font-semibold"
-                  style={{ borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
+                  className="flex-1 py-2 rounded-full text-sm font-semibold embossed-cream-pill"
                 >
                   {t('common_cancel')}
                 </button>
                 <button
                   onClick={handleDelete}
                   className="flex-1 py-2 rounded-lg text-sm font-semibold"
-                  style={{ background: '#ef4444', color: '#fff', fontFamily: FONT }}
+                  style={{ background: '#ef4444', color: '#fff' }}
                 >
                   {t('common_delete')}
                 </button>

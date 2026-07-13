@@ -18,8 +18,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const FONT = "'Cormorant Garamond', Georgia, serif";
-
 interface BurnCountdownProps {
   /** When the entry will burn (must be a Date in the future or recent past). */
   target: Date;
@@ -48,7 +46,6 @@ export default function BurnCountdown({
     return (
       <span
         style={{
-          fontFamily: FONT,
           letterSpacing: '0.05em',
           ...style,
         }}
@@ -76,7 +73,6 @@ export default function BurnCountdown({
   return (
     <span
       style={{
-        fontFamily: FONT,
         letterSpacing: '0.05em',
         ...style,
       }}

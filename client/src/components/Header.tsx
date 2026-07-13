@@ -42,7 +42,6 @@ export default function Header() {
     textTransform: 'uppercase',
     color: isDashboard ? 'var(--muted-foreground)' : '#5C3D2A',
     textDecoration: 'none',
-    fontFamily: "'Cormorant Garamond', Georgia, serif",
   };
 
   const ctaBtnStyle: React.CSSProperties = {
@@ -55,13 +54,12 @@ export default function Header() {
     letterSpacing: '0.16em',
     textTransform: 'uppercase',
     border: 'none',
-    fontFamily: "'Cormorant Garamond', Georgia, serif",
     cursor: 'pointer',
   };
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-[999] flex items-center justify-between"
+      className="fixed top-0 left-0 right-0 z-[999] flex items-center justify-between chrome-gold-wash"
       style={{
         background: isDashboard ? 'var(--card)' : 'rgba(245,240,232,0.96)',
         backdropFilter: 'blur(12px)',
@@ -125,11 +123,11 @@ export default function Header() {
 
         <li>
           {isAuthenticated ? (
-            <button onClick={handleLogout} style={ctaBtnStyle}>
+            <button onClick={handleLogout} className="gold-cta-gradient" style={ctaBtnStyle}>
               {t('header_signOut')}
             </button>
           ) : (
-            <Link href="/login" style={{ ...ctaBtnStyle, textDecoration: 'none' }}>
+            <Link href="/login" className="gold-cta-gradient" style={{ ...ctaBtnStyle, textDecoration: 'none' }}>
               {t('header_signIn')}
             </Link>
           )}
@@ -197,12 +195,13 @@ export default function Header() {
 
           <div style={{ marginTop: 12 }}>
             {isAuthenticated ? (
-              <button onClick={handleLogout} style={{ ...ctaBtnStyle, width: '100%' }}>
+              <button onClick={handleLogout} className="gold-cta-gradient" style={{ ...ctaBtnStyle, width: '100%' }}>
                 {t('header_signOut')}
               </button>
             ) : (
               <Link
                 href="/login"
+                className="gold-cta-gradient"
                 style={{ ...ctaBtnStyle, display: 'block', textAlign: 'center' }}
                 onClick={() => setMobileOpen(false)}
               >

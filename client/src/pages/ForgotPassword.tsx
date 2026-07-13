@@ -44,7 +44,7 @@ export default function ForgotPassword() {
               {t('forgotPassword_successMsg', { email })}
             </p>
             <Link href="/login"
-              className="inline-block py-3 px-8 rounded-lg text-sm font-medium tracking-wider uppercase"
+              className="inline-block py-3 px-8 rounded-full text-sm font-medium tracking-wider uppercase gold-cta-gradient"
               style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8', boxShadow: '0 2px 16px rgba(168, 134, 58, 0.25)' }}>
               {t('forgotPassword_backBtn')}
             </Link>
@@ -69,7 +69,7 @@ export default function ForgotPassword() {
                   placeholder={t('forgotPassword_emailPlaceholder')} autoComplete="email" />
               </div>
               <button type="submit" disabled={isSubmitting}
-                className="w-full py-3.5 rounded-lg text-sm font-medium tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60"
+                className="w-full py-3.5 rounded-full text-sm font-medium tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 gold-cta-gradient"
                 style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8', boxShadow: '0 2px 16px rgba(168, 134, 58, 0.25)' }}>
                 {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : null}
                 {isSubmitting ? t('forgotPassword_submitting') : t('forgotPassword_submitBtn')}

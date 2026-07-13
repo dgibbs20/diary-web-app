@@ -340,4 +340,141 @@
     color: oklch(0.72 0.12 85);
     text-decoration: underline;
   }
+
+  /* ── Phase 3: texture & frame treatments ── */
+
+  /* Light mode: soft champagne texture wash behind the dashboard canvas views.
+     Composited as a 94%-opaque duplicate of --background over the texture image,
+     so the visible bleed-through is ~6% — layered behind the solid color, not
+     replacing it. Dark mode explicitly disables this (see .dark override below). */
+  .dashboard-view-canvas {
+    background-repeat: no-repeat;
+  }
+  :root .dashboard-view-canvas {
+    background-image: linear-gradient(
+        color-mix(in oklch, var(--background) 94%, transparent),
+        color-mix(in oklch, var(--background) 94%, transparent)
+      ),
+      url('/assets/images/texture_bg.webp');
+    background-size: cover;
+    background-position: center;
+  }
+  .dark .dashboard-view-canvas {
+    background-image: none;
+  }
+
+  /* Dark mode: subtle brushed-gold wash behind chrome elements (Sidebar, Header),
+     mirroring the mobile app's bottom-nav treatment at low opacity. Light mode
+     is untouched. */
+  .chrome-gold-wash {
+    position: relative;
+  }
+  .chrome-gold-wash::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+  }
+  .dark .chrome-gold-wash::before {
+    background-image: url('/assets/images/footer_brushed_gold.webp');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.18;
+  }
+  .chrome-gold-wash > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Dark mode: brushed-gold texture blended under the gold CTA gradient on
+     primary buttons. Light mode keeps the flat gold gradient/solid fill as-is —
+     these variables are only ever consumed by .dark-scoped rules below, so the
+     light-mode gradient values buttons already set inline are untouched. */
+  .gold-cta-gradient,
+  .gold-cta-solid {
+    background-blend-mode: normal;
+  }
+  .dark .gold-cta-gradient {
+    background-image: linear-gradient(135deg, rgba(98, 70, 20, 0.68), rgba(180, 145, 60, 0.68)),
+      url('/assets/images/footer_brushed_gold.webp');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+  }
+  .dark .gold-cta-solid {
+    background-image: linear-gradient(rgba(168, 134, 58, 0.72), rgba(168, 134, 58, 0.72)),
+      url('/assets/images/footer_brushed_gold.webp');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+  }
+  .dark .gold-cta-gradient:disabled,
+  .dark .gold-cta-solid:disabled {
+    background-image: none;
+  }
+
+  /* Dark mode: Art Deco corner frame around contained, portrait-ish modal
+     surfaces. border-image (not background-image) so the 524x740 corner
+     artwork isn't stretched. Light mode untouched. Omitted below the sm
+     breakpoint on any surface that opts in via .frame-responsive, since the
+     frame reads as clutter at narrow widths. */
+  /* !important is deliberate here: PaywallModal's card sets its own inline
+     `border` (a plain gold hairline for light mode), which otherwise always
+     wins over a class rule regardless of .dark — this is the one legitimate
+     case for overriding inline styles rather than restructuring that inline
+     border into a class of its own. */
+  .dark .decorative-frame {
+    border-style: solid !important;
+    border-width: 18px !important;
+    border-color: transparent !important;
+    border-image-source: url('/assets/images/decorative_frame_espresso_gold.webp') !important;
+    border-image-slice: 140 140 140 140 fill !important;
+    border-image-width: 18px !important;
+    border-image-outset: 0 !important;
+    border-image-repeat: stretch !important;
+  }
+  @media (max-width: 639px) {
+    .dark .decorative-frame.frame-responsive {
+      border-image-source: none !important;
+      border-width: 0 !important;
+    }
+  }
+
+  /* ── Phase 4: embossed cream pill — secondary/utility buttons, light mode ── */
+  .embossed-cream-pill {
+    background-color: var(--color-cream);
+    color: var(--color-brown);
+    border: 1px solid rgba(93, 64, 28, 0.06);
+    border-radius: 9999px;
+    box-shadow:
+      4px 5px 10px rgba(93, 64, 28, 0.16),
+      -3px -3px 8px rgba(255, 255, 255, 0.85);
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+  .embossed-cream-pill:hover:not(:disabled) {
+    background-color: var(--color-cream-dark);
+    color: var(--color-brown);
+    box-shadow:
+      5px 6px 14px rgba(93, 64, 28, 0.22),
+      -4px -4px 10px rgba(255, 255, 255, 0.9);
+  }
+  .embossed-cream-pill:active:not(:disabled) {
+    box-shadow:
+      inset 2px 2px 5px rgba(93, 64, 28, 0.15),
+      inset -2px -2px 5px rgba(255, 255, 255, 0.6);
+  }
+  .embossed-cream-pill:disabled {
+    box-shadow: none;
+    opacity: 0.5;
+  }
+  /* Light-mode-only effect — dark mode falls back to the app's normal flat
+     secondary-button treatment so cream never appears against a dark surface. */
+  .dark .embossed-cream-pill {
+    background-color: var(--muted);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    box-shadow: none;
+  }
 }

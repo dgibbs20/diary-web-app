@@ -96,7 +96,7 @@ export default function AnalyticsPanel() {
 
   return (
     <>
-    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
+    <div className="h-full flex flex-col dashboard-view-canvas" style={{ backgroundColor: 'var(--background)' }}>
       <header className="px-6 lg:px-8 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-3">
           <BarChart3 size={20} style={{ color: GOLD }} />
@@ -109,7 +109,7 @@ export default function AnalyticsPanel() {
             </h1>
             <p
               className="text-sm mt-0.5"
-              style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+              style={{ color: 'var(--muted-foreground)' }}
             >
               {t('analytics_subtitle')}
             </p>
@@ -160,8 +160,8 @@ export default function AnalyticsPanel() {
           ) : error ? (
             <div className="text-center py-12">
               <BarChart3 size={40} className="mx-auto mb-4" style={{ color: 'var(--muted-foreground)', opacity: 0.5 }} />
-              <p className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{error ? t(error) : ''}</p>
-              <p className="text-xs mt-2" style={{ color: 'var(--muted-foreground)', fontFamily: FONT, opacity: 0.7 }}>
+              <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>{error ? t(error) : ''}</p>
+              <p className="text-xs mt-2" style={{ color: 'var(--muted-foreground)', opacity: 0.7 }}>
                 {t('analytics_errorMsg')}
               </p>
               {/* Still show stat cards from user profile fallback */}
@@ -193,14 +193,14 @@ export default function AnalyticsPanel() {
                     <Sparkles size={16} style={{ color: GOLD }} />
                     <h3
                       className="text-lg font-semibold"
-                      style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+                      style={{ color: 'var(--foreground)' }}
                     >
                       {t('analytics_aiReflection')}
                     </h3>
                   </div>
                   <div
                     className="text-sm leading-relaxed"
-                    style={{ color: 'var(--foreground)', fontFamily: FONT, opacity: 0.9 }}
+                    style={{ color: 'var(--foreground)', opacity: 0.9 }}
                   >
                     <Streamdown>{aiReflection}</Streamdown>
                   </div>
@@ -225,7 +225,7 @@ export default function AnalyticsPanel() {
                 >
                   <h3
                     className="text-lg mb-4 font-semibold"
-                    style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+                    style={{ color: 'var(--foreground)' }}
                   >
                     {t('analytics_moodDistribution')}
                   </h3>
@@ -238,7 +238,7 @@ export default function AnalyticsPanel() {
                           <span style={{ fontSize: "1.2rem", lineHeight: 1, flexShrink: 0 }}>{config.emoji}</span>
                           <span
                             className="text-sm w-20 capitalize font-medium"
-                            style={{ color: 'var(--foreground)', fontFamily: FONT }}
+                            style={{ color: 'var(--foreground)' }}
                           >
                             {t('mood_' + moodKey)}
                           </span>
@@ -253,7 +253,7 @@ export default function AnalyticsPanel() {
                           </div>
                           <span
                             className="text-xs tabular-nums w-8 text-right font-semibold"
-                            style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                            style={{ color: 'var(--muted-foreground)' }}
                           >
                             {count}
                           </span>
@@ -276,14 +276,14 @@ export default function AnalyticsPanel() {
                   <FileText size={16} style={{ color: GOLD }} />
                   <h3
                     className="text-lg font-semibold"
-                    style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+                    style={{ color: 'var(--foreground)' }}
                   >
                     {t('analytics_exportTitle')}
                   </h3>
                 </div>
                 <p
                   className="text-sm leading-relaxed mb-4"
-                  style={{ color: 'var(--foreground)', fontFamily: FONT, opacity: 0.9 }}
+                  style={{ color: 'var(--foreground)', opacity: 0.9 }}
                 >
                   {t('analytics_exportDesc')}
                 </p>
@@ -291,7 +291,7 @@ export default function AnalyticsPanel() {
                 {!isElite && (
                   <div
                     className="flex items-center gap-2 mb-4 text-xs font-semibold tracking-wider"
-                    style={{ color: GOLD, fontFamily: FONT }}
+                    style={{ color: GOLD }}
                   >
                     <Crown size={14} />
                     <span>{t('analytics_exportEliteFeature')}</span>
@@ -301,8 +301,8 @@ export default function AnalyticsPanel() {
                 <button
                   onClick={handleExport}
                   disabled={isExporting}
-                  className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
-                  style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+                  className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60 gold-cta-gradient"
+                  style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
                 >
                   {isExporting ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />}
                   {isExporting ? t('analytics_exporting') : isElite ? t('analytics_exportBtn') : t('analytics_exportUpgradeBtn')}
@@ -313,7 +313,7 @@ export default function AnalyticsPanel() {
               <div className="text-center py-4">
                 <p
                   className="text-xs tracking-wider uppercase font-semibold"
-                  style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                  style={{ color: 'var(--muted-foreground)' }}
                 >
                   {t('analytics_memberSince')} {memberSince || t('analytics_theBeginning')}
                 </p>
@@ -378,14 +378,14 @@ function StatCard({ card, idx }: { card: { icon: React.ElementType; label: strin
         <card.icon size={16} style={{ color: card.color }} />
         <span
           className="text-xs tracking-wider uppercase"
-          style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600 }}
+          style={{ color: 'var(--muted-foreground)', fontWeight: 600 }}
         >
           {card.label}
         </span>
       </div>
       <p
         className="text-2xl font-semibold"
-        style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+        style={{ color: 'var(--foreground)' }}
       >
         {card.value}
       </p>

@@ -58,7 +58,7 @@ export default function JournalList({
   const stats = user?.stats;
 
   return (
-    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
+    <div className="h-full flex flex-col dashboard-view-canvas" style={{ backgroundColor: 'var(--background)' }}>
       {/* Header area */}
       <header
         className="px-6 lg:px-8 py-5"
@@ -79,7 +79,7 @@ export default function JournalList({
               </h1>
               <p
                 className="text-sm mt-1 tracking-wide"
-                style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 {stats?.current_streak
                   ? t('journalList_dayStreak', { count: stats.current_streak })
@@ -99,7 +99,7 @@ export default function JournalList({
                   <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>{MOOD_CONFIG[todayMood]?.emoji}</span>
                   <span
                     className="text-xs font-semibold capitalize hidden sm:inline tracking-wide"
-                    style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                    style={{ color: 'var(--muted-foreground)' }}
                   >
                     {todayMood}
                   </span>
@@ -110,7 +110,6 @@ export default function JournalList({
                   style={{
                     background: 'linear-gradient(135deg, rgba(168,134,58,0.12), rgba(201,168,76,0.08))',
                     color: '#C9A84C',
-                    fontFamily: FONT,
                     border: '1px solid rgba(201,168,76,0.15)',
                   }}
                 >
@@ -134,7 +133,6 @@ export default function JournalList({
                   borderColor: 'var(--border)',
                   color: 'var(--foreground)',
                   backgroundColor: 'var(--card)',
-                  fontFamily: FONT,
                   fontSize: '0.9rem',
                 }}
               />
@@ -147,7 +145,6 @@ export default function JournalList({
                 borderColor: 'var(--border)',
                 color: 'var(--foreground)',
                 backgroundColor: 'var(--card)',
-                fontFamily: FONT,
                 fontSize: '0.9rem',
               }}
             >
@@ -182,24 +179,23 @@ export default function JournalList({
               />
               <h3
                 className="text-xl mb-2 font-light"
-                style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+                style={{ color: 'var(--foreground)' }}
               >
                 {searchQuery ? t('journalList_noEntries') : t('journalList_emptyTitle')}
               </h3>
               <p
                 className="text-sm mb-8"
-                style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 {searchQuery ? t('journalList_tryDifferent') : t('journalList_emptyBody')}
               </p>
               {!searchQuery && (
                 <button
                   onClick={onNewEntry}
-                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold tracking-wider uppercase transition-all"
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold tracking-wider uppercase transition-all gold-cta-gradient"
                   style={{
                     background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
                     color: '#F5F0E8',
-                    fontFamily: FONT,
                     letterSpacing: '0.12em',
                     boxShadow: '0 4px 16px rgba(168,134,58,0.25)',
                   }}
@@ -241,7 +237,7 @@ export default function JournalList({
                       <div className="flex items-center gap-2 mb-1">
                         <h3
                           className="text-base font-medium truncate"
-                          style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+                          style={{ color: 'var(--foreground)' }}
                         >
                           {entry.title || t('journalList_untitledEntry')}
                         </h3>
@@ -280,7 +276,7 @@ export default function JournalList({
                       {ghostModeEnabled ? (
                         <p
                           className="text-sm truncate mb-1.5 flex items-center gap-1.5"
-                          style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontStyle: 'italic' }}
+                          style={{ color: 'var(--muted-foreground)', fontStyle: 'italic' }}
                         >
                           <Ghost size={12} style={{ opacity: 0.5 }} />
                           {t('journalList_ghostHidden')}
@@ -288,14 +284,14 @@ export default function JournalList({
                       ) : (
                         <p
                           className="text-sm truncate mb-1.5"
-                          style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                          style={{ color: 'var(--muted-foreground)' }}
                         >
                           {entry.preview || t('journalList_noContent')}
                         </p>
                       )}
                       <div
                         className="flex items-center gap-3 text-xs tracking-wide"
-                        style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                        style={{ color: 'var(--muted-foreground)' }}
                       >
                         <span>{formatDate(entry.created_at)}</span>
                         <span style={{ opacity: 0.4 }}>·</span>
@@ -322,7 +318,7 @@ export default function JournalList({
       <div className="lg:hidden fixed bottom-6 right-6 z-30">
         <button
           onClick={onNewEntry}
-          className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
+          className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 gold-cta-gradient"
           style={{
             background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
             color: '#F5F0E8',
