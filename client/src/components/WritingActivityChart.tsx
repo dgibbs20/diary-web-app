@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { analyticsApi } from '@/lib/api';
 import { MOOD_CONFIG } from '@/lib/constants';
 
+const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
 
 const MONTH_LABELS = [
@@ -128,13 +129,13 @@ export default function WritingActivityChart({ year, month, onMonthChange }: Wri
           <TrendingUp size={16} style={{ color: GOLD }} />
           <h3
             className="text-lg font-semibold"
-            style={{ color: 'var(--foreground)' }}
+            style={{ fontFamily: FONT, color: 'var(--foreground)' }}
           >
             {t('analytics_writingActivity')}
           </h3>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
+          <span className="text-sm" style={{ fontFamily: FONT, color: 'var(--muted-foreground)' }}>
             {MONTH_LABELS[month - 1]} {year}
           </span>
           <div className="flex items-center gap-1">
@@ -167,7 +168,7 @@ export default function WritingActivityChart({ year, month, onMonthChange }: Wri
         />
       ) : error ? (
         <div className="text-center py-8">
-          <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
+          <p className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
             {t(error)}
           </p>
         </div>
@@ -175,7 +176,7 @@ export default function WritingActivityChart({ year, month, onMonthChange }: Wri
         <div className="text-center py-8">
           <p
             className="text-sm italic"
-            style={{ color: 'var(--muted-foreground)' }}
+            style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
           >
             {t('analytics_activityEmpty')}
           </p>
@@ -186,13 +187,13 @@ export default function WritingActivityChart({ year, month, onMonthChange }: Wri
             <BarChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
               <XAxis
                 dataKey="day"
-                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                tick={{ fontFamily: FONT, fontSize: 11, fill: 'var(--muted-foreground)' }}
                 axisLine={{ stroke: 'var(--border)' }}
                 tickLine={false}
                 interval={tickInterval}
               />
               <YAxis
-                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                tick={{ fontFamily: FONT, fontSize: 11, fill: 'var(--muted-foreground)' }}
                 axisLine={false}
                 tickLine={false}
                 width={36}
@@ -238,6 +239,7 @@ function ActivityTooltip({
         backgroundColor: 'var(--card)',
         border: '1px solid var(--border)',
         boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+        fontFamily: FONT,
       }}
     >
       <p className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>{formatted}</p>

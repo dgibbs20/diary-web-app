@@ -142,6 +142,7 @@ export default function Login() {
               margin: '0 auto 26px',
               fontWeight: 300,
               lineHeight: 1.75,
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
             }}
           >
             {t('login_heroDesc')}
@@ -160,6 +161,7 @@ export default function Login() {
                 textTransform: 'uppercase',
                 color: '#7A5A3B',
                 textDecoration: 'none',
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
                 transition: 'color 0.22s ease',
               }}
               onMouseEnter={(e) => {
@@ -176,7 +178,7 @@ export default function Login() {
           {/* Sign In CTA */}
           <button
             onClick={scrollToForm}
-            className="px-8 py-3 rounded-full text-sm font-medium tracking-wider uppercase transition-all duration-200 gold-cta-gradient"
+            className="px-8 py-3 rounded-lg text-sm font-medium tracking-wider uppercase transition-all duration-200"
             style={{
               background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
               color: '#F5F0E8',
@@ -235,6 +237,7 @@ export default function Login() {
                 textTransform: 'uppercase',
                 color: '#8B6347',
                 textDecoration: 'none',
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
               }}
             >
               {t('login_downloadApp')}
@@ -359,7 +362,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-full text-sm font-medium tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 gold-cta-gradient"
+              className="w-full py-3.5 rounded-lg text-sm font-medium tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60"
               style={{
                 background:
                   'linear-gradient(135deg, #A8863A, #C9A84C)',

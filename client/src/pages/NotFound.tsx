@@ -37,16 +37,17 @@ export default function NotFound() {
       </h2>
       <p
         className="text-center mb-8 max-w-md leading-relaxed"
-        style={{ color: '#7A6B5D', fontSize: '16px' }}
+        style={{ fontFamily: FONT, color: '#7A6B5D', fontSize: '16px' }}
       >
         {t('notFound_body')}
       </p>
       <button
         onClick={() => setLocation('/')}
-        className="px-8 py-3 rounded-full text-sm font-semibold tracking-wider transition-all hover:opacity-90 gold-cta-gradient"
+        className="px-8 py-3 rounded-lg text-sm font-semibold tracking-wider transition-all hover:opacity-90"
         style={{
           background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`,
           color: '#FFF9F0',
+          fontFamily: FONT,
           letterSpacing: '0.1em',
         }}
       >

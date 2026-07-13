@@ -52,7 +52,7 @@ export default function ExportDialog({
           onClick={onClose}
         >
           <motion.div
-            className="rounded-2xl w-full mx-4 decorative-frame frame-responsive"
+            className="rounded-2xl w-full mx-4"
             style={{
               maxWidth: '520px',
               backgroundColor: 'var(--card)',
@@ -84,6 +84,7 @@ export default function ExportDialog({
                 </h2>
                 <p
                   style={{
+                    fontFamily: FONT,
                     fontSize: '0.82rem',
                     color: 'var(--muted-foreground)',
                     marginTop: '4px',
@@ -141,6 +142,7 @@ export default function ExportDialog({
                 <div style={{ textAlign: 'center' }}>
                   <div
                     style={{
+                      fontFamily: FONT,
                       fontSize: '1.05rem',
                       fontWeight: 600,
                       letterSpacing: '0.04em',
@@ -152,6 +154,7 @@ export default function ExportDialog({
                   </div>
                   <div
                     style={{
+                      fontFamily: FONT,
                       fontSize: '0.75rem',
                       color: 'var(--muted-foreground)',
                       fontStyle: 'italic',
@@ -200,6 +203,7 @@ export default function ExportDialog({
                 <div style={{ textAlign: 'center' }}>
                   <div
                     style={{
+                      fontFamily: FONT,
                       fontSize: '1.05rem',
                       fontWeight: 600,
                       letterSpacing: '0.04em',
@@ -211,6 +215,7 @@ export default function ExportDialog({
                   </div>
                   <div
                     style={{
+                      fontFamily: FONT,
                       fontSize: '0.72rem',
                       color: GOLD,
                       marginTop: '4px',
@@ -232,19 +237,19 @@ export default function ExportDialog({
               <motion.button
                 onClick={handleConfirm}
                 disabled={!selected || isExporting}
-                className="gold-cta-gradient"
                 whileHover={selected && !isExporting ? { scale: 1.02 } : {}}
                 whileTap={selected && !isExporting ? { scale: 0.98 } : {}}
                 style={{
                   marginTop: '16px',
                   width: '100%',
                   padding: '12px',
-                  borderRadius: '9999px',
+                  borderRadius: '12px',
                   background:
                     selected && !isExporting
                       ? `linear-gradient(135deg, ${GOLD}, #b8892e)`
                       : 'var(--muted)',
                   color: selected && !isExporting ? '#fff' : 'var(--muted-foreground)',
+                  fontFamily: FONT,
                   fontSize: '0.95rem',
                   letterSpacing: '0.1em',
                   fontWeight: 600,
@@ -257,12 +262,15 @@ export default function ExportDialog({
               </motion.button>
               <button
                 onClick={onClose}
-                className="embossed-cream-pill"
                 style={{
+                  background: 'none',
+                  border: 'none',
+                  fontFamily: FONT,
                   fontSize: '0.8rem',
+                  color: 'var(--muted-foreground)',
                   letterSpacing: '0.06em',
                   cursor: 'pointer',
-                  padding: '8px 20px',
+                  padding: '4px 8px',
                 }}
               >
                 {t('common_cancel')}

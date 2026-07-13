@@ -82,7 +82,7 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="relative w-full max-w-md rounded-2xl overflow-hidden decorative-frame frame-responsive"
+              className="relative w-full max-w-md rounded-2xl overflow-hidden"
               style={{
                 backgroundColor: '#2C1A0E',
                 border: '1.5px solid rgba(201, 168, 76, 0.4)',
@@ -142,7 +142,7 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
                 {/* Description */}
                 <p
                   className="text-sm leading-relaxed mb-8"
-                  style={{ color: 'rgba(255,255,255,0.7)' }}
+                  style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: 'rgba(255,255,255,0.7)' }}
                 >
                   {t(`paywall_${featureKey}_desc`)}
                 </p>
@@ -150,8 +150,9 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
                 {/* Upgrade button */}
                 <button
                   onClick={handleUpgrade}
-                  className="w-full py-3.5 rounded-full font-bold flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] gold-cta-solid"
+                  className="w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                   style={{
+                    fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: '1.05rem',
                     backgroundColor: '#C9A84C',
                     color: '#2C1A0E',
@@ -168,6 +169,7 @@ export default function PaywallModal({ isOpen, onClose, feature }: PaywallModalP
                   onClick={onClose}
                   className="mt-4 text-sm transition-colors"
                   style={{
+                    fontFamily: "'Cormorant Garamond', Georgia, serif",
                     color: 'rgba(255,255,255,0.4)',
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}

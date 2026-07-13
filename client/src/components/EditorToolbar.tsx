@@ -13,6 +13,8 @@ import {
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+const FONT = "'Cormorant Garamond', Georgia, serif";
+
 interface EditorToolbarProps {
   editor: Editor | null;
 }
@@ -109,7 +111,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         <button
           onClick={() => { setShowFontMenu(!showFontMenu); setShowSizeMenu(false); setShowColorPicker(false); setShowHighlightPicker(false); }}
           className="flex items-center gap-1 px-2 py-1 rounded text-xs hover:bg-accent transition-colors min-w-[110px]"
-          style={{ color: 'var(--foreground)' }}
+          style={{ color: 'var(--foreground)', fontFamily: FONT }}
         >
           <Type size={13} />
           <span className="truncate">{currentFontLabel}</span>
@@ -139,7 +141,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         <button
           onClick={() => { setShowSizeMenu(!showSizeMenu); setShowFontMenu(false); setShowColorPicker(false); setShowHighlightPicker(false); }}
           className="flex items-center gap-1 px-2 py-1 rounded text-xs hover:bg-accent transition-colors min-w-[50px]"
-          style={{ color: 'var(--foreground)' }}
+          style={{ color: 'var(--foreground)', fontFamily: FONT }}
         >
           <span>{currentSize}</span>
           <ChevronDown size={12} />
@@ -157,7 +159,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
                   setShowSizeMenu(false);
                 }}
                 className="w-full text-left px-3 py-1.5 text-sm hover:bg-accent transition-colors"
-                style={{ color: currentSize === size ? '#C9A84C' : 'var(--foreground)' }}
+                style={{ color: currentSize === size ? '#C9A84C' : 'var(--foreground)', fontFamily: FONT }}
               >
                 {size}
               </button>

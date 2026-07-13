@@ -41,7 +41,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
 
   return (
     <motion.aside
-      className="h-full flex flex-col border-r relative z-20 select-none chrome-gold-wash"
+      className="h-full flex flex-col border-r relative z-20 select-none"
       style={{
         backgroundColor: 'var(--sidebar)',
         borderColor: 'var(--sidebar-border)',
@@ -55,10 +55,11 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
       <div className="px-3 pt-4 pb-2">
         <button
           onClick={onNewEntry}
-          className="w-full flex items-center justify-center gap-3 px-3 py-2.5 rounded-full transition-all duration-200 group gold-cta-gradient"
+          className="w-full flex items-center justify-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group"
           style={{
             background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
             color: '#F5F0E8',
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontWeight: 600,
             letterSpacing: '0.08em',
             boxShadow: '0 2px 10px rgba(168,134,58,0.2)',
@@ -81,6 +82,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
           style={{
             background: 'transparent',
             color: '#C9A84C',
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontWeight: 600,
             letterSpacing: '0.08em',
             borderColor: 'rgba(201,168,76,0.35)',
@@ -118,6 +120,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
               style={{
                 backgroundColor: isActive ? 'var(--sidebar-accent)' : 'transparent',
                 color: isActive ? '#C9A84C' : 'var(--sidebar-foreground)',
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
               }}
             >
               {isActive && (
@@ -146,6 +149,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
           style={{
             backgroundColor: showAiPanel ? 'var(--sidebar-accent)' : 'transparent',
             color: showAiPanel ? '#C9A84C' : 'var(--sidebar-foreground)',
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
           }}
         >
           <Sparkles size={18} className="flex-shrink-0" />
@@ -174,6 +178,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
             style={{
               background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
               color: '#F5F0E8',
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
             }}
           >
             {user?.first_name?.[0] || user?.fullname?.[0] || 'U'}
@@ -185,7 +190,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
           >
             <p
               className="text-sm font-semibold truncate"
-              style={{ color: 'var(--sidebar-foreground)' }}
+              style={{ color: 'var(--sidebar-foreground)', fontFamily: "'Cormorant Garamond', Georgia, serif" }}
             >
               {user?.first_name || user?.fullname || 'User'}
             </p>
@@ -198,7 +203,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 mt-1 hover:bg-accent"
-          style={{ color: 'var(--muted-foreground)' }}
+          style={{ color: 'var(--muted-foreground)', fontFamily: "'Cormorant Garamond', Georgia, serif" }}
         >
           <LogOut size={18} className="flex-shrink-0" />
           <motion.span
