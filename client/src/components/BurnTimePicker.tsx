@@ -146,7 +146,6 @@ export default function BurnTimePicker({
         style={{
           background: 'var(--card)',
           border: '1px solid var(--border)',
-          fontFamily: FONT_SERIF,
         }}
       >
         <DialogHeader>
@@ -166,7 +165,6 @@ export default function BurnTimePicker({
           <DialogDescription
             style={{
               color: 'var(--muted-foreground)',
-              fontFamily: FONT_SERIF,
             }}
           >
             {t('burnTimePicker_description')}
@@ -182,7 +180,6 @@ export default function BurnTimePicker({
                 className="text-xs uppercase tracking-widest"
                 style={{
                   color: 'var(--muted-foreground)',
-                  fontFamily: FONT_SERIF,
                   letterSpacing: '0.15em',
                 }}
               >
@@ -212,7 +209,6 @@ export default function BurnTimePicker({
                   className="text-xs uppercase tracking-widest"
                   style={{
                     color: 'var(--muted-foreground)',
-                    fontFamily: FONT_SERIF,
                     letterSpacing: '0.15em',
                   }}
                 >
@@ -244,7 +240,6 @@ export default function BurnTimePicker({
                     background: 'var(--muted)',
                     border: '1px solid var(--border)',
                     color: 'var(--foreground)',
-                    fontFamily: FONT_SERIF,
                     fontVariantNumeric: 'tabular-nums',
                   }}
                 />
@@ -277,7 +272,6 @@ export default function BurnTimePicker({
                     background: 'var(--muted)',
                     border: '1px solid var(--border)',
                     color: 'var(--foreground)',
-                    fontFamily: FONT_SERIF,
                     fontVariantNumeric: 'tabular-nums',
                   }}
                 />
@@ -285,7 +279,6 @@ export default function BurnTimePicker({
                   className="text-xs uppercase tracking-widest ml-1"
                   style={{
                     color: 'var(--muted-foreground)',
-                    fontFamily: FONT_SERIF,
                     letterSpacing: '0.15em',
                   }}
                 >
@@ -300,7 +293,6 @@ export default function BurnTimePicker({
                 className="text-xs uppercase tracking-widest block mb-2"
                 style={{
                   color: 'var(--muted-foreground)',
-                  fontFamily: FONT_SERIF,
                   letterSpacing: '0.15em',
                 }}
               >
@@ -328,7 +320,6 @@ export default function BurnTimePicker({
                       background: 'var(--muted)',
                       border: '1px solid var(--border)',
                       color: 'var(--foreground)',
-                      fontFamily: FONT_SERIF,
                       letterSpacing: '0.02em',
                     }}
                   >
@@ -356,7 +347,6 @@ export default function BurnTimePicker({
                   className="text-sm"
                   style={{
                     color: 'var(--foreground)',
-                    fontFamily: FONT_SERIF,
                     lineHeight: 1.4,
                   }}
                 >
@@ -371,7 +361,6 @@ export default function BurnTimePicker({
                 role="alert"
                 style={{
                   color: 'var(--destructive)',
-                  fontFamily: FONT_SERIF,
                 }}
               >
                 {error}
@@ -384,16 +373,16 @@ export default function BurnTimePicker({
           <Button
             variant="ghost"
             onClick={onCancel}
-            style={{ fontFamily: FONT_SERIF }}
+            className="rounded-full embossed-cream-pill"
           >
             {t('common_cancel')}
           </Button>
           <Button
             onClick={handleConfirm}
+            className="rounded-full gold-cta-solid"
             style={{
               background: GOLD,
               color: 'var(--primary-foreground)',
-              fontFamily: FONT_SERIF,
               letterSpacing: '0.02em',
             }}
           >

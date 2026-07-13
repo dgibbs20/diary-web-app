@@ -21,7 +21,6 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
 const GOLD = 'var(--color-gold)';
-const FONT = "'Cormorant Garamond', Georgia, serif";
 
 interface BurnSwitchProps {
   /** Current value of the switch. */
@@ -74,7 +73,6 @@ export default function BurnSwitch({
         className="text-sm font-medium tracking-wide cursor-pointer"
         style={{
           color: value ? 'var(--foreground)' : 'var(--muted-foreground)',
-          fontFamily: FONT,
           letterSpacing: '0.01em',
           transition: 'color 200ms ease',
         }}

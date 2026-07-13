@@ -92,7 +92,7 @@ export default function Register() {
             {t('register_heroTagline')}
           </p>
           <p
-            style={{ fontSize: '1.05rem', color: '#8B6347', maxWidth: '420px', margin: '0 auto', fontWeight: 300, lineHeight: 1.75, fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+            style={{ fontSize: '1.05rem', color: '#8B6347', maxWidth: '420px', margin: '0 auto', fontWeight: 300, lineHeight: 1.75 }}
           >
             {t('register_heroDesc')}
           </p>
@@ -142,7 +142,7 @@ export default function Register() {
 
             <button
               type="submit" disabled={isSubmitting}
-              className="w-full py-3.5 rounded-lg text-sm font-medium tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 mt-2"
+              className="w-full py-3.5 rounded-full text-sm font-medium tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 mt-2 gold-cta-gradient"
               style={{ background: 'linear-gradient(135deg, #A8863A, #C9A84C)', color: '#F5F0E8', boxShadow: '0 2px 16px rgba(168, 134, 58, 0.25)' }}
               onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(168, 134, 58, 0.35)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 16px rgba(168, 134, 58, 0.25)'; }}

@@ -284,7 +284,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
     switch (saveStatus) {
       case 'saving': return <Clock size={14} className="animate-pulse" />;
       case 'saved': return <Check size={14} />;
-      case 'error': return <span className="text-destructive text-xs" style={{ fontFamily: FONT }}>{t('common_error')}</span>;
+      case 'error': return <span className="text-destructive text-xs">{t('common_error')}</span>;
       default: return null;
     }
   };
@@ -299,7 +299,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
   };
 
   return (
-    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
+    <div className="h-full flex flex-col dashboard-view-canvas" style={{ backgroundColor: 'var(--background)' }}>
       {/* Top bar */}
       <header
         className="flex items-center justify-between px-4 lg:px-6 py-2.5"
@@ -317,7 +317,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           {mood && MOOD_CONFIG[mood] && (
             <div
               className="flex items-center gap-1.5 px-3 py-1 rounded-full"
-              style={{ background: 'var(--muted)', fontFamily: FONT }}
+              style={{ background: 'var(--muted)' }}
             >
               <span style={{ fontSize: '1.1rem', lineHeight: 1 }}>{MOOD_CONFIG[mood].emoji}</span>
               <span className="text-xs font-semibold capitalize tracking-wide" style={{ color: 'var(--muted-foreground)' }}>
@@ -330,7 +330,6 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
             className="flex items-center gap-1.5 text-xs tracking-wide"
             style={{
               color: saveStatus === 'saved' ? '#C9A84C' : 'var(--muted-foreground)',
-              fontFamily: FONT,
               fontWeight: 600,
             }}
           >
@@ -342,7 +341,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
         <div className="flex items-center gap-1.5">
           <span
             className="text-xs tabular-nums px-2"
-            style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600, letterSpacing: '0.05em' }}
+            style={{ color: 'var(--muted-foreground)', fontWeight: 600, letterSpacing: '0.05em' }}
           >
             {t('journalEditor_wordCount', { count: wordCount })}
           </span>
@@ -394,7 +393,6 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
               color: '#C9A84C',
               backgroundColor: 'rgba(201,168,76,0.1)',
               border: '1px solid rgba(201,168,76,0.3)',
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
               letterSpacing: '0.05em',
             }}
             onMouseEnter={e => {
@@ -447,7 +445,7 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           {/* Date */}
           <p
             className="text-xs tracking-widest uppercase mb-8"
-            style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600, letterSpacing: '0.18em' }}
+            style={{ color: 'var(--muted-foreground)', fontWeight: 600, letterSpacing: '0.18em' }}
           >
             {entry
               ? new Date(entry.created_at).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
@@ -467,7 +465,6 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           style={{
             background: 'rgba(232,93,74,0.06)',
             color: '#E85D4A',
-            fontFamily: FONT,
             fontWeight: 600,
             letterSpacing: '0.1em',
           }}
@@ -484,7 +481,6 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
                 className="underline-offset-2 hover:underline"
                 style={{
                   color: '#E85D4A',
-                  fontFamily: FONT,
                   letterSpacing: '0.1em',
                 }}
                 title={t('journalEditor_changeTab')}
@@ -499,7 +495,6 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
               className="underline-offset-2 hover:underline"
               style={{
                 color: '#E85D4A',
-                fontFamily: FONT,
                 letterSpacing: '0.1em',
               }}
             >
@@ -532,28 +527,26 @@ export default function JournalEditor({ entry, pendingMood, onSave, onDelete, on
           >
             <h3
               className="text-lg mb-2 font-medium"
-              style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+              style={{ color: 'var(--foreground)', fontFamily: FONT }}
             >
               {t('journalEditor_deleteTitle')}
             </h3>
             <p
               className="text-sm mb-6"
-              style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+              style={{ color: 'var(--muted-foreground)' }}
             >
               {t('journalEditor_deleteBody')}
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="flex-1 py-2.5 rounded-lg border text-sm font-semibold tracking-wide"
-                style={{ borderColor: 'var(--border)', color: 'var(--foreground)', fontFamily: FONT }}
+                className="flex-1 py-2.5 rounded-full text-sm font-semibold tracking-wide embossed-cream-pill"
               >
                 {t('common_cancel')}
               </button>
               <button
                 onClick={handleDelete}
                 className="flex-1 py-2.5 rounded-lg text-sm font-semibold tracking-wide bg-destructive text-destructive-foreground"
-                style={{ fontFamily: FONT }}
               >
                 {t('common_delete')}
               </button>

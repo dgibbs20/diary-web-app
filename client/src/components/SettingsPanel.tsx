@@ -40,7 +40,7 @@ export default function SettingsPanel() {
   ];
 
   return (
-    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
+    <div className="h-full flex flex-col dashboard-view-canvas" style={{ backgroundColor: 'var(--background)' }}>
       <header className="px-6 lg:px-8 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
         <h1
           className="text-2xl font-semibold"
@@ -63,7 +63,6 @@ export default function SettingsPanel() {
                   backgroundColor: activeTab === tab.id ? 'var(--card)' : 'transparent',
                   color: activeTab === tab.id ? GOLD_DARK : 'var(--muted-foreground)',
                   boxShadow: activeTab === tab.id ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                  fontFamily: FONT,
                   fontWeight: activeTab === tab.id ? 700 : 600,
                   letterSpacing: '0.03em',
                 }}
@@ -112,13 +111,11 @@ function ProfileSection() {
   const inputStyle: React.CSSProperties = {
     border: '1px solid var(--border)',
     color: 'var(--foreground)',
-    fontFamily: FONT,
     fontSize: '15px',
   };
 
   const labelStyle: React.CSSProperties = {
     color: 'var(--muted-foreground)',
-    fontFamily: FONT,
     fontWeight: 700,
     letterSpacing: '0.12em',
   };
@@ -129,17 +126,17 @@ function ProfileSection() {
       <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: 'var(--muted)' }}>
         <div
           className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold"
-          style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+          style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
         >
           {user?.first_name?.[0] || 'U'}
         </div>
         <div className="flex-1">
-          <p className="font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>{user?.fullname}</p>
-          <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{user?.email}</p>
+          <p className="font-semibold" style={{ color: 'var(--foreground)' }}>{user?.fullname}</p>
+          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{user?.email}</p>
         </div>
         <span
           className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold tracking-wider"
-          style={{ background: 'rgba(201,168,76,0.12)', color: GOLD, fontFamily: FONT }}
+          style={{ background: 'rgba(201,168,76,0.12)', color: GOLD }}
         >
           <Crown size={12} /> {user?.subscription_tier === 'diary_elite' ? 'Elite' : t('settings_profile_free')}
         </span>
@@ -193,8 +190,8 @@ function ProfileSection() {
 
       <button
         onClick={handleSave} disabled={isSaving}
-        className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
-        style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+        className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60 gold-cta-gradient"
+        style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
       >
         {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
         {isSaving ? t('settings_profile_saving') : t('settings_profile_saveChanges')}
@@ -218,10 +215,10 @@ function ProfileSection() {
               <Crown size={18} style={{ color: GOLD }} />
             </div>
             <div>
-              <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+              <p className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
                 {isElite ? t('settings_profile_manageSubscription') : t('settings_profile_upgradeElite')}
               </p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
                 {isElite ? t('settings_profile_manageDesc') : t('settings_profile_upgradeDesc')}
               </p>
             </div>
@@ -238,8 +235,8 @@ function ProfileSection() {
           { value: user?.stats?.total_words || 0, label: t('settings_profile_words') },
         ].map(s => (
           <div key={s.label} className="text-center p-3 rounded-lg" style={{ background: 'var(--muted)' }}>
-            <p className="text-xl font-semibold" style={{ color: GOLD, fontFamily: FONT }}>{s.value}</p>
-            <p className="text-xs tracking-wider uppercase" style={{ color: 'var(--muted-foreground)', fontFamily: FONT, fontWeight: 600 }}>{s.label}</p>
+            <p className="text-xl font-semibold" style={{ color: GOLD }}>{s.value}</p>
+            <p className="text-xs tracking-wider uppercase" style={{ color: 'var(--muted-foreground)', fontWeight: 600 }}>{s.label}</p>
           </div>
         ))}
       </div>
@@ -288,8 +285,8 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
         <div className="flex items-center gap-3">
           {theme === 'dark' ? <Moon size={18} style={{ color: GOLD }} /> : <Sun size={18} style={{ color: GOLD }} />}
           <div>
-            <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>{t('settings_pref_darkMode')}</p>
-            <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{t('settings_pref_darkModeDesc')}</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>{t('settings_pref_darkMode')}</p>
+            <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{t('settings_pref_darkModeDesc')}</p>
           </div>
         </div>
         <button
@@ -309,8 +306,8 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
         <div className="flex items-center gap-3">
           <Globe size={18} style={{ color: GOLD }} />
           <div>
-            <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>{t('settings_pref_language')}</p>
-            <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{t('settings_pref_languageDesc')}</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>{t('settings_pref_language')}</p>
+            <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{t('settings_pref_languageDesc')}</p>
           </div>
         </div>
         <select
@@ -322,7 +319,6 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
             userApi.updatePreferences({ preferred_language: newLang }).catch(() => {});
           }}
           style={{
-            fontFamily: FONT,
             fontSize: '0.85rem',
             background: 'var(--card)',
             color: 'var(--foreground)',
@@ -341,10 +337,10 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
       {/* Companion name */}
       <div className="p-4 rounded-xl space-y-3" style={{ background: 'var(--muted)' }}>
         <div>
-          <p style={{ fontFamily: FONT, fontSize: '0.875rem', fontWeight: 600, color: 'var(--foreground)' }}>
+          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--foreground)' }}>
             {t('settings_companion_nameTitle')}
           </p>
-          <p style={{ fontFamily: FONT, fontSize: '0.75rem', color: 'var(--muted-foreground)', marginTop: 2 }}>
+          <p style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)', marginTop: 2 }}>
             {t('settings_companion_nameSubtitle')}
           </p>
         </div>
@@ -364,7 +360,6 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
               border: '1px solid var(--border)',
               background: 'var(--card)',
               color: 'var(--foreground)',
-              fontFamily: FONT,
               fontSize: '0.875rem',
               outline: 'none',
             }}
@@ -393,12 +388,12 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
           <button
             onClick={() => handleSaveCompanionName()}
             disabled={isSavingName}
+            className="gold-cta-gradient"
             style={{
               padding: '8px 16px',
-              borderRadius: 8,
+              borderRadius: 9999,
               background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`,
               color: '#FFF9F0',
-              fontFamily: FONT,
               fontSize: '0.875rem',
               fontWeight: 600,
               cursor: isSavingName ? 'not-allowed' : 'pointer',
@@ -416,7 +411,7 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
           </button>
         </div>
 
-        <p style={{ fontSize: '0.7rem', color: 'var(--muted-foreground)', textAlign: 'right', fontFamily: FONT }}>
+        <p style={{ fontSize: '0.7rem', color: 'var(--muted-foreground)', textAlign: 'right' }}>
           {companionName.length} / 20
         </p>
       </div>
@@ -425,15 +420,15 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
       <div className="p-4 rounded-xl" style={{ border: '1px solid var(--border)' }}>
         <div className="flex items-center gap-2 mb-3">
           <Smartphone size={16} style={{ color: 'var(--muted-foreground)' }} />
-          <p className="text-sm font-semibold" style={{ color: 'var(--foreground)', fontFamily: FONT }}>{t('settings_pref_mobileOnly')}</p>
+          <p className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>{t('settings_pref_mobileOnly')}</p>
         </div>
         <div className="space-y-2">
           {mobileFeatures.map(f => (
             <div key={f.id} className="flex items-center justify-between py-1.5">
-              <span className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{t(f.key)}</span>
+              <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>{t(f.key)}</span>
               <span
                 className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
-                style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
+                style={{ background: 'rgba(201,168,76,0.1)', color: GOLD }}
               >
                 {t('settings_pref_mobile')}
               </span>
@@ -503,13 +498,11 @@ function SecuritySection() {
   const inputStyle: React.CSSProperties = {
     border: '1px solid var(--border)',
     color: 'var(--foreground)',
-    fontFamily: FONT,
     fontSize: '15px',
   };
 
   const labelStyle: React.CSSProperties = {
     color: 'var(--muted-foreground)',
-    fontFamily: FONT,
     fontWeight: 700,
     letterSpacing: '0.12em',
   };
@@ -528,18 +521,18 @@ function SecuritySection() {
                 <Ghost size={18} style={{ color: ghostMode ? GOLD : 'var(--muted-foreground)' }} />
               </div>
               <div>
-                <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)' }}>
                   {t('settings_security_ghostMode')}
                   {!isElite && (
                     <span
                       className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
-                      style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
+                      style={{ background: 'rgba(201,168,76,0.1)', color: GOLD }}
                     >
                       <Crown size={10} className="inline mr-1" />{t('common_elite')}
                     </span>
                   )}
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
                   {t('settings_security_ghostModeDesc')}
                 </p>
               </div>
@@ -559,7 +552,7 @@ function SecuritySection() {
           {ghostMode && (
             <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(201,168,76,0.06)' }}>
               <Shield size={14} style={{ color: GOLD_DARK }} />
-              <p className="text-xs" style={{ color: GOLD_DARK, fontFamily: FONT, fontWeight: 600 }}>
+              <p className="text-xs" style={{ color: GOLD_DARK, fontWeight: 600 }}>
                 {t('settings_security_ghostActive')}
               </p>
             </div>
@@ -568,7 +561,7 @@ function SecuritySection() {
 
         {/* Change Password */}
         <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
-        <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>{t('settings_security_changePassword')}</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>{t('settings_security_changePassword')}</h3>
 
         <div>
           <label className="block text-xs uppercase mb-2" style={labelStyle}>{t('settings_security_currentPw')}</label>
@@ -615,8 +608,8 @@ function SecuritySection() {
 
         <button
           onClick={handleChangePw} disabled={isSaving}
-          className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
-          style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+          className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60 gold-cta-gradient"
+          style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
         >
           {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
           {isSaving ? t('settings_security_changingPw') : t('settings_security_changePwBtn')}
@@ -659,13 +652,13 @@ function ExportSection() {
           <Download size={32} className="mx-auto mb-3" style={{ color: GOLD }} />
           <h3
             className="text-lg mb-2 font-semibold"
-            style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+            style={{ color: 'var(--foreground)' }}
           >
             {t('settings_export_title')}
           </h3>
           <p
             className="text-sm mb-6"
-            style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+            style={{ color: 'var(--muted-foreground)' }}
           >
             {t('settings_export_desc')}
           </p>
@@ -673,7 +666,7 @@ function ExportSection() {
           {!isElite && (
             <div
               className="flex items-center justify-center gap-2 mb-4 text-xs font-semibold tracking-wider"
-              style={{ color: GOLD, fontFamily: FONT }}
+              style={{ color: GOLD }}
             >
               <Crown size={14} />
               <span>{t('settings_export_eliteFeature')}</span>
@@ -682,8 +675,8 @@ function ExportSection() {
 
           <button
             onClick={handleExport} disabled={isExporting}
-            className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 mx-auto disabled:opacity-60"
-            style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+            className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider transition-all flex items-center gap-2 mx-auto disabled:opacity-60 gold-cta-gradient"
+            style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
           >
             {isExporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
             {isExporting ? t('settings_export_exporting') : isElite ? t('settings_export_exportBtn') : t('settings_export_upgradeBtn')}

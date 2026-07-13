@@ -284,7 +284,7 @@ export default function Dashboard() {
           <img src="/assets/images/logo.png" alt="diAry" className="h-16 w-auto mx-auto mb-4 animate-pulse" />
           <p
             className="text-sm tracking-widest uppercase"
-            style={{ color: 'var(--muted-foreground)', fontFamily: FONT, letterSpacing: '0.15em' }}
+            style={{ color: 'var(--muted-foreground)', letterSpacing: '0.15em' }}
           >
             {t('dashboard_loadingSpace')}
           </p>
@@ -486,7 +486,6 @@ function DashboardFooter() {
       style={{
         background: '#2C1A0E',
         padding: '8px 3%',
-        fontFamily: FONT,
         borderTop: '1px solid rgba(201,168,76,0.15)',
       }}
     >
@@ -500,7 +499,7 @@ function DashboardFooter() {
           />
           <span
             className="hidden md:inline"
-            style={{ fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(245,240,232,0.35)', whiteSpace: 'nowrap' }}
+            style={{ fontFamily: FONT, fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(245,240,232,0.35)', whiteSpace: 'nowrap' }}
           >
             {t('footer_tagline')}
           </span>

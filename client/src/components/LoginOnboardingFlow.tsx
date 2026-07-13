@@ -159,7 +159,6 @@ export default function LoginOnboardingFlow({
             >
               <div>
                 <p style={{
-                  fontFamily: FONT,
                   fontSize: '0.75rem',
                   letterSpacing: '0.18em',
                   textTransform: 'uppercase',
@@ -180,7 +179,6 @@ export default function LoginOnboardingFlow({
                   {t('loginOnboarding_moodTitle')}
                 </h2>
                 <p style={{
-                  fontFamily: FONT,
                   fontSize: '0.82rem',
                   color: 'var(--muted-foreground)',
                   marginTop: '4px',
@@ -217,7 +215,6 @@ export default function LoginOnboardingFlow({
                     border: '1px solid var(--border)',
                     background: 'var(--muted)',
                     color: 'var(--foreground)',
-                    fontFamily: FONT,
                     fontSize: '0.88rem',
                     letterSpacing: '0.02em',
                     outline: 'none',
@@ -260,7 +257,6 @@ export default function LoginOnboardingFlow({
                     >
                       <span style={{ fontSize: '1.75rem', lineHeight: 1 }}>{config.emoji}</span>
                       <span style={{
-                        fontFamily: FONT,
                         fontSize: '0.72rem',
                         letterSpacing: '0.04em',
                         color: isSelected ? GOLD : 'var(--muted-foreground)',
@@ -285,17 +281,17 @@ export default function LoginOnboardingFlow({
               <motion.button
                 onClick={handleMoodContinue}
                 disabled={!selectedMood}
+                className="gold-cta-gradient"
                 whileHover={selectedMood ? { scale: 1.02 } : {}}
                 whileTap={selectedMood ? { scale: 0.98 } : {}}
                 style={{
                   width: '100%',
                   padding: '12px',
-                  borderRadius: '12px',
+                  borderRadius: '9999px',
                   background: selectedMood
                     ? `linear-gradient(135deg, ${GOLD}, #b8892e)`
                     : 'var(--muted)',
                   color: selectedMood ? '#fff' : 'var(--muted-foreground)',
-                  fontFamily: FONT,
                   fontSize: '0.95rem',
                   letterSpacing: '0.1em',
                   fontWeight: 600,
@@ -308,15 +304,12 @@ export default function LoginOnboardingFlow({
               </motion.button>
               <button
                 onClick={handleSkipMood}
+                className="embossed-cream-pill"
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  fontFamily: FONT,
                   fontSize: '0.8rem',
-                  color: 'var(--muted-foreground)',
                   letterSpacing: '0.06em',
                   cursor: 'pointer',
-                  padding: '4px 8px',
+                  padding: '8px 20px',
                 }}
               >
                 {t('loginOnboarding_skipForNow')}
@@ -329,7 +322,7 @@ export default function LoginOnboardingFlow({
         {step === 'intent' && (
           <motion.div
             key="intent"
-            className="rounded-2xl w-full mx-4"
+            className="rounded-2xl w-full mx-4 decorative-frame frame-responsive"
             style={{
               maxWidth: '520px',
               backgroundColor: 'var(--card)',
@@ -349,7 +342,6 @@ export default function LoginOnboardingFlow({
               <div>
                 {moodEmoji && moodLabel && (
                   <p style={{
-                    fontFamily: FONT,
                     fontSize: '0.8rem',
                     color: GOLD,
                     letterSpacing: '0.06em',
@@ -373,7 +365,6 @@ export default function LoginOnboardingFlow({
                   {t('loginOnboarding_intentTitle')}
                 </h2>
                 <p style={{
-                  fontFamily: FONT,
                   fontSize: '0.82rem',
                   color: 'var(--muted-foreground)',
                   marginTop: '5px',
@@ -399,7 +390,6 @@ export default function LoginOnboardingFlow({
                   <div className="flex items-center gap-2">
                     <Loader2 size={13} className="animate-spin" style={{ color: GOLD }} />
                     <span style={{
-                      fontFamily: FONT,
                       fontSize: '0.8rem',
                       fontStyle: 'italic',
                       color: 'var(--muted-foreground)',
@@ -419,7 +409,6 @@ export default function LoginOnboardingFlow({
                     <div className="flex items-center gap-2 mb-2">
                       <Sparkles size={14} style={{ color: GOLD }} />
                       <span style={{
-                        fontFamily: FONT,
                         fontSize: '0.78rem',
                         fontWeight: 600,
                         letterSpacing: '0.08em',
@@ -430,7 +419,6 @@ export default function LoginOnboardingFlow({
                       </span>
                     </div>
                     <div style={{
-                      fontFamily: FONT,
                       fontSize: '0.85rem',
                       lineHeight: 1.5,
                       color: 'var(--foreground)',
@@ -488,7 +476,6 @@ export default function LoginOnboardingFlow({
                 </div>
                 <div>
                   <p style={{
-                    fontFamily: FONT,
                     fontSize: '1.15rem',
                     fontWeight: 600,
                     color: 'var(--foreground)',
@@ -498,7 +485,6 @@ export default function LoginOnboardingFlow({
                     {t('loginOnboarding_journalTitle')}
                   </p>
                   <p style={{
-                    fontFamily: FONT,
                     fontSize: '0.8rem',
                     color: 'var(--muted-foreground)',
                     fontStyle: 'italic',
@@ -550,7 +536,6 @@ export default function LoginOnboardingFlow({
                 </div>
                 <div>
                   <p style={{
-                    fontFamily: FONT,
                     fontSize: '1.15rem',
                     fontWeight: 600,
                     color: 'var(--foreground)',
@@ -560,7 +545,6 @@ export default function LoginOnboardingFlow({
                     {t('loginOnboarding_chatTitle')}
                   </p>
                   <p style={{
-                    fontFamily: FONT,
                     fontSize: '0.8rem',
                     color: 'var(--muted-foreground)',
                     fontStyle: 'italic',
@@ -577,15 +561,12 @@ export default function LoginOnboardingFlow({
             <div className="px-8 pb-7 flex justify-center">
               <button
                 onClick={onDismiss}
+                className="embossed-cream-pill"
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  fontFamily: FONT,
                   fontSize: '0.78rem',
-                  color: 'var(--muted-foreground)',
                   letterSpacing: '0.06em',
                   cursor: 'pointer',
-                  padding: '4px 8px',
+                  padding: '8px 20px',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '5px',

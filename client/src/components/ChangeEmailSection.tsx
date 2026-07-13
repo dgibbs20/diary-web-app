@@ -9,7 +9,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { userApi } from '@/lib/api';
 import { toast } from 'sonner';
 
-const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
 const GOLD_DARK = '#A8863A';
 
@@ -34,13 +33,11 @@ export default function ChangeEmailSection() {
   const inputStyle: React.CSSProperties = {
     border: '1px solid var(--border)',
     color: 'var(--foreground)',
-    fontFamily: FONT,
     fontSize: '15px',
   };
 
   const labelStyle: React.CSSProperties = {
     color: 'var(--muted-foreground)',
-    fontFamily: FONT,
     fontWeight: 700,
     letterSpacing: '0.12em',
   };
@@ -126,10 +123,10 @@ export default function ChangeEmailSection() {
 
   return (
     <div className="p-5 rounded-xl" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
-      <h3 className="text-lg font-semibold mb-1" style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
+      <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--foreground)' }}>
         {t('settings_security_changeEmail')}
       </h3>
-      <p className="text-xs mb-4" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+      <p className="text-xs mb-4" style={{ color: 'var(--muted-foreground)' }}>
         {t('settings_security_currentEmail')}: {user?.email}
       </p>
 
@@ -163,13 +160,13 @@ export default function ChangeEmailSection() {
           </div>
 
           {requestError && (
-            <p className="text-xs" style={{ color: '#D14343', fontFamily: FONT }}>{requestError}</p>
+            <p className="text-xs" style={{ color: '#D14343' }}>{requestError}</p>
           )}
 
           <button
             onClick={handleRequest} disabled={isRequesting}
-            className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
-            style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+            className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60 gold-cta-gradient"
+            style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
           >
             {isRequesting ? <Loader2 size={14} className="animate-spin" /> : <Mail size={14} />}
             {isRequesting ? t('settings_security_sendingCode') : t('settings_security_changeEmailBtn')}
@@ -179,7 +176,7 @@ export default function ChangeEmailSection() {
 
       {step === 'verify' && (
         <div className="space-y-4">
-          <p className="text-sm" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+          <p className="text-sm" style={{ color: 'var(--foreground)' }}>
             {t('settings_security_checkEmailMessage')}
           </p>
 
@@ -195,14 +192,14 @@ export default function ChangeEmailSection() {
           </div>
 
           {verifyError && (
-            <p className="text-xs" style={{ color: '#D14343', fontFamily: FONT }}>{verifyError}</p>
+            <p className="text-xs" style={{ color: '#D14343' }}>{verifyError}</p>
           )}
 
           <div className="flex items-center gap-4 flex-wrap">
             <button
               onClick={handleVerify} disabled={isVerifying}
-              className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60"
-              style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0', fontFamily: FONT }}
+              className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider transition-all flex items-center gap-2 disabled:opacity-60 gold-cta-gradient"
+              style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
             >
               {isVerifying ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
               {isVerifying ? t('settings_security_verifying') : t('settings_security_verifyBtn')}
@@ -211,7 +208,7 @@ export default function ChangeEmailSection() {
             <button
               type="button" onClick={handleResend} disabled={isResending}
               className="text-xs font-semibold underline disabled:opacity-60"
-              style={{ color: GOLD_DARK, fontFamily: FONT }}
+              style={{ color: GOLD_DARK }}
             >
               {isResending ? t('settings_security_resending') : t('settings_security_resendCode')}
             </button>
@@ -219,7 +216,7 @@ export default function ChangeEmailSection() {
             <button
               type="button" onClick={resetToRequestStep}
               className="text-xs underline"
-              style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+              style={{ color: 'var(--muted-foreground)' }}
             >
               {t('settings_security_useDifferentEmail')}
             </button>

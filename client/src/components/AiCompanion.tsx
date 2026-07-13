@@ -30,7 +30,6 @@ import { Streamdown } from 'streamdown';
 import { toast } from 'sonner';
 import PaywallModal from './PaywallModal';
 
-const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
 const GOLD_DARK = '#A8863A';
 
@@ -530,14 +529,14 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
             <div>
               <h3
                 className="text-sm font-semibold tracking-wide"
-                style={{ color: 'var(--foreground)', fontFamily: FONT }}
+                style={{ color: 'var(--foreground)' }}
               >
                 {companionName || t('aiCompanion_title')}
               </h3>
               <button
                 onClick={() => setShowModes(!showModes)}
                 className="text-xs flex items-center gap-1 hover:underline"
-                style={{ color: GOLD_DARK, fontFamily: FONT, fontWeight: 600 }}
+                style={{ color: GOLD_DARK, fontWeight: 600 }}
               >
                 {currentMode.icon} {t(`aiMode_${mode}_label`)} {t('aiCompanion_mode')}
                 <ChevronDown size={10} />
@@ -549,7 +548,6 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
               <div
                 className="px-2.5 py-1 rounded-full text-xs font-medium"
                 style={{
-                  fontFamily: FONT,
                   backgroundColor: remainingResponses <= 1 ? 'rgba(220, 50, 50, 0.1)' : 'rgba(201,168,76,0.1)',
                   color: remainingResponses <= 1 ? '#DC3232' : GOLD_DARK,
                 }}
@@ -560,7 +558,7 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
             {isElite && (
               <div
                 className="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1"
-                style={{ backgroundColor: 'rgba(201,168,76,0.1)', color: GOLD_DARK, fontFamily: FONT }}
+                style={{ backgroundColor: 'rgba(201,168,76,0.1)', color: GOLD_DARK }}
               >
                 <Crown size={10} /> {t('aiCompanion_unlimited')}
               </div>
@@ -600,7 +598,7 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                   <span className="text-lg">{m.icon}</span>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium" style={{ fontFamily: FONT }}>{t(`aiMode_${m.id}_label`)}</p>
+                      <p className="text-sm font-medium">{t(`aiMode_${m.id}_label`)}</p>
                       {isRestricted && (
                         <span
                           className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold"
@@ -610,7 +608,7 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                         </span>
                       )}
                     </div>
-                    <p className="text-xs" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{t(`aiMode_${m.id}_description`)}</p>
+                    <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{t(`aiMode_${m.id}_description`)}</p>
                   </div>
                 </button>
               );
@@ -645,21 +643,20 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                         border: `1px solid ${GOLD}`,
                         backgroundColor: 'var(--background)',
                         color: 'var(--foreground)',
-                        fontFamily: FONT,
                       }}
                     />
                   ) : (
                     <button
                       onClick={() => setEditingTitle(true)}
                       className="flex-1 text-left text-xs px-2 py-1 rounded-md transition-colors hover:bg-accent truncate"
-                      style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                      style={{ color: 'var(--muted-foreground)' }}
                     >
                       {entryTitle || defaultTitle}
                     </button>
                   )}
                   {savedEntryId && (
                     <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: 'rgba(34,197,94,0.1)', color: '#16a34a', fontFamily: FONT }}>
+                      style={{ backgroundColor: 'rgba(34,197,94,0.1)', color: '#16a34a' }}>
                       <Check size={9} /> Saved
                     </span>
                   )}
@@ -674,7 +671,6 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                     title="Save as journal entry"
                     className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02] disabled:opacity-50"
                     style={{
-                      fontFamily: FONT,
                       backgroundColor: 'rgba(201,168,76,0.12)',
                       color: GOLD_DARK,
                       border: `1px solid rgba(201,168,76,0.25)`,
@@ -692,7 +688,6 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                       title="Export as text file (right-click for more)"
                       className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
                       style={{
-                        fontFamily: FONT,
                         backgroundColor: 'var(--muted)',
                         color: 'var(--foreground)',
                         border: '1px solid var(--border)',
@@ -706,17 +701,17 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                         style={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)' }}>
                         <button onClick={handleExportTxt}
                           className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
-                          style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
+                          style={{ color: 'var(--foreground)' }}>
                           <FileText size={11} /> {t('aiCompanion_downloadTxt')}
                         </button>
                         <button onClick={() => handleExportPdf('download')}
                           className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
-                          style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
+                          style={{ color: 'var(--foreground)' }}>
                           <Download size={11} /> {t('aiCompanion_downloadPdf')}
                         </button>
                         <button onClick={() => handleExportPdf('email')}
                           className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
-                          style={{ fontFamily: FONT, color: 'var(--foreground)' }}>
+                          style={{ color: 'var(--foreground)' }}>
                           <Mail size={11} /> {t('aiCompanion_emailPdf')}
                         </button>
                       </div>
@@ -729,7 +724,6 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                     title={burnMode ? 'Discard chat' : 'Schedule burn'}
                     className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
                     style={{
-                      fontFamily: FONT,
                       backgroundColor: 'rgba(239,68,68,0.08)',
                       color: '#ef4444',
                       border: '1px solid rgba(239,68,68,0.2)',
@@ -751,21 +745,20 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                     className="mx-3 mb-2 px-3 py-2 rounded-lg"
                     style={{ backgroundColor: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)' }}
                   >
-                    <p className="text-xs mb-2" style={{ color: 'var(--foreground)', fontFamily: FONT }}>
+                    <p className="text-xs mb-2" style={{ color: 'var(--foreground)' }}>
                       {t('aiCompanion_discardConfirm')}
                     </p>
                     <div className="flex gap-2">
                       <button
                         onClick={handleBurn}
                         className="flex-1 py-1 rounded-md text-xs font-semibold transition-colors"
-                        style={{ backgroundColor: '#ef4444', color: '#fff', fontFamily: FONT }}
+                        style={{ backgroundColor: '#ef4444', color: '#fff' }}
                       >
                         {t('aiCompanion_yesDiscard')}
                       </button>
                       <button
                         onClick={() => setShowBurnConfirm(false)}
-                        className="flex-1 py-1 rounded-md text-xs transition-colors"
-                        style={{ backgroundColor: 'var(--muted)', color: 'var(--foreground)', fontFamily: FONT }}
+                        className="flex-1 py-1 rounded-full text-xs transition-colors embossed-cream-pill"
                       >
                         {t('common_cancel')}
                       </button>
@@ -785,10 +778,10 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                     style={{ backgroundColor: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)' }}
                   >
                     <p className="text-xs font-semibold mb-2 flex items-center gap-1.5"
-                      style={{ color: '#ef4444', fontFamily: FONT }}>
+                      style={{ color: '#ef4444' }}>
                       <Flame size={11} /> {t('aiCompanion_scheduleBurn')}
                     </p>
-                    <p className="text-xs mb-3" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+                    <p className="text-xs mb-3" style={{ color: 'var(--muted-foreground)' }}>
                       {t('aiCompanion_burnSaveNote')}
                     </p>
                     <div className="flex gap-2 mb-3">
@@ -799,7 +792,6 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                         onChange={(e) => setBurnDate(e.target.value)}
                         className="flex-1 rounded-md px-2 py-1.5 text-xs"
                         style={{
-                          fontFamily: FONT,
                           backgroundColor: 'var(--background)',
                           border: '1px solid var(--border)',
                           color: 'var(--foreground)',
@@ -811,7 +803,6 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                         onChange={(e) => setBurnTime(e.target.value)}
                         className="flex-1 rounded-md px-2 py-1.5 text-xs"
                         style={{
-                          fontFamily: FONT,
                           backgroundColor: 'var(--background)',
                           border: '1px solid var(--border)',
                           color: 'var(--foreground)',
@@ -823,14 +814,13 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                         onClick={handleBurnSchedule}
                         disabled={isSaving || !burnDate || !burnTime}
                         className="flex-1 py-1.5 rounded-md text-xs font-semibold transition-colors disabled:opacity-50"
-                        style={{ backgroundColor: '#ef4444', color: '#fff', fontFamily: FONT }}
+                        style={{ backgroundColor: '#ef4444', color: '#fff' }}
                       >
                         {isSaving ? t('common_saving') : t('aiCompanion_setBurnTime')}
                       </button>
                       <button
                         onClick={() => setShowBurnPicker(false)}
-                        className="flex-1 py-1.5 rounded-md text-xs transition-colors"
-                        style={{ backgroundColor: 'var(--muted)', color: 'var(--foreground)', fontFamily: FONT }}
+                        className="flex-1 py-1.5 rounded-full text-xs transition-colors embossed-cream-pill"
                       >
                         {t('common_cancel')}
                       </button>
@@ -850,7 +840,7 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                     style={{ backgroundColor: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}
                   >
                     <Clock size={11} style={{ color: '#ef4444', flexShrink: 0 }} />
-                    <span className="text-xs" style={{ color: '#ef4444', fontFamily: FONT }}>
+                    <span className="text-xs" style={{ color: '#ef4444' }}>
                       {burnCountdown}
                     </span>
                   </motion.div>
@@ -871,20 +861,20 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
               />
               <h4
                 className="text-lg mb-2 font-semibold"
-                style={{ fontFamily: FONT, color: 'var(--foreground)' }}
+                style={{ color: 'var(--foreground)' }}
               >
                 {companionName || t('aiCompanion_emptyTitle')}
               </h4>
               <p
                 className="text-sm leading-relaxed"
-                style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 {t('aiCompanion_emptyBody')}
               </p>
               {entryContext && (
                 <p
                   className="text-xs mt-4 px-3 py-2 rounded-lg"
-                  style={{ background: 'var(--muted)', color: 'var(--muted-foreground)', fontFamily: FONT }}
+                  style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}
                 >
                   {t('aiCompanion_entryContext')}
                 </p>
@@ -892,7 +882,7 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
               {!isElite && (
                 <p
                   className="text-xs mt-3"
-                  style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}
+                  style={{ color: 'var(--muted-foreground)' }}
                 >
                   {t('aiCompanion_freeRemaining', { count: remainingResponses, total: FREE_DAILY_LIMIT })}
                 </p>
@@ -907,12 +897,10 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                     background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`,
                     color: '#FFF9F0',
                     borderBottomRightRadius: '4px',
-                    fontFamily: FONT,
                   } : {
                     background: 'var(--muted)',
                     color: 'var(--foreground)',
                     borderBottomLeftRadius: '4px',
-                    fontFamily: FONT,
                   }}
                 >
                   {msg.role === 'assistant' ? (
@@ -929,7 +917,7 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
               <div className="px-4 py-3 rounded-2xl" style={{ background: 'var(--muted)' }}>
                 <div className="flex items-center gap-2">
                   <Loader2 size={14} className="animate-spin" style={{ color: GOLD }} />
-                  <span className="text-sm" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>{t('aiCompanion_thinking')}</span>
+                  <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>{t('aiCompanion_thinking')}</span>
                 </div>
               </div>
             </div>
@@ -942,9 +930,8 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
           {!isElite && dailyUsage >= FREE_DAILY_LIMIT ? (
             <button
               onClick={() => setPaywallFeature('ai_limit')}
-              className="w-full py-3 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
+              className="w-full py-3 rounded-full text-sm font-medium flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
               style={{
-                fontFamily: FONT,
                 backgroundColor: 'rgba(201,168,76,0.1)',
                 color: GOLD_DARK,
                 border: '1px solid rgba(201,168,76,0.3)',
@@ -967,7 +954,6 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
                   border: '1px solid var(--border)',
                   backgroundColor: 'var(--background)',
                   color: 'var(--foreground)',
-                  fontFamily: FONT,
                   maxHeight: '120px',
                 }}
                 onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
@@ -981,7 +967,7 @@ export default function AiCompanion({ entryContext, userName, entryId, onClose, 
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className="p-2.5 rounded-xl transition-all disabled:opacity-40"
+                className="p-2.5 rounded-full transition-all disabled:opacity-40 gold-cta-gradient"
                 style={{ background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD})`, color: '#FFF9F0' }}
               >
                 <Send size={16} />

@@ -75,7 +75,6 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
               {t('moodPicker_title')}
             </h2>
             <p style={{
-              fontFamily: FONT,
               fontSize: '0.82rem',
               color: 'var(--muted-foreground)',
               marginTop: '4px',
@@ -123,7 +122,6 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
                 border: '1px solid var(--border)',
                 background: 'var(--muted)',
                 color: 'var(--foreground)',
-                fontFamily: FONT,
                 fontSize: '0.88rem',
                 letterSpacing: '0.02em',
                 outline: 'none',
@@ -150,7 +148,6 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
                 style={{
                   textAlign: 'center',
                   color: 'var(--muted-foreground)',
-                  fontFamily: FONT,
                   fontStyle: 'italic',
                   fontSize: '0.9rem',
                   padding: '40px 0',
@@ -204,7 +201,6 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
                       </span>
                       <span
                         style={{
-                          fontFamily: FONT,
                           fontSize: '0.72rem',
                           letterSpacing: '0.04em',
                           color: isSelected ? GOLD : 'var(--muted-foreground)',
@@ -232,18 +228,18 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
           <motion.button
             onClick={handleContinue}
             disabled={!selected}
+            className="gold-cta-gradient"
             whileHover={selected ? { scale: 1.02 } : {}}
             whileTap={selected ? { scale: 0.98 } : {}}
             style={{
               marginTop: '16px',
               width: '100%',
               padding: '12px',
-              borderRadius: '12px',
+              borderRadius: '9999px',
               background: selected
                 ? `linear-gradient(135deg, ${GOLD}, #b8892e)`
                 : 'var(--muted)',
               color: selected ? '#fff' : 'var(--muted-foreground)',
-              fontFamily: FONT,
               fontSize: '0.95rem',
               letterSpacing: '0.1em',
               fontWeight: 600,
@@ -256,15 +252,12 @@ export default function MoodPicker({ onSelect, onClose }: MoodPickerProps) {
           </motion.button>
           <button
             onClick={onClose}
+            className="embossed-cream-pill"
             style={{
-              background: 'none',
-              border: 'none',
-              fontFamily: FONT,
               fontSize: '0.8rem',
-              color: 'var(--muted-foreground)',
               letterSpacing: '0.06em',
               cursor: 'pointer',
-              padding: '4px 8px',
+              padding: '8px 20px',
             }}
           >
             {t('moodPicker_skip')}

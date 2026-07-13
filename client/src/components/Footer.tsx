@@ -39,7 +39,6 @@ export default function Footer() {
         color: 'rgba(245,240,232,0.6)',
         padding: '48px 5% 32px',
         textAlign: 'center',
-        fontFamily: "'Cormorant Garamond', Georgia, serif",
       }}
     >
       {/* Logo */}
@@ -57,6 +56,7 @@ export default function Footer() {
       {/* Tagline */}
       <p
         style={{
+          fontFamily: "'Cormorant Garamond', Georgia, serif",
           fontSize: '1.8rem',
           fontStyle: 'italic',
           color: 'rgba(245,240,232,0.45)',
@@ -121,7 +121,6 @@ export default function Footer() {
               fontSize: '0.72rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontWeight: 600,
               cursor: 'pointer',
               transition: 'all 0.25s',
@@ -146,6 +145,7 @@ export default function Footer() {
                 window.location.href = '/login';
               }
             }}
+            className="gold-cta-gradient"
             style={{
               background: 'linear-gradient(135deg, #A8863A, #C9A84C)',
               color: '#F5F0E8',
@@ -154,7 +154,6 @@ export default function Footer() {
               fontSize: '0.72rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontWeight: 600,
               cursor: 'pointer',
               border: 'none',
