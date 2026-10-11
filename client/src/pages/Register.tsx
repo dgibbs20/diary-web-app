@@ -127,14 +127,14 @@ export default function Register() {
 
             <div>
               <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>{t('register_email')}</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_emailPlaceholder')} autoComplete="email" />
+              <input type="email" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_emailPlaceholder')} autoComplete="email" />
             </div>
 
             <div>
               <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>{t('register_password')}</label>
               <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} className={`${inputCls} pr-11`} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_passwordPlaceholder')} autoComplete="new-password" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 p-1" style={{ color: '#8B7355' }}>
+                <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} className={`${inputCls} pe-11`} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_passwordPlaceholder')} autoComplete="new-password" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute end-3 top-1/2 -translate-y-1/2 p-1" style={{ color: '#8B7355' }}>
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>

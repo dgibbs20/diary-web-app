@@ -140,12 +140,12 @@ export default function ChangeEmailSection() {
             <div className="relative">
               <input
                 type={showCurrent ? 'text' : 'password'} value={currentPw} onChange={(e) => setCurrentPw(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
+                className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pe-10 focus:outline-none transition-shadow"
                 style={inputStyle}
                 onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
                 onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
               />
-              <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
+              <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute end-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
                 {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>

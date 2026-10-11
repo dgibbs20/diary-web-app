@@ -123,13 +123,13 @@ export default function JournalList({
           {/* Search + Filter */}
           <div className="flex items-center gap-3">
             <div className="flex-1 relative">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }} />
+              <Search size={16} className="absolute start-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }} />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder={t('journalList_searchPlaceholder')}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm focus:outline-none transition-all"
+                className="w-full ps-10 pe-4 py-2.5 rounded-lg border text-sm focus:outline-none transition-all"
                 style={{
                   borderColor: 'var(--border)',
                   color: 'var(--foreground)',
@@ -214,7 +214,7 @@ export default function JournalList({
                 <motion.button
                   key={entry.id}
                   onClick={() => onEntrySelect(entry)}
-                  className="w-full text-left p-4 rounded-lg border transition-all duration-200 group"
+                  className="w-full text-start p-4 rounded-lg border transition-all duration-200 group"
                   style={{
                     backgroundColor: 'var(--card)',
                     borderColor: 'var(--border)',

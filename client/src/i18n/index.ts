@@ -33,6 +33,19 @@ import vi from './locales/vi.json';
 import zh from './locales/zh.json';
 import zh_TW from './locales/zh_TW.json';
 
+// Keep <html lang/dir> in sync with the language actually rendered.
+// 'iw' is the legacy code for Hebrew.
+const RTL_LANGUAGES = ['ar', 'he', 'iw'];
+
+function applyDocumentLanguage() {
+  const lng = i18n.resolvedLanguage || i18n.language || 'en';
+  const base = lng.split(/[-_]/)[0].toLowerCase();
+  document.documentElement.lang = lng.replace('_', '-');
+  document.documentElement.dir = RTL_LANGUAGES.includes(base) ? 'rtl' : 'ltr';
+}
+
+i18n.on('languageChanged', applyDocumentLanguage);
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)

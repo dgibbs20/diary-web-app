@@ -91,7 +91,7 @@ export default function VerifyEmail() {
         </p>
 
         <form onSubmit={handleSubmit}>
-          <div className="flex justify-center gap-3 mb-8" onPaste={handlePaste}>
+          <div dir="ltr" className="flex justify-center gap-3 mb-8" onPaste={handlePaste}>
             {otp.map((digit, i) => (
               <input
                 key={i} id={`otp-${i}`} type="text" inputMode="numeric" maxLength={1} value={digit}

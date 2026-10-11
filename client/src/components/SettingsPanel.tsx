@@ -236,7 +236,7 @@ function ProfileSection() {
               </p>
             </div>
           </div>
-          <ArrowRight size={16} style={{ color: GOLD }} className="group-hover:translate-x-1 transition-transform" />
+          <ArrowRight size={16} style={{ color: GOLD }} className="group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1 transition-transform" />
         </div>
       </div>
 
@@ -304,11 +304,11 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
         </div>
         <button
           onClick={() => toggleTheme?.()}
-          className="w-12 h-7 rounded-full relative transition-colors duration-300"
+          className="w-12 h-7 rounded-full relative transition-colors duration-300 rtl:-scale-x-100"
           style={{ backgroundColor: theme === 'dark' ? GOLD : 'var(--border)' }}
         >
           <div
-            className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
+            className="absolute top-0.5 left-0 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
             style={{ transform: theme === 'dark' ? 'translateX(22px)' : 'translateX(2px)' }}
           />
         </button>
@@ -426,7 +426,7 @@ function PreferencesSection({ theme, toggleTheme }: { theme: string; toggleTheme
           </button>
         </div>
 
-        <p style={{ fontSize: '0.7rem', color: 'var(--muted-foreground)', textAlign: 'right', fontFamily: FONT }}>
+        <p style={{ fontSize: '0.7rem', color: 'var(--muted-foreground)', textAlign: 'end', fontFamily: FONT }}>
           {companionName.length} / 20
         </p>
       </div>
@@ -545,7 +545,7 @@ function SecuritySection() {
                       className="text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider"
                       style={{ background: 'rgba(201,168,76,0.1)', color: GOLD, fontFamily: FONT }}
                     >
-                      <Crown size={10} className="inline mr-1" />{t('common_elite')}
+                      <Crown size={10} className="inline me-1" />{t('common_elite')}
                     </span>
                   )}
                 </p>
@@ -557,11 +557,11 @@ function SecuritySection() {
             <button
               onClick={handleGhostToggle}
               disabled={isTogglingGhost}
-              className="w-12 h-7 rounded-full relative transition-colors duration-300"
+              className="w-12 h-7 rounded-full relative transition-colors duration-300 rtl:-scale-x-100"
               style={{ backgroundColor: ghostMode ? GOLD : 'var(--border)', opacity: isTogglingGhost ? 0.6 : 1 }}
             >
               <div
-                className="absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
+                className="absolute top-0.5 left-0 w-6 h-6 rounded-full bg-white shadow-sm transition-transform duration-300"
                 style={{ transform: ghostMode ? 'translateX(22px)' : 'translateX(2px)' }}
               />
             </button>
@@ -585,12 +585,12 @@ function SecuritySection() {
           <div className="relative">
             <input
               type={showCurrent ? 'text' : 'password'} value={currentPw} onChange={(e) => setCurrentPw(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
+              className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pe-10 focus:outline-none transition-shadow"
               style={inputStyle}
               onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
               onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
             />
-            <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
+            <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute end-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
               {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
@@ -601,12 +601,12 @@ function SecuritySection() {
           <div className="relative">
             <input
               type={showNew ? 'text' : 'password'} value={newPw} onChange={(e) => setNewPw(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pr-10 focus:outline-none transition-shadow"
+              className="w-full px-4 py-2.5 rounded-lg text-sm bg-background pe-10 focus:outline-none transition-shadow"
               style={inputStyle}
               onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px rgba(201,168,76,0.2)`; }}
               onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
             />
-            <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
+            <button type="button" onClick={() => setShowNew(!showNew)} className="absolute end-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted-foreground)' }}>
               {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>

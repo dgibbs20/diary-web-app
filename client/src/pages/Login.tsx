@@ -279,6 +279,7 @@ export default function Login() {
 
               <input
                 type="email"
+                dir="ltr"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('login_emailPlaceholder')}
@@ -318,7 +319,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={t('login_passwordPlaceholder')}
                   autoComplete="current-password"
-                  className="w-full px-4 py-3 pr-11 rounded-lg border text-sm focus:outline-none transition-all"
+                  className="w-full px-4 py-3 pe-11 rounded-lg border text-sm focus:outline-none transition-all"
                   style={{
                     backgroundColor: 'rgba(255,255,255,0.6)',
                     borderColor: 'rgba(168, 134, 58, 0.15)',
@@ -329,7 +330,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1"
+                  className="absolute end-3 top-1/2 -translate-y-1/2 p-1"
                   style={{ color: '#8B7355' }}
                 >
                   {showPassword ? (

@@ -41,7 +41,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
 
   return (
     <motion.aside
-      className="h-full flex flex-col border-r relative z-20 select-none"
+      className="h-full flex flex-col border-e relative z-20 select-none"
       style={{
         backgroundColor: 'var(--sidebar)',
         borderColor: 'var(--sidebar-border)',
@@ -126,7 +126,7 @@ export default function Sidebar({ viewMode, onViewChange, onNewEntry, onUploadEn
               {isActive && (
                 <motion.div
                   layoutId="sidebar-indicator"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full"
+                  className="absolute start-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full"
                   style={{ backgroundColor: '#C9A84C' }}
                 />
               )}

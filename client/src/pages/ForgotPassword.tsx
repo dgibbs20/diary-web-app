@@ -58,10 +58,10 @@ export default function ForgotPassword() {
             <h1 className="font-serif text-2xl font-light mb-2" style={{ color: '#3D2B1F' }}>{t('forgotPassword_title')}</h1>
             <p className="text-sm mb-8" style={{ color: '#8B7355' }}>{t('forgotPassword_subtitle')}</p>
 
-            <form onSubmit={handleSubmit} className="space-y-5 text-left">
+            <form onSubmit={handleSubmit} className="space-y-5 text-start">
               <div>
                 <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>{t('forgotPassword_email')}</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                <input type="email" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border text-sm focus:outline-none transition-all"
                   style={{ backgroundColor: 'rgba(255,255,255,0.6)', borderColor: 'rgba(168, 134, 58, 0.15)', color: '#3D2B1F' }}
                   onFocus={(e) => { e.currentTarget.style.borderColor = '#C9A84C'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(201,168,76,0.1)'; }}
