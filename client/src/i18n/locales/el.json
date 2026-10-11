@@ -374,7 +374,7 @@
   "register_agreeTermsPrefix": "Αποδέχομαι τους ",
   "register_agreeTermsLink": "Όρους Υπηρεσίας",
   "register_agreeTermsSuffix": " και την Πολιτική Απορρήτου",
-  "register_pleaseAgreeTerms": "Αποδέξου τους Όρους & Προϋποθέσεις",
+  "register_pleaseAgreeTerms": "Αποδεχτείτε τους Όρους & Προϋποθέσεις",
   "register_errFillAll": "Συμπληρώστε όλα τα πεδία",
   "register_errPasswordMismatch": "Οι κωδικοί δεν ταιριάζουν",
   "register_errPasswordShort": "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες",
