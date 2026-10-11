@@ -10,6 +10,7 @@
   "common_saving": "Saving...",
   "common_saved": "Saved",
   "common_error": "Error",
+  "common_networkError": "Network error. Please try again.",
   "common_search": "Search",
   "common_settings": "Settings",
   "common_today": "Today",
@@ -423,6 +424,10 @@
   "register_agreeTermsLink": "Terms of Service",
   "register_agreeTermsSuffix": " and Privacy Policy",
   "register_pleaseAgreeTerms": "Please agree to Terms & Conditions",
+  "register_errFillAll": "Please fill in all fields",
+  "register_errPasswordMismatch": "Passwords do not match",
+  "register_errPasswordShort": "Password must be at least 8 characters",
+  "register_errGeneric": "Registration failed",
 
   "forgotPassword_title": "Reset Password",
   "forgotPassword_category": "Account Recovery",

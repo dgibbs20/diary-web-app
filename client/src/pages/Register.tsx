@@ -25,15 +25,15 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullname || !email || !password) {
-      toast.error('Please fill in all fields');
+      toast.error(t('register_errFillAll'));
       return;
     }
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error(t('register_errPasswordMismatch'));
       return;
     }
     if (password.length < 8) {
-      toast.error('Password must be at least 8 characters');
+      toast.error(t('register_errPasswordShort'));
       return;
     }
     if (!agreedToTerms) {
@@ -49,7 +49,7 @@ export default function Register() {
       toast.success('Account created! Please verify your email.');
       navigate(`/verify?email=${encodeURIComponent(result.email || email)}`);
     } else {
-      toast.error(result.error || 'Registration failed');
+      toast.error(result.error || t('register_errGeneric'));
     }
   };
 

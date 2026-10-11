@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { authApi, setTokens, getTokens, clearTokens, userApi } from '@/lib/api';
+import i18n from '@/i18n';
 
 export interface UserPreferences {
   ai_mode: string;
@@ -109,9 +110,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (res.success) {
         return { success: true, email: res.email || email };
       }
-      return { success: false, error: res.error?.message || res.error || 'Registration failed' };
+      return { success: false, error: res.error?.message || res.error || i18n.t('register_errGeneric') };
     } catch {
-      return { success: false, error: 'Network error. Please try again.' };
+      return { success: false, error: i18n.t('common_networkError') };
     }
   };
 
