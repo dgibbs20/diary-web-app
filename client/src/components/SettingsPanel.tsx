@@ -86,8 +86,8 @@ export default function SettingsPanel() {
           {activeTab === 'profile' && <ProfileSection />}
           {activeTab === 'preferences' && <PreferencesSection theme={theme} toggleTheme={toggleTheme} />}
           {activeTab === 'security' && <SecuritySection />}
+          {activeTab === 'security' && <DangerZoneSection />}
           {activeTab === 'export' && <ExportSection />}
-          <DangerZoneSection />
         </div>
       </div>
     </div>
