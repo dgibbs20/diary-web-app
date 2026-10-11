@@ -353,6 +353,20 @@ export const userApi = {
     if (res.status === 429) return { success: false, rate_limited: true };
     return res.json();
   },
+
+  async deleteAccount(): Promise<{ success: boolean; error?: string }> {
+    try {
+      const res = await authFetch('/api/auth/delete-user', { method: 'DELETE' });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || data?.success === false) {
+        const message = data?.error?.message || (typeof data?.error === 'string' ? data.error : null);
+        return { success: false, error: message || `HTTP ${res.status}` };
+      }
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err instanceof Error ? err.message : 'Network error' };
+    }
+  },
 };
 
 // ============ ANALYTICS API ============

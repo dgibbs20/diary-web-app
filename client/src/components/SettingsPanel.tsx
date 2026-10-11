@@ -6,9 +6,9 @@
  * - Ghost Mode: Elite-only, free users see PaywallModal
  * - Export PDF: Elite-only, free users see PaywallModal
  */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield, ArrowRight, Globe, X } from 'lucide-react';
+import { User, Lock, Download, Moon, Sun, Crown, Eye, EyeOff, Loader2, Check, Smartphone, Ghost, Shield, ArrowRight, Globe, X, Trash2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -19,6 +19,15 @@ import { useLocation } from 'wouter';
 import PaywallModal from './PaywallModal';
 import ExportDialog from './ExportDialog';
 import ChangeEmailSection from './ChangeEmailSection';
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 const FONT = "'Cormorant Garamond', Georgia, serif";
 const GOLD = '#C9A84C';
@@ -78,6 +87,7 @@ export default function SettingsPanel() {
           {activeTab === 'preferences' && <PreferencesSection theme={theme} toggleTheme={toggleTheme} />}
           {activeTab === 'security' && <SecuritySection />}
           {activeTab === 'export' && <ExportSection />}
+          <DangerZoneSection />
         </div>
       </div>
     </div>
@@ -724,6 +734,123 @@ function ExportSection() {
         onClose={() => setShowPaywall(false)}
         feature="export"
       />
+    </>
+  );
+}
+
+function DangerZoneSection() {
+  const { t } = useTranslation();
+  const { deleteAccount } = useAuth();
+  const [, navigate] = useLocation();
+  const [open, setOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const inFlight = useRef(false);
+
+  // The confirmation word is always the Latin "DELETE", regardless of language.
+  const canConfirm = confirmText.trim().toUpperCase() === 'DELETE';
+
+  const handleOpenChange = (next: boolean) => {
+    if (isDeleting) return;
+    setOpen(next);
+    if (!next) setConfirmText('');
+  };
+
+  const handleDelete = async () => {
+    if (!canConfirm || inFlight.current) return;
+    inFlight.current = true;
+    setIsDeleting(true);
+    const res = await deleteAccount();
+    inFlight.current = false;
+    setIsDeleting(false);
+    if (res.success) {
+      setOpen(false);
+      toast.success(t('settings_deleteAccount_success'));
+      navigate('/login');
+    } else {
+      toast.error(t('settings_deleteAccount_error'));
+    }
+  };
+
+  return (
+    <>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-10">
+        <div
+          className="p-5 rounded-xl"
+          style={{
+            border: '1px solid color-mix(in oklch, var(--destructive) 45%, var(--border))',
+            backgroundColor: 'color-mix(in oklch, var(--destructive) 5%, var(--card))',
+          }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <AlertTriangle size={16} style={{ color: 'var(--destructive)' }} />
+            <h3 className="text-lg font-semibold" style={{ fontFamily: FONT, color: 'var(--destructive)' }}>
+              {t('settings_deleteAccount_title')}
+            </h3>
+          </div>
+          <p className="text-sm mb-5" style={{ color: 'var(--muted-foreground)', fontFamily: FONT }}>
+            {t('settings_deleteAccount_description')}
+          </p>
+          <button
+            onClick={() => setOpen(true)}
+            className="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wider transition-all flex items-center gap-2 hover:opacity-90"
+            style={{ background: 'var(--destructive)', color: 'var(--destructive-foreground)', fontFamily: FONT }}
+          >
+            <Trash2 size={14} />
+            {t('settings_deleteAccount_button')}
+          </button>
+        </div>
+      </motion.div>
+
+      <AlertDialog open={open} onOpenChange={handleOpenChange}>
+        <AlertDialogContent onEscapeKeyDown={(e) => { if (isDeleting) e.preventDefault(); }}>
+          <AlertDialogHeader>
+            <AlertDialogTitle style={{ fontFamily: FONT, color: 'var(--destructive)' }}>
+              {t('settings_deleteAccount_confirmTitle')}
+            </AlertDialogTitle>
+            <AlertDialogDescription style={{ fontFamily: FONT }}>
+              {t('settings_deleteAccount_confirmBody')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <div>
+            <label htmlFor="delete-account-confirm" className="block text-sm mb-2" style={{ color: 'var(--foreground)', fontFamily: FONT, fontWeight: 600 }}>
+              {t('settings_deleteAccount_typePrompt')}
+            </label>
+            <input
+              id="delete-account-confirm"
+              type="text"
+              dir="ltr"
+              autoComplete="off"
+              autoCapitalize="characters"
+              spellCheck={false}
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleDelete(); }}
+              disabled={isDeleting}
+              className="w-full px-4 py-2.5 rounded-lg text-sm bg-background focus:outline-none transition-shadow"
+              style={{ border: '1px solid var(--border)', color: 'var(--foreground)', fontFamily: FONT, fontSize: '15px' }}
+              onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 2px color-mix(in oklch, var(--destructive) 25%, transparent)'; }}
+              onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; }}
+            />
+          </div>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting} style={{ fontFamily: FONT }}>
+              {t('common_cancel')}
+            </AlertDialogCancel>
+            <button
+              onClick={handleDelete}
+              disabled={!canConfirm || isDeleting}
+              className="px-5 py-2 rounded-md text-sm font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: 'var(--destructive)', color: 'var(--destructive-foreground)', fontFamily: FONT }}
+            >
+              {isDeleting && <Loader2 size={14} className="animate-spin" />}
+              {t('settings_deleteAccount_confirmButton')}
+            </button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

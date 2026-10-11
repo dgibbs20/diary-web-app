@@ -52,6 +52,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string; needsVerification?: boolean; email?: string }>;
   register: (email: string, password: string, fullname: string, termsAccepted: boolean, username?: string) => Promise<{ success: boolean; error?: string; email?: string }>;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<{ success: boolean; error?: string }>;
   refreshUser: () => Promise<void>;
   updateUser: (updates: Partial<User>) => void;
 }
@@ -120,6 +121,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearTokens();
   };
 
+  // Clears local session directly instead of calling logout(): the account no
+  // longer exists server-side, so the logout request would be pointless and
+  // could throw before local state is cleared.
+  const deleteAccount = async () => {
+    const res = await userApi.deleteAccount();
+    if (!res.success) return res;
+    setUser(null);
+    clearTokens();
+    return { success: true };
+  };
+
   const updateUser = (updates: Partial<User>) => {
     setUser(prev => prev ? { ...prev, ...updates } : null);
   };
@@ -133,6 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       register,
       logout,
+      deleteAccount,
       refreshUser,
       updateUser,
     }}>
