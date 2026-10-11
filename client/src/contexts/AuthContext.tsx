@@ -50,7 +50,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isElite: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string; needsVerification?: boolean; email?: string }>;
-  register: (email: string, password: string, fullname: string, username?: string) => Promise<{ success: boolean; error?: string; email?: string }>;
+  register: (email: string, password: string, fullname: string, termsAccepted: boolean, username?: string) => Promise<{ success: boolean; error?: string; email?: string }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
   updateUser: (updates: Partial<User>) => void;
@@ -102,9 +102,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const register = async (email: string, password: string, fullname: string, username?: string) => {
+  const register = async (email: string, password: string, fullname: string, termsAccepted: boolean, username?: string) => {
     try {
-      const res = await authApi.register(email, password, fullname, username);
+      const res = await authApi.register(email, password, fullname, termsAccepted, username);
       if (res.success) {
         return { success: true, email: res.email || email };
       }

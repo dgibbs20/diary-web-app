@@ -114,11 +114,11 @@ export const authApi = {
     return res.json();
   },
 
-  async register(email: string, password: string, fullname: string, username?: string) {
+  async register(email: string, password: string, fullname: string, termsAccepted: boolean, username?: string) {
     const res = await fetch(`${API_BASE}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, fullname, username }),
+      body: JSON.stringify({ email, password, fullname, username, terms_accepted: termsAccepted, terms_version: '2.0' }),
     });
     return res.json();
   },

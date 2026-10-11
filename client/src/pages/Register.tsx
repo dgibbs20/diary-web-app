@@ -19,6 +19,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,9 +36,13 @@ export default function Register() {
       toast.error('Password must be at least 8 characters');
       return;
     }
+    if (!agreedToTerms) {
+      toast.error(t('register_pleaseAgreeTerms'));
+      return;
+    }
 
     setIsSubmitting(true);
-    const result = await register(email, password, fullname);
+    const result = await register(email, password, fullname, agreedToTerms);
     setIsSubmitting(false);
 
     if (result.success) {
@@ -138,6 +143,15 @@ export default function Register() {
             <div>
               <label className="block text-xs font-medium tracking-wider uppercase mb-2" style={{ color: '#5C3D2A' }}>{t('register_confirmPassword')}</label>
               <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={inputCls} style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} placeholder={t('register_confirmPlaceholder')} autoComplete="new-password" />
+            </div>
+
+            <div className="flex items-start gap-2.5 pt-1">
+              <input id="agree-terms" type="checkbox" checked={agreedToTerms} onChange={(e) => setAgreedToTerms(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer" style={{ accentColor: '#A8863A' }} />
+              <label htmlFor="agree-terms" className="text-sm leading-snug cursor-pointer" style={{ color: '#8B7355' }}>
+                {t('register_agreeTermsPrefix')}
+                <a href="https://diary.gmxquantum.com/terms.html" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="font-medium hover:underline" style={{ color: '#A8863A' }}>{t('register_agreeTermsLink')}</a>
+                {t('register_agreeTermsSuffix')}
+              </label>
             </div>
 
             <button

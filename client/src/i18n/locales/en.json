@@ -410,6 +410,10 @@
   "register_signIn": "Sign In",
   "register_heroTagline": "\"Begin the journey of knowing yourself — one page at a time.\"",
   "register_heroDesc": "Join thousands who trust diAry with their most private thoughts. Military-grade encryption. Zero-knowledge architecture.",
+  "register_agreeTermsPrefix": "I agree to the ",
+  "register_agreeTermsLink": "Terms of Service",
+  "register_agreeTermsSuffix": " and Privacy Policy",
+  "register_pleaseAgreeTerms": "Please agree to Terms & Conditions",
 
   "forgotPassword_title": "Reset Password",
   "forgotPassword_category": "Account Recovery",
