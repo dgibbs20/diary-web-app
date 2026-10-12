@@ -103,6 +103,88 @@
         font-style: italic;
         font-display: swap;
       }
+      /* Greek glyphs: Cormorant Garamond lacks them, so EB Garamond (SIL OFL, see EBGaramond-OFL.txt) fills U+0370-03FF.
+         Must stay after the rules above so these faces win for Greek characters. */
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-400-normal.woff2') format('woff2');
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-400-italic.woff2') format('woff2');
+        font-weight: 300;
+        font-style: italic;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-400-normal.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-400-italic.woff2') format('woff2');
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-500-normal.woff2') format('woff2');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-500-italic.woff2') format('woff2');
+        font-weight: 500;
+        font-style: italic;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-600-normal.woff2') format('woff2');
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-600-italic.woff2') format('woff2');
+        font-weight: 600;
+        font-style: italic;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-700-normal.woff2') format('woff2');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        src: url('/assets/fonts/eb-garamond-greek-700-italic.woff2') format('woff2');
+        font-weight: 700;
+        font-style: italic;
+        font-display: swap;
+        unicode-range: U+0370-03FF;
+      }
     </style>
     <!-- GitHub Pages SPA redirect restoration -->
     <script type="text/javascript">
